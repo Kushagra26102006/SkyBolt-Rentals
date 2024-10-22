@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styl.css">
+</head>
+<body>
+    <div class="container">
+        <form action="">
+            <!-- <h1>Login</h1> -->
+            <fieldset>
+                <legend><h2>LOGIN</h2></legend>
+                <label for="Name">Name</label>
+                <input type="text" id="name" placeholder="Name" required name="myname">
+                <br><br>
+                Email:- <input type="email" placeholder="email" required>
+                <br><br>
+                password:- <input type="password" placeholder="password" required>
+                <br><br>
+                Number:- <input type="number" placeholder="number" required>
+                <br><br>
+                <label for="Country">Country:-</label>
+                <select id="Country">
+                    <option>INDIA</option>
+                    <option>RUSSIA</option>
+                    <option>PORTUGAL</option>
+                    <option>AFGANISTAN</option>
+                    <option>SRI LANKA</option>
+                    <option>ENGLAND</option>
+                    <option>NEWZELAND</option>
+                    <option>CHICAGO</option>
+                    <option>UAE</option>
+                    <option>SAUDI ARAB</option>
+                    <option>AUSTRALIA</option>
+                    <option>SPAIN</option>
+                </select>
+            </fieldset>
+        <br><br>
+        <a href="index.html"><button type="submit" class="btn" onclick="openPopup()">Submit</button></a>
+        <div class="popup" id="popup">
+            <img src="download.png" >
+            <h2>Thank You</h2>
+            <p>Your details has been successfully submitted. Thanks </p>
+            <a href="index.html"><button type="button" onclick="closePopup()" >OK</button></a>
+        </div>
+    </div>
+    <div class="loader"></div>
+        </form>
+<script src="script.js"></script>
+</body>
+</html>

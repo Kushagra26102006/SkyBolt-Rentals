@@ -1,0 +1,178 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0px;
+    padding: 5px;
+    height: 100px;
+    background-color: #f4f4f4;
+} 
+/* #title{
+    height: 100px;
+    width: 1320px;
+    background-color: rgb(4, 23, 54);
+    text-align: center;
+    color: #7295ba;
+    display: flex;
+    justify-content: center;
+} */
+#title {
+    background: #214798;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+nav{
+    margin-bottom: 300px;
+}
+/* header { 
+    background-color: #007BFF;
+    color: white;
+    padding: 0px;
+    text-align: center;
+    height: 90px;
+    width: 1320px;
+} */
+header {
+    background: #30aacb;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav a {
+    color: rgb(231, 231, 231);
+    text-decoration: none;
+}
+
+section {
+    padding: 20px;
+    margin: 20px;
+    background-color: rgb(60, 167, 238);
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bike-list {
+    display: flex;
+    margin: 50px;
+    justify-content: space-around;
+    background-color: rgb(60, 167, 238);
+}
+
+#one {
+    height: 300px;
+    width: 1000px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    text-align: center;
+    margin: 50px;
+    text-decoration: none;
+}
+
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+
+}
+
+
+#two {
+    height: 300px;
+    width: 1000px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    text-align: center;
+    margin: 50px;
+    text-decoration: none;
+    
+}
+
+#three {
+    height: 300px;
+    width: 1000px;
+    padding: 10px;
+    background-color: #e9ecef;
+    margin: 50px;
+}
+
+#fore {
+    height: 300px;
+    width: 1000px;
+    padding: 10px;
+    background-color: #e9ecef;
+    margin: 50px;
+}
+
+#five {
+    height: 300px;
+    width: 1000px;
+    padding: 10px;
+    background-color: #e9ecef;
+    margin: 50px;
+}
+
+ #bike{
+    height: 300px;
+    width: 1000px;
+    align-items: center;
+    background-color: #e9ecef;
+    margin: 50px;
+    padding: 30px;
+
+} 
+
+#car {
+    height: 300px;
+    width: 1000px;
+    align-items: center;
+    background-color: #e9ecef;
+    margin: 50px;
+    padding: 30px;
+
+}
+
+#bicycle {
+    height: 300px;
+    width: 1000px;
+    align-items: center;
+    background-color: #e9ecef;
+    margin: 50px;
+    padding: 30px;
+
+}
+
+a {
+    text-decoration: none;
+}
+
+#tag {
+    display: flex;
+    justify-content: space-around;
+}
+body{
+     background-image: url(custom-honda-cbx-1000.jpg);
+     background: cover; 
+} 
+center:active{
+    background-color: #322b71;
+}
+section:active{
+    background-color: #3f1ad4;
+} 

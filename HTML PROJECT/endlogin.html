@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="endlogin.css">
+</head>
+<body>
+    <div class="container">
+        <form action="">
+            <h1>Registration</h1>
+            <fieldset>
+                <legend><h2>Form</h2></legend>
+                <label for="Name">Name</label>
+                <input type="text" id="name" placeholder="Name" required name="myname">
+                <br><br>
+                Email:- <input type="email" placeholder="email" required>
+                <br><br>
+                password:- <input type="password" placeholder="password" required>
+                <br><br>
+                Number:- <input type="number" placeholder="number" required>
+                <br><br>
+                Gender:- 
+                Male <input type="radio">
+                Female <input type="radio">
+                Transgender <input type="radio">
+                <br><br>
+                Hobbies:- 
+                Singing<input type="radio">
+                dancing<input type="radio">
+                others<input type="radio">
+                <br><br>
+                <label for="Country">Country:-</label>
+                <select id="Country">
+                    <option>INDIA</option>
+                    <option>RUSSIA</option>
+                    <option>PORTUGAL</option>
+                    <option>AFGANISTAN</option>
+                    <option>SRI LANKA</option>
+                    <option>ENGLAND</option>
+                    <option>NEWZELAND</option>
+                    <option>CHICAGO</option>
+                    <option>UAE</option>
+                    <option>SAUDI ARAB</option>
+                    <option>AUSTRALIA</option>
+                    <option>SPAIN</option>
+                </select>
+            </fieldset>
+        <br><br>
+        <button type="submit" class="btn" onclick="openPopup()">Submit</button>
+        <div class="popup" id="popup">
+            <img src="download.png" >
+            <h2>Thank You</h2>
+            <p>Your details has been successfully submitted. Thanks </p>
+            <button type="button" onclick="closePopup()" >OK</button>
+        </div>
+    </div>
+        </form>
+<script>
+let popup=document.getElementById("popup");
+
+function openPopup(){
+    popup.classList.add("open-popup")
+}
+function closePopup(){
+    popup.classList.remove("open-popup")
+}
+</script>
+    
+</body>
+</html>

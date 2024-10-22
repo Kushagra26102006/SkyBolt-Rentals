@@ -1,0 +1,96 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('car-background.jpg');
+    background-size: cover;
+    color: white;
+    text-align: center;
+    background-image: url('vistara_banner.jpg');
+    background: cover;
+}
+
+.container {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+#header {
+    margin-bottom: 30px;
+    background-color: #2198ec;
+    color: #fff;
+     padding: 10px 0;
+    text-align: center;
+}  
+
+.car-list {
+    display: flex;
+    justify-content: space-around;
+}
+a{
+    text-decoration: none;
+    color: #fff;
+}
+
+.car {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    width: 30%;
+    margin: 10px;
+}
+
+.car img {
+    width: 100%;
+    border-radius: 5px;
+}
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #3088e7;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+#title{
+    height: 100px;
+    width: 1430px;
+    background-color: rgb(4, 23, 54);
+    text-align: center;
+    color: #7295ba;
+    display: flex;
+    justify-content: center;
+    
+}
+   
+center:active{
+    background-color: #322b71;
+}
+section:active{
+    background-color: #3f1ad4;
+} 
+#tag{
+    flex-basis: auto;
+    flex-basis: 0;
+    flex-basis: 200px;
+}
+h1{
+    background-color: #0c3a5b;
+    display: flex;
+    justify-content: space-around;
+
+}  
+big{
+    font-size: 40px;
+}
+button{
+    height: 40px;
+    width: 60px;
+    background-color: rgb(128, 158, 98);
+    color: solid black;
+    margin: 5px;
+}
