@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com;">
+  
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Vehicle Details & Reserve - SkyBolt Rentals</title>
+  <meta name="description" content="View full vehicle specifications, features, safety standards, and calculate real-time daily rental rates with SkyBolt Rentals.">
+  
+  <meta property="og:title" content="Vehicle Details & Reserve - SkyBolt Rentals">
+  <meta property="og:description" content="View vehicle specs, features, and calculate daily rental rates instantly.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: var(--space-10);
+      align-items: start;
+    }
+
+    .details-media-container {
+      position: relative;
+      border-radius: var(--radius-2xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      background-color: var(--surface-muted);
+      aspect-ratio: 16 / 10;
+    }
+
+    .details-media-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .fav-btn-lg {
+      position: absolute;
+      top: var(--space-4);
+      right: var(--space-4);
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      background-color: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+      z-index: 5;
+    }
+
+    .fav-btn-lg.active {
+      color: var(--danger);
+      background-color: #FFFFFF;
+    }
+
+    .fav-btn-lg:hover {
+      transform: scale(1.08);
+    }
+
+    .booking-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-xl);
+      position: sticky;
+      top: calc(var(--header-height) + 1.5rem);
+    }
+
+    .spec-grid-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .spec-item {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3);
+      text-align: center;
+    }
+
+    .spec-item i {
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .spec-item span {
+      display: block;
+      font-size: var(--fs-2xs);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .spec-item strong {
+      font-size: var(--fs-xs);
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 960px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+      }
+      .booking-card {
+        position: static;
+      }
+    }
+
+    /* Production Reviews & Ratings Styling */
+    .reviews-section {
+      margin-top: var(--space-8);
+      padding-top: var(--space-8);
+      border-top: 1px solid var(--border);
+    }
+
+    .reviews-summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      margin-bottom: var(--space-6);
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: var(--space-8);
+      align-items: center;
+      box-shadow: var(--shadow-xs);
+    }
+
+    @media (max-width: 680px) {
+      .reviews-summary-card {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+        text-align: center;
+      }
+    }
+
+    .reviews-big-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-right: var(--space-4);
+      border-right: 1px solid var(--border);
+    }
+
+    @media (max-width: 680px) {
+      .reviews-big-score {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: var(--space-4);
+      }
+    }
+
+    .big-rating-number {
+      font-size: 3.25rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .rating-stars-gold {
+      color: #f59e0b;
+      margin: var(--space-2) 0;
+      display: flex;
+      gap: 3px;
+      font-size: 1.1rem;
+    }
+
+    .rating-distribution {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .dist-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--fs-xs);
+    }
+
+    .dist-label {
+      width: 48px;
+      color: var(--text-secondary);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .dist-track {
+      flex: 1;
+      height: 8px;
+      background: var(--surface-muted);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .dist-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      border-radius: var(--radius-full);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .dist-count {
+      width: 32px;
+      color: var(--text-muted);
+      font-family: monospace;
+      font-size: var(--fs-2xs);
+    }
+
+    .reviews-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+      padding: var(--space-3) var(--space-4);
+      background: var(--surface-muted);
+      border-radius: var(--radius-lg);
+    }
+
+    .review-card-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+      box-shadow: var(--shadow-xs);
+      transition: box-shadow var(--transition-fast);
+    }
+
+    .review-card-item:hover {
+      box-shadow: var(--shadow-sm);
+    }
+
+    .review-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-3);
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .review-author-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--primary), #3b82f6);
+      color: white;
+      font-weight: 700;
+      font-size: var(--fs-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: var(--fs-2xs);
+      font-weight: 700;
+    }
+
+    .review-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: var(--space-3);
+      margin-top: var(--space-4);
+      font-size: var(--fs-xs);
+    }
+
+    .btn-helpful {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: var(--radius-md);
+      padding: 4px 10px;
+      cursor: pointer;
+      font-size: var(--fs-xs);
+      transition: all var(--transition-fast);
+    }
+
+    .btn-helpful:hover {
+      background: var(--surface-muted);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-helpful.active {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary);
+      font-weight: 700;
+    }
+
+    .btn-report {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: var(--fs-xs);
+      transition: color var(--transition-fast);
+    }
+
+    .btn-report:hover {
+      color: var(--danger);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navbar Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/vehicles" class="nav-link active">Vehicles</a></li>
+          <li><a href="/bikes" class="nav-link">Bikes</a></li>
+          <li><a href="/cars" class="nav-link">Cars</a></li>
+          <li><a href="/scooters" class="nav-link">E-Scooters</a></li>
+          <li><a href="/#offers-section" class="nav-link">Offers</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link">Contact</a></li>
+          <li class="nav-actions-mobile">
+            <a href="/login" class="btn btn-outline">Login</a>
+            <a href="/vehicles" class="btn btn-primary">Book Now</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+        <a href="/login" class="btn btn-outline" id="btn-login">Login</a>
+        <a href="/vehicles" class="btn btn-primary" id="btn-book-now">Book Now</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="section">
+    <div class="container">
+      
+      <!-- Back Link & Breadcrumb -->
+      <div style="margin-bottom: var(--space-6);">
+        <a href="/vehicles" class="btn btn-ghost btn-sm">
+          <i class="fa-solid fa-arrow-left"></i> Back to Fleet Catalog
+        </a>
+      </div>
+
+      <div class="details-grid" id="details-container">
+        
+        <!-- Left Column: Media & Overview -->
+        <div>
+          <div class="details-media-container">
+            <button class="fav-btn-lg" id="detail-fav-btn" aria-label="Add to favorites">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+            <img src="assets/images/hero-bg.webp" alt="Vehicle Image" id="detail-img">
+          </div>
+
+          <div style="margin-top: var(--space-6);">
+            <div style="display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-3);">
+              <span class="badge badge-primary" id="detail-category-badge">Category</span>
+              <span class="badge badge-success" id="detail-rating-badge"><i class="fa-solid fa-star"></i> 4.9</span>
+              <span class="badge badge-neutral"><i class="fa-solid fa-shield"></i> Safety Inspected</span>
+            </div>
+
+            <h1 id="detail-title" style="font-size: var(--fs-3xl); margin-bottom: var(--space-2);">Vehicle Name</h1>
+            
+            <div style="display: flex; gap: var(--space-4); align-items: center; color: var(--text-secondary); font-size: var(--fs-sm); margin-bottom: var(--space-6);">
+              <span><i class="fa-solid fa-location-dot text-primary"></i> <span id="detail-location">Location</span></span>
+              <span><i class="fa-solid fa-comments text-muted"></i> <span id="detail-reviews">120 reviews</span></span>
+            </div>
+
+            <!-- Specs Grid -->
+            <div class="spec-grid-box" id="detail-specs-container">
+              <div class="spec-item">
+                <i class="fa-solid fa-gas-pump"></i>
+                <span>Fuel</span>
+                <strong id="spec-fuel">Petrol</strong>
+              </div>
+              <div class="spec-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Transmission</span>
+                <strong id="spec-trans">Automatic</strong>
+              </div>
+              <div class="spec-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Seating</span>
+                <strong id="spec-seats">5 Seats</strong>
+              </div>
+            </div>
+
+            <h3 style="margin-bottom: var(--space-3);">Overview</h3>
+            <p id="detail-description" style="font-size: var(--fs-md); line-height: var(--lh-relaxed); margin-bottom: var(--space-8);">
+              Detailed description of the vehicle.
+            </p>
+
+            <h3 style="margin-bottom: var(--space-4);">Rental Inclusions & Standards</h3>
+            <div class="features-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: var(--space-8);">
+              <div class="feature-card" style="padding: var(--space-4);">
+                <div class="feature-icon-wrapper" style="width: 40px; height: 40px; font-size: 1.1rem; margin-bottom: var(--space-2);">
+                  <i class="fa-solid fa-shield-check"></i>
+                </div>
+                <h4 style="font-size: var(--fs-sm);">40-Point Inspection</h4>
+                <p style="font-size: var(--fs-xs);">Every vehicle inspected before key handoff.</p>
+              </div>
+              <div class="feature-card" style="padding: var(--space-4);">
+                <div class="feature-icon-wrapper" style="width: 40px; height: 40px; font-size: 1.1rem; margin-bottom: var(--space-2);">
+                  <i class="fa-solid fa-headset"></i>
+                </div>
+                <h4 style="font-size: var(--fs-sm);">24/7 Roadside Care</h4>
+                <p style="font-size: var(--fs-xs);">Emergency assistance included with rental.</p>
+              </div>
+            </div>
+            <!-- Verified Customer Reviews Section -->
+            <section class="reviews-section" id="reviews-section">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-3);">
+                <div>
+                  <h3 style="margin-bottom: var(--space-1); font-size: var(--fs-xl);">Verified Customer Reviews</h3>
+                  <p style="font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 0;">
+                    Authoritative ratings directly from customers who completed real rentals.
+                  </p>
+                </div>
+                <div>
+                  <span class="verified-badge"><i class="fa-solid fa-shield-check"></i> 100% Verified Rentals</span>
+                </div>
+              </div>
+
+              <!-- Rating Summary Card -->
+              <div class="reviews-summary-card" id="reviews-summary-card">
+                <div class="reviews-big-score">
+                  <div class="big-rating-number" id="review-stat-avg">0.0</div>
+                  <div class="rating-stars-gold" id="review-stat-stars">
+                    <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                  </div>
+                  <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600;" id="review-stat-count">
+                    Based on 0 verified reviews
+                  </div>
+                </div>
+
+                <div class="rating-distribution" id="review-stat-distribution">
+                  <div class="dist-row">
+                    <span class="dist-label">5 stars</span>
+                    <div class="dist-track"><div class="dist-fill" id="dist-bar-5" style="width: 0%;"></div></div>
+                    <span class="dist-count" id="dist-count-5">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">4 stars</span>
+                    <div class="dist-track"><div class="dist-fill" id="dist-bar-4" style="width: 0%;"></div></div>
+                    <span class="dist-count" id="dist-count-4">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">3 stars</span>
+                    <div class="dist-track"><div class="dist-fill" id="dist-bar-3" style="width: 0%;"></div></div>
+                    <span class="dist-count" id="dist-count-3">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">2 stars</span>
+                    <div class="dist-track"><div class="dist-fill" id="dist-bar-2" style="width: 0%;"></div></div>
+                    <span class="dist-count" id="dist-count-2">0</span>
+                  </div>
+                  <div class="dist-row">
+                    <span class="dist-label">1 star</span>
+                    <div class="dist-track"><div class="dist-fill" id="dist-bar-1" style="width: 0%;"></div></div>
+                    <span class="dist-count" id="dist-count-1">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reviews Filter / Sort Toolbar -->
+              <div class="reviews-toolbar">
+                <div style="display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap;">
+                  <span style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary);">Filter:</span>
+                  <select id="review-filter-rating" class="form-control" style="width: auto; padding: 4px 10px; font-size: var(--fs-xs); height: auto;">
+                    <option value="">All Star Ratings</option>
+                    <option value="5">5 Stars only</option>
+                    <option value="4">4 Stars only</option>
+                    <option value="3">3 Stars only</option>
+                    <option value="2">2 Stars only</option>
+                    <option value="1">1 Star only</option>
+                  </select>
+                </div>
+
+                <div style="display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap;">
+                  <span style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary);">Sort by:</span>
+                  <select id="review-sort-select" class="form-control" style="width: auto; padding: 4px 10px; font-size: var(--fs-xs); height: auto;">
+                    <option value="newest">Most Recent</option>
+                    <option value="highest_rating">Highest Rated</option>
+                    <option value="lowest_rating">Lowest Rated</option>
+                    <option value="most_helpful">Most Helpful</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Reviews Dynamic List -->
+              <div id="reviews-list-container">
+                <div style="text-align: center; padding: var(--space-8); color: var(--text-muted);">
+                  <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.5rem; margin-bottom: var(--space-2);"></i>
+                  <p style="font-size: var(--fs-xs);">Loading verified customer experiences...</p>
+                </div>
+              </div>
+
+              <!-- Reviews Pagination -->
+              <div id="reviews-pagination-container" style="display: flex; justify-content: center; gap: var(--space-2); margin-top: var(--space-6);"></div>
+            </section>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Booking Calculator Panel -->
+        <aside class="booking-card" id="booking-panel">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-6); padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-light);">
+            <div>
+              <span style="font-size: var(--fs-xs); color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Daily Rate</span>
+              <div style="font-size: var(--fs-3xl); font-weight: 800; color: var(--primary); line-height: 1.1;" id="detail-price-display">
+                ₹500 <span style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 400;">/ day</span>
+              </div>
+            </div>
+            <div style="font-size: var(--fs-xs); color: var(--success); font-weight: 700;">
+              <i class="fa-solid fa-circle-check"></i> Ready for Pickup
+            </div>
+          </div>
+
+          <form id="booking-calc-form">
+            <div class="form-group">
+              <label for="calc-location"><i class="fa-solid fa-location-dot"></i> Pickup & Return Hub</label>
+              <select id="calc-location" class="form-control">
+                <option value="Bangalore">Bangalore Tech Hub</option>
+                <option value="Delhi">Delhi Aerocity Hub</option>
+                <option value="Ludhiana">Ludhiana Central Hub</option>
+                <option value="New York">New York Central Depot</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="calc-pickup-date">Pickup Date</label>
+                <input type="date" id="calc-pickup-date" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="calc-return-date">Return Date</label>
+                <input type="date" id="calc-return-date" class="form-control">
+              </div>
+            </div>
+
+            <div id="calc-availability-badge" style="margin: var(--space-3) 0;"></div>
+
+            <!-- Real-Time Price Breakdown Box -->
+            <div class="price-breakdown">
+              <div class="breakdown-row">
+                <span>Rental Duration</span>
+                <span id="breakdown-days">3 Days</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Daily Rate</span>
+                <span id="breakdown-rate">₹500</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Subtotal</span>
+                <span id="breakdown-subtotal">₹1500</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Taxes & GST (18%)</span>
+                <span id="breakdown-tax">₹270</span>
+              </div>
+              <div class="breakdown-row total">
+                <span>Estimated Total</span>
+                <span id="breakdown-total" class="text-primary">₹1770</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-reserve-submit">
+              Reserve Vehicle <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <p style="font-size: var(--fs-xs); color: var(--text-muted); text-align: center; margin-top: var(--space-4); margin-bottom: 0;">
+            <i class="fa-solid fa-lock"></i> Authoritative pricing verified server-side. Free cancellation up to 24h before pickup.
+          </p>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Reservation Confirmation Modal -->
+  <div class="modal-overlay" id="success-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-circle-check text-primary"></i> Reservation Initiated</h3>
+        <button class="modal-close-btn" id="close-modal-btn" aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body text-center">
+        <p id="modal-summary-text" class="lead" style="margin-bottom: var(--space-4);">Your vehicle reservation hold has been created successfully.</p>
+        <a href="booking" class="btn btn-primary btn-block" id="modal-proceed-booking">Proceed to Checkout</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Review Modal -->
+  <div class="modal-overlay" id="report-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-flag text-danger"></i> Report Inappropriate Review</h3>
+        <button class="modal-close-btn" id="close-report-modal-btn" aria-label="Close report dialog"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="report-review-form">
+          <input type="hidden" id="report-target-review-id">
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label for="report-reason" style="font-size: var(--fs-sm); font-weight: 600;">Reason for Report *</label>
+            <select id="report-reason" class="form-control" required>
+              <option value="">Select a reason...</option>
+              <option value="SPAM">Spam or commercial advertising</option>
+              <option value="INAPPROPRIATE_CONTENT">Inappropriate or offensive content</option>
+              <option value="ABUSIVE_CONTENT">Abusive or harassing language</option>
+              <option value="FRAUDULENT">Suspected fraudulent or misleading claim</option>
+              <option value="IRRELEVANT">Irrelevant or not about the rental experience</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label for="report-description" style="font-size: var(--fs-sm); font-weight: 600;">Additional Context (Optional)</label>
+            <textarea id="report-description" class="form-control" rows="3" maxlength="1000" placeholder="Provide details to assist moderation staff..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: var(--space-3); justify-content: flex-end; margin-top: var(--space-4);">
+            <button type="button" class="btn btn-outline" id="btn-cancel-report">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-report">Submit Report</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> SkyBolt Rentals</h3>
+          <p>Move freely. Rent smarter. Verified vehicle fleet.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Fleet</h4>
+          <ul>
+            <li><a href="/vehicles">All Fleet</a></li>
+            <li><a href="/bikes">Bikes</a></li>
+            <li><a href="/cars">Cars</a></li>
+            <li><a href="/scooters">E-Scooters</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Customer Care</a></li>
+            <li><a href="/#offers-section">Promotions</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/contact">Help Center</a></li>
+            <li><a href="/login">Login</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/vehicles">Fleet</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/details.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

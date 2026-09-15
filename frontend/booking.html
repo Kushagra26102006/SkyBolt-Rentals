@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com https://maps.google.com https://www.google.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com https://maps.google.com https://www.google.com;">
+  
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Vehicle Checkout &amp; Reservation - SkyBolt Rentals</title>
+  <meta name="description" content="Complete your vehicle rental reservation with SkyBolt Rentals. Authoritative transparent pricing, instant confirmation, and 24/7 support.">
+  
+  <meta property="og:title" content="Vehicle Checkout &amp; Reservation - SkyBolt Rentals">
+  <meta property="og:description" content="Complete your vehicle rental reservation in 5 easy steps.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Razorpay Official Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Modular Design System Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    /* ===================================================================
+       Booking Page - Dedicated Wizard Styles (Guaranteed Override)
+       =================================================================== */
+
+    /* Page background gradient */
+    body {
+      background: var(--background);
+    }
+
+    .booking-hero {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-muted) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 0 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .booking-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .booking-hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .booking-hero-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.375rem;
+      flex-shrink: 0;
+      box-shadow: 0 8px 20px rgba(37,99,235,0.3);
+    }
+
+    .booking-hero h1 {
+      font-size: 1.875rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .booking-hero p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0;
+    }
+
+    /* ===================================================================
+       Wizard Progress Stepper — Completely Rebuilt
+       =================================================================== */
+
+    .wizard-progress-wrap {
+      margin-bottom: 2rem;
+    }
+
+    .wizard-steps-bar {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Connecting track behind the steps */
+    .wizard-steps-bar::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: calc(1.5rem + 18px);
+      right: calc(1.5rem + 18px);
+      height: 2px;
+      background: var(--border);
+      transform: translateY(-50%);
+      z-index: 0;
+    }
+
+    /* Progress fill overlay (controlled by JS step count) */
+    .wizard-steps-bar::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: calc(1.5rem + 18px);
+      width: var(--progress-width, 0%);
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), #6366f1);
+      transform: translateY(-50%);
+      z-index: 0;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .wizard-step {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 6px !important;
+      position: relative;
+      z-index: 2;
+      flex: 1 !important;
+      text-align: center;
+      cursor: default;
+    }
+
+    .step-number {
+      width: 38px !important;
+      height: 38px !important;
+      border-radius: 50% !important;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .wizard-step.active .step-number {
+      background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%) !important;
+      border-color: var(--primary) !important;
+      color: #fff !important;
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.15), 0 4px 12px rgba(37,99,235,0.35) !important;
+      transform: scale(1.1);
+    }
+
+    .wizard-step.completed .step-number {
+      background: var(--success) !important;
+      border-color: var(--success) !important;
+      color: #fff !important;
+      box-shadow: 0 2px 8px rgba(16,185,129,0.3) !important;
+    }
+
+    .wizard-step.completed .step-number::after {
+      display: none;
+    }
+
+    .step-label {
+      font-size: 0.6875rem !important;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      transition: color 0.2s;
+    }
+
+    .wizard-step.active .step-label {
+      color: var(--primary) !important;
+      font-weight: 700;
+    }
+
+    .wizard-step.completed .step-label {
+      color: var(--success);
+    }
+
+    @media (max-width: 500px) {
+      .step-label { display: none; }
+      .wizard-steps-bar { padding: 1rem; }
+    }
+
+    /* ===================================================================
+       Wizard Panels
+       =================================================================== */
+
+    .wizard-panel {
+      display: none !important;
+      animation: panelIn 0.25s ease;
+    }
+
+    .wizard-panel.active {
+      display: block !important;
+    }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateX(10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ===================================================================
+       Form Card Enhancement
+       =================================================================== */
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.25rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    }
+
+    @media (max-width: 640px) {
+      .form-card { padding: 1.25rem; }
+    }
+
+    /* Step section headings */
+    .step-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-heading-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .step-heading h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0;
+    }
+
+    .step-heading span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ===================================================================
+       Vehicle Preview Card — Step 1
+       =================================================================== */
+
+    .vehicle-preview-card {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.125rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .vehicle-preview-card:hover {
+      border-color: rgba(37,99,235,0.3);
+    }
+
+    .vehicle-preview-img {
+      width: 110px;
+      height: 76px;
+      object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
+      background: var(--border);
+    }
+
+    .vehicle-preview-info h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .vehicle-preview-specs {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .vehicle-preview-price {
+      font-size: 1.125rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* ===================================================================
+       Navigation Buttons Row
+       =================================================================== */
+
+    .wizard-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .wizard-nav.single {
+      justify-content: flex-end;
+    }
+
+    /* ===================================================================
+       Review Summary — Step 4
+       =================================================================== */
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 600px) {
+      .review-grid { grid-template-columns: 1fr; }
+    }
+
+    .review-tile {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .review-tile-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .review-tile h4 {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+    }
+
+    .review-tile .sub {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Price Breakdown */
+    .price-breakdown {
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .breakdown-row:last-child {
+      border-bottom: none;
+    }
+
+    .breakdown-row span:last-child {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .breakdown-row.total {
+      padding-top: 0.75rem;
+      margin-top: 0.5rem;
+      border-top: 2px solid var(--border);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .breakdown-row.total span:last-child {
+      color: var(--primary);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    /* ===================================================================
+       Step 5 Confirmation
+       =================================================================== */
+
+    .confirm-success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 8px 24px rgba(16,185,129,0.35);
+    }
+
+    .booking-receipt {
+      background: var(--surface-muted);
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      max-width: 460px;
+      margin: 0 auto 2rem;
+      text-align: left;
+    }
+
+    .receipt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.875rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .receipt-ref-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    .receipt-ref-value {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 800;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .receipt-row:last-child {
+      border-bottom: none;
+    }
+
+    .receipt-row strong {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .receipt-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-top: 0.875rem;
+      padding-top: 0.875rem;
+      border-top: 2px solid var(--border);
+    }
+
+    /* ===================================================================
+       Date Picker Enhancement
+       =================================================================== */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      opacity: 0.6;
+      cursor: pointer;
+      filter: var(--date-icon-filter, none);
+    }
+
+    [data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+
+    /* Hub select dropdown with icon */
+    .hub-select-wrap {
+      position: relative;
+    }
+
+    .hub-select-wrap .hub-icon {
+      position: absolute;
+      left: 0.875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      font-size: 0.875rem;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hub-select-wrap select {
+      padding-left: 2.25rem;
+    }
+
+    /* ===================================================================
+       Secure Checkout Badge Strip
+       =================================================================== */
+    .secure-strip {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      padding: 0.625rem 0.875rem;
+      background: var(--primary-muted);
+      border: 1px solid rgba(37,99,235,0.15);
+      border-radius: 10px;
+    }
+
+    .secure-strip-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Availability badge */
+    #step2-availability-badge {
+      margin: 0.875rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navbar Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/vehicles" class="nav-link">Vehicles</a></li>
+          <li><a href="/bikes" class="nav-link">Bikes</a></li>
+          <li><a href="/cars" class="nav-link">Cars</a></li>
+          <li><a href="/scooters" class="nav-link">E-Scooters</a></li>
+          <li><a href="/#offers-section" class="nav-link">Offers</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link">Contact</a></li>
+          <li class="nav-actions-mobile">
+            <a href="/login" class="btn btn-outline">Login</a>
+            <a href="/vehicles" class="btn btn-primary">Book Now</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+        <a href="/login" class="btn btn-outline" id="btn-login">Login</a>
+        <a href="/vehicles" class="btn btn-primary" id="btn-book-now">Book Now</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Hero Banner -->
+  <section class="booking-hero">
+    <div class="container">
+      <div class="booking-hero-inner">
+        <div class="booking-hero-icon">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <div>
+          <h1>Reservation Checkout</h1>
+          <p>Complete your rental in 5 steps with instant availability verification and transparent pricing.</p>
+        </div>
+      </div>
+
+      <div class="secure-strip">
+        <div class="secure-strip-item"><i class="fa-solid fa-shield-halved"></i> Secure Checkout</div>
+        <div class="secure-strip-item"><i class="fa-solid fa-bolt"></i> Instant Confirmation</div>
+        <div class="secure-strip-item"><i class="fa-solid fa-rotate-left"></i> Free Cancellation</div>
+        <div class="secure-strip-item"><i class="fa-solid fa-headset"></i> 24/7 Support</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wizard Content Section -->
+  <main class="section" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+    <div class="container container-narrow">
+
+      <!-- Progress Stepper -->
+      <div class="wizard-progress-wrap">
+        <div class="wizard-steps-bar" id="wizard-steps-indicator">
+          <div class="wizard-step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Vehicle</div>
+          </div>
+          <div class="wizard-step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Dates</div>
+          </div>
+          <div class="wizard-step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Details</div>
+          </div>
+          <div class="wizard-step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-label">Summary</div>
+          </div>
+          <div class="wizard-step" data-step="5">
+            <div class="step-number">5</div>
+            <div class="step-label">Confirmed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Form Card -->
+      <div class="form-card">
+        <form id="wizard-form">
+
+          <!-- ============================================================
+               STEP 1: Vehicle Selection
+               ============================================================ -->
+          <div class="wizard-panel active" data-panel="1">
+            <div class="step-heading">
+              <div class="step-heading-icon"><i class="fa-solid fa-car"></i></div>
+              <div>
+                <h3>Select Your Vehicle</h3>
+                <span>Choose from our available fleet</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="step1-vehicle-select">Available Vehicles</label>
+              <select id="step1-vehicle-select" class="form-control">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+
+            <!-- Vehicle Preview Card -->
+            <div class="vehicle-preview-card" id="step1-preview-card">
+              <img src="assets/images/car-tour.webp" id="step1-preview-img" alt="Vehicle preview" class="vehicle-preview-img" onerror="this.src='assets/images/car-tour.webp'">
+              <div class="vehicle-preview-info">
+                <h4 id="step1-preview-title">Vehicle Name</h4>
+                <div class="vehicle-preview-specs" id="step1-preview-specs">Fuel · Transmission · Hub</div>
+                <div class="vehicle-preview-price" id="step1-preview-price">₹500 / day</div>
+              </div>
+            </div>
+
+            <div class="wizard-nav single">
+              <button type="button" class="btn btn-primary btn-next-step" data-next="2">
+                Continue to Dates &nbsp;<i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               STEP 2: Dates & Location
+               ============================================================ -->
+          <div class="wizard-panel" data-panel="2">
+            <div class="step-heading">
+              <div class="step-heading-icon"><i class="fa-solid fa-calendar-days"></i></div>
+              <div>
+                <h3>Rental Dates &amp; Hub</h3>
+                <span>Select your pickup location and rental period</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="step2-location"><i class="fa-solid fa-location-dot text-primary"></i>&nbsp; Pickup &amp; Return Hub</label>
+              <div class="hub-select-wrap">
+                <i class="hub-icon fa-solid fa-location-dot"></i>
+                <select id="step2-location" class="form-control">
+                  <option value="Bangalore">Bangalore Tech Hub</option>
+                  <option value="Delhi">Delhi Aerocity Hub</option>
+                  <option value="Ludhiana">Ludhiana Central Hub</option>
+                  <option value="New York">New York Central Depot</option>
+                </select>
+              </div>
+
+              <!-- Selected Hub Google Map Preview -->
+              <div class="booking-hub-map-card" id="booking-hub-map-card">
+                <div class="booking-hub-map-header">
+                  <span class="booking-hub-name" id="booking-hub-map-name">
+                    <i class="fa-solid fa-location-dot"></i> <span id="booking-hub-map-title">Bangalore Tech Hub</span>
+                  </span>
+                  <a href="https://www.google.com/maps/dir/?api=1&destination=12.8452,77.6602" target="_blank" rel="noopener" class="booking-hub-directions-link" id="booking-hub-map-directions">
+                    <span>Directions</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                  </a>
+                </div>
+                <iframe
+                  id="booking-hub-map-iframe"
+                  class="booking-hub-iframe"
+                  title="Pickup Hub Map Preview"
+                  src="https://maps.google.com/maps?q=Electronic%20City%20Phase%201%20Hosur%20Road%20Bangalore&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                  loading="lazy"
+                  allowfullscreen
+                  referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+                <div class="booking-hub-meta">
+                  <div class="booking-hub-meta-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <span id="booking-hub-map-hours">Open 24/7 (365 Days)</span>
+                  </div>
+                  <div class="booking-hub-meta-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Fast Key Handoff &amp; Sanitized Fleet</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="step2-pickup-date">Pickup Date</label>
+                <input type="date" id="step2-pickup-date" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="step2-return-date">Return Date</label>
+                <input type="date" id="step2-return-date" class="form-control">
+              </div>
+            </div>
+
+            <!-- Live Availability Badge inserted here by JS -->
+            <div id="step2-availability-badge"></div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-outline btn-prev-step" data-prev="1"><i class="fa-solid fa-arrow-left"></i>&nbsp; Previous</button>
+              <button type="button" class="btn btn-primary btn-next-step" data-next="3">Customer Info &nbsp;<i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               STEP 3: Customer Details
+               ============================================================ -->
+          <div class="wizard-panel" data-panel="3">
+            <div class="step-heading">
+              <div class="step-heading-icon"><i class="fa-solid fa-id-card"></i></div>
+              <div>
+                <h3>Driver &amp; Customer Details</h3>
+                <span>Required for booking confirmation</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="step3-name">Full Legal Name</label>
+              <input type="text" id="step3-name" class="form-control" placeholder="John Doe" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="step3-email">Email Address</label>
+                <input type="email" id="step3-email" class="form-control" placeholder="name@example.com" required>
+              </div>
+              <div class="form-group">
+                <label for="step3-phone">Phone Number</label>
+                <input type="tel" id="step3-phone" class="form-control" placeholder="+91 98765 43210" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="step3-license">Driving License Number</label>
+              <input type="text" id="step3-license" class="form-control" placeholder="DL-04-2022-1234567" required>
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-outline btn-prev-step" data-prev="2"><i class="fa-solid fa-arrow-left"></i>&nbsp; Previous</button>
+              <button type="button" class="btn btn-primary btn-next-step" data-next="4">Review Summary &nbsp;<i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               STEP 4: Review & Pricing
+               ============================================================ -->
+          <div class="wizard-panel" data-panel="4">
+            <div class="step-heading">
+              <div class="step-heading-icon"><i class="fa-solid fa-receipt"></i></div>
+              <div>
+                <h3>Review Booking Summary</h3>
+                <span>Confirm all details before payment</span>
+              </div>
+            </div>
+
+            <div class="review-grid">
+              <div class="review-tile">
+                <div class="review-tile-label">Vehicle &amp; Hub</div>
+                <h4 id="review-vehicle-name">Honda Activa 5G</h4>
+                <div class="sub" id="review-location"><i class="fa-solid fa-location-dot text-primary"></i> Ludhiana Central Hub</div>
+              </div>
+              <div class="review-tile">
+                <div class="review-tile-label">Customer &amp; Dates</div>
+                <h4 id="review-customer-name">John Doe</h4>
+                <div class="sub" id="review-dates-range"><i class="fa-solid fa-calendar"></i> Aug 20 – Aug 23, 2026</div>
+              </div>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="price-breakdown">
+              <div class="breakdown-row">
+                <span>Rental Duration</span>
+                <span id="review-days">3 Days</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Daily Rental Rate</span>
+                <span id="review-rate">₹500</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Base Subtotal</span>
+                <span id="review-subtotal">₹1,500</span>
+              </div>
+              <div class="breakdown-row">
+                <span>GST (18%)</span>
+                <span id="review-tax">₹270</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Refundable Security Deposit</span>
+                <span id="review-deposit">₹1,000</span>
+              </div>
+              <div class="breakdown-row total">
+                <span>Total Payable Amount</span>
+                <span id="review-total">₹2,770</span>
+              </div>
+            </div>
+
+            <!-- Payment Gateway Channel Selector -->
+            <div class="payment-method-card" style="margin: 1.5rem 0; padding: 1.25rem; background: var(--surface-muted); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <i class="fa-solid fa-shield-halved" style="color: #0284c7; font-size: 1.1rem;"></i>
+                  <strong style="font-size: var(--fs-sm); color: var(--text-primary);">Pay via Razorpay Secure Gateway</strong>
+                </div>
+                <span class="badge" style="background: rgba(2, 132, 199, 0.12); color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.3); font-size: 0.75rem; font-weight: 700;">
+                  <i class="fa-solid fa-lock"></i> 256-Bit SSL
+                </span>
+              </div>
+              <p style="font-size: var(--fs-xs); color: var(--text-secondary); margin-bottom: 0.75rem;">
+                Complete payment seamlessly via Instant UPI, Credit/Debit Cards, NetBanking, or Digital Wallets.
+              </p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 11px; padding: 3px 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                  <i class="fa-solid fa-qrcode text-primary"></i> UPI (GPay / PhonePe / Paytm)
+                </span>
+                <span style="font-size: 11px; padding: 3px 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                  <i class="fa-solid fa-credit-card text-primary"></i> All Major Cards
+                </span>
+                <span style="font-size: 11px; padding: 3px 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                  <i class="fa-solid fa-building-columns text-primary"></i> NetBanking (50+ Banks)
+                </span>
+              </div>
+            </div>
+
+            <div class="wizard-nav">
+              <button type="button" class="btn btn-outline btn-prev-step" data-prev="3"><i class="fa-solid fa-arrow-left"></i>&nbsp; Previous</button>
+              <button type="button" class="btn btn-primary btn-lg" id="btn-confirm-booking">
+                <i class="fa-solid fa-lock"></i>&nbsp; Pay with Razorpay
+              </button>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               STEP 5: Confirmation Success
+               ============================================================ -->
+          <div class="wizard-panel" data-panel="5">
+            <div class="text-center" style="padding: 1.5rem 0;">
+              <div class="confirm-success-icon">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <h2 style="margin-bottom: 0.5rem;">Booking Confirmed!</h2>
+              <p style="color: var(--text-muted); max-width: 420px; margin: 0 auto 1.75rem; font-size: 0.9375rem;">
+                Your vehicle has been successfully reserved. A confirmation has been saved to your account.
+              </p>
+
+              <div class="booking-receipt">
+                <div class="receipt-header">
+                  <span class="receipt-ref-label">Booking Reference</span>
+                  <span class="receipt-ref-value" id="confirm-booking-id">SKY-2026-48291</span>
+                </div>
+
+                <div class="receipt-row">
+                  <strong>Vehicle</strong>
+                  <span id="confirm-vehicle">Honda Activa 5G</span>
+                </div>
+                <div class="receipt-row">
+                  <strong>Pickup Hub</strong>
+                  <span id="confirm-location">Ludhiana Central Hub</span>
+                </div>
+                <div class="receipt-row">
+                  <strong>Pickup Date</strong>
+                  <span id="confirm-pickup">2026-08-20</span>
+                </div>
+                <div class="receipt-row">
+                  <strong>Return Date</strong>
+                  <span id="confirm-return">2026-08-23</span>
+                </div>
+                <div class="receipt-row" id="confirm-payment-ref-row">
+                  <strong>Payment Ref</strong>
+                  <span id="confirm-payment-ref" style="font-family: var(--font-mono); font-weight: 700; font-size: 0.8125rem;">PAY-2026...</span>
+                </div>
+                <div class="receipt-row">
+                  <strong>Status</strong>
+                  <span id="confirm-payment-status" style="font-weight: 700; color: var(--success);"><i class="fa-solid fa-circle-check"></i> Paid &amp; Confirmed</span>
+                </div>
+
+                <div class="receipt-total">
+                  <span>Total Paid</span>
+                  <span id="confirm-total" class="text-primary">₹2,770</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="/dashboard" class="btn btn-primary btn-lg"><i class="fa-solid fa-gauge"></i>&nbsp; My Dashboard</a>
+                <a href="/vehicles" class="btn btn-outline btn-lg">Browse More Vehicles</a>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/vehicles">Fleet</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/payment-gateway.js"></script>
+  <script src="js/booking.js"></script>
+  <script src="js/ui.js"></script>
+
+  <script>
+    // Update stepper progress bar line width based on current step
+    function updateProgressBar(step) {
+      const bar = document.getElementById('wizard-steps-indicator');
+      if (!bar) return;
+      const totalSteps = 5;
+      const pct = ((step - 1) / (totalSteps - 1)) * 100;
+      bar.style.setProperty('--progress-width', pct + '%');
+    }
+
+    // Patch goToStep to update progress bar
+    const _origGoToStep = window.goToStep;
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProgressBar(1);
+
+      // Override goToStep to add progress bar update
+      const originalGoToStep = window.goToStep;
+      if (typeof originalGoToStep === 'function') {
+        window.goToStep = function(stepNumber) {
+          originalGoToStep(stepNumber);
+          updateProgressBar(stepNumber);
+        };
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com;">
+  
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Vehicle Owner Dashboard - SkyBolt Rentals</title>
+  <meta name="description" content="Manage your listed rental fleet, view incoming customer bookings, track rental revenue, and add new bikes or vehicles.">
+  
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <base href="/">
+  
+  <!-- Modular Design System Styles -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/hero.css">
+  <link rel="stylesheet" href="/css/cards.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+
+  <style>
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    .dash-sidebar {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: calc(var(--header-height) + 1.25rem);
+    }
+
+    .dash-user-badge {
+      text-align: center;
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: var(--space-6);
+    }
+
+    .dash-avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, #7c3aed 0%, var(--primary) 100%);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin: 0 auto var(--space-3);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dash-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .dash-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .dash-tab-btn:hover {
+      color: var(--primary);
+      background-color: var(--bg-alt);
+    }
+
+    .dash-tab-btn.active {
+      color: #7c3aed;
+      background-color: rgba(124, 58, 237, 0.1);
+      font-weight: 700;
+    }
+
+    .dash-tab-btn i {
+      width: 20px;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    .stat-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+
+    .stat-kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stat-kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-kpi-card .stat-icon {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      opacity: 0.2;
+    }
+
+    .stat-kpi-card .stat-val {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .stat-kpi-card .stat-lbl {
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .vehicle-table-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--fs-sm);
+      text-align: left;
+    }
+
+    .dash-table th {
+      background: var(--bg-alt);
+      padding: var(--space-3) var(--space-4);
+      font-weight: 700;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.05em;
+    }
+
+    .dash-table td {
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+      color: var(--text);
+    }
+
+    .dash-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-approved { background: rgba(16, 185, 129, 0.15); color: #059669; }
+    .badge-pending { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+    .badge-rejected { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+    .badge-inactive { background: rgba(107, 114, 128, 0.15); color: #4b5563; }
+
+    @media (max-width: 900px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+      .dash-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navbar Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/vehicles" class="nav-link">Fleet</a></li>
+          <li><a href="/owner-dashboard" class="nav-link active">Owner Dashboard</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link">Support</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Dynamically rendered by app.js -->
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Header Title -->
+  <section style="background: var(--surface); border-bottom: 1px solid var(--border); padding: var(--space-8) 0;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div>
+          <span class="badge" style="background: rgba(124, 58, 237, 0.15); color: #7c3aed; font-weight: 700; margin-bottom: var(--space-2); display: inline-block;">
+            <i class="fa-solid fa-key"></i> Vehicle Owner Portal
+          </span>
+          <h1 style="font-size: var(--fs-3xl); margin-bottom: 4px;" id="owner-welcome-title">Owner Dashboard</h1>
+          <p class="text-muted" style="margin-bottom: 0;">Manage your listed vehicles, incoming rentals, and payout earnings.</p>
+        </div>
+        <div>
+          <a href="/owner/add-vehicle" class="btn btn-primary btn-lg" id="btn-header-add-vehicle" style="background: linear-gradient(135deg, #7c3aed, var(--primary)); border: none;">
+            <i class="fa-solid fa-plus"></i> List New Vehicle
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dashboard Main Layout -->
+  <main class="section" style="padding-top: var(--space-8);">
+    <div class="container">
+      <div class="dashboard-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="dash-sidebar">
+          <div class="dash-user-badge">
+            <div class="dash-avatar" id="owner-avatar-icon">O</div>
+            <h3 style="font-size: var(--fs-lg); margin-bottom: 2px;" id="owner-display-name">Loading...</h3>
+            <p class="text-muted" style="font-size: var(--fs-xs); margin-bottom: var(--space-2);" id="owner-display-email">owner@example.com</p>
+            <span class="badge badge-pending" id="owner-verification-badge">
+              <i class="fa-solid fa-clock"></i> Verification Pending
+            </span>
+          </div>
+
+          <nav class="dash-nav" aria-label="Dashboard Tabs">
+            <button class="dash-tab-btn active" data-tab="overview">
+              <i class="fa-solid fa-chart-pie"></i> Overview
+            </button>
+            <button class="dash-tab-btn" data-tab="my-vehicles">
+              <i class="fa-solid fa-motorcycle"></i> My Listed Vehicles
+            </button>
+            <button class="dash-tab-btn" data-tab="bookings">
+              <i class="fa-solid fa-calendar-check"></i> Vehicle Rentals
+            </button>
+            <button class="dash-tab-btn" data-tab="earnings">
+              <i class="fa-solid fa-wallet"></i> Earnings & Payouts
+            </button>
+            <button class="dash-tab-btn" data-tab="profile">
+              <i class="fa-solid fa-user-gear"></i> Owner Profile
+            </button>
+            <hr style="border: none; border-top: 1px solid var(--border-light); margin: var(--space-2) 0;">
+            <a href="/owner/add-vehicle" class="dash-tab-btn" style="color: #7c3aed; font-weight: 700;">
+              <i class="fa-solid fa-circle-plus"></i> Add Vehicle
+            </a>
+          </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="dash-content">
+
+          <!-- TAB 1: OVERVIEW -->
+          <div class="dash-tab-panel" id="panel-overview">
+            
+            <!-- KPI Cards Grid -->
+            <div class="stat-kpi-grid">
+              <div class="stat-kpi-card">
+                <i class="fa-solid fa-motorcycle stat-icon text-primary"></i>
+                <div class="stat-val" id="stat-total-vehicles">0</div>
+                <div class="stat-lbl">Listed Vehicles</div>
+              </div>
+              <div class="stat-kpi-card">
+                <i class="fa-solid fa-circle-check stat-icon" style="color: #10B981;"></i>
+                <div class="stat-val" style="color: #10B981;" id="stat-active-vehicles">0</div>
+                <div class="stat-lbl">Active & Approved</div>
+              </div>
+              <div class="stat-kpi-card">
+                <i class="fa-solid fa-hourglass-half stat-icon" style="color: #F59E0B;"></i>
+                <div class="stat-val" style="color: #F59E0B;" id="stat-pending-vehicles">0</div>
+                <div class="stat-lbl">Pending Review</div>
+              </div>
+              <div class="stat-kpi-card">
+                <i class="fa-solid fa-calendar-days stat-icon text-primary"></i>
+                <div class="stat-val" id="stat-total-bookings">0</div>
+                <div class="stat-lbl">Total Bookings</div>
+              </div>
+              <div class="stat-kpi-card">
+                <i class="fa-solid fa-indian-rupee-sign stat-icon" style="color: #7c3aed;"></i>
+                <div class="stat-val" style="color: #7c3aed;" id="stat-total-earnings">₹0</div>
+                <div class="stat-lbl">Total Earnings</div>
+              </div>
+            </div>
+
+            <!-- Quick Action / Onboarding Notice -->
+            <div id="owner-status-banner" style="background: var(--surface); border: 1px solid var(--border); border-left: 4px solid #7c3aed; border-radius: var(--radius-lg); padding: var(--space-5); margin-bottom: var(--space-8); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);">
+              <div style="display: flex; align-items: center; gap: var(--space-4);">
+                <div style="width: 44px; height: 44px; border-radius: var(--radius-full); background: rgba(124, 58, 237, 0.1); color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                  <i class="fa-solid fa-shield-check"></i>
+                </div>
+                <div>
+                  <h4 style="margin-bottom: 2px;">Earn with SkyBolt Rentals</h4>
+                  <p class="text-muted" style="margin-bottom: 0; font-size: var(--fs-sm);">List your bike, car or scooter and receive direct earnings on every completed rental.</p>
+                </div>
+              </div>
+              <a href="/owner/add-vehicle" class="btn btn-outline btn-sm">List Another Vehicle</a>
+            </div>
+
+            <!-- Recent Vehicles Summary -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+              <h3 style="font-size: var(--fs-xl); margin-bottom: 0;">My Vehicles</h3>
+              <button class="btn btn-sm btn-outline btn-switch-tab" data-target="my-vehicles">View All</button>
+            </div>
+            <div class="vehicle-table-container mb-8">
+              <table class="dash-table" id="table-overview-vehicles">
+                <thead>
+                  <tr>
+                    <th>Vehicle</th>
+                    <th>Category</th>
+                    <th>Rate / Day</th>
+                    <th>Hub / City</th>
+                    <th>Approval Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-overview-vehicles">
+                  <tr><td colspan="6" class="text-center text-muted" style="padding: var(--space-8);">Loading your vehicles...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Recent Bookings Summary -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+              <h3 style="font-size: var(--fs-xl); margin-bottom: 0;">Recent Vehicle Bookings</h3>
+              <button class="btn btn-sm btn-outline btn-switch-tab" data-target="bookings">View All</button>
+            </div>
+            <div class="vehicle-table-container">
+              <table class="dash-table" id="table-overview-bookings">
+                <thead>
+                  <tr>
+                    <th>Booking Ref</th>
+                    <th>Vehicle</th>
+                    <th>Customer</th>
+                    <th>Dates</th>
+                    <th>Payment</th>
+                    <th>Your Earning</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-overview-bookings">
+                  <tr><td colspan="6" class="text-center text-muted" style="padding: var(--space-8);">Loading bookings...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <!-- TAB 2: MY VEHICLES -->
+          <div class="dash-tab-panel" id="panel-my-vehicles" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-3);">
+              <div>
+                <h2 style="font-size: var(--fs-2xl); margin-bottom: 2px;">My Listed Vehicles</h2>
+                <p class="text-muted" style="margin-bottom: 0; font-size: var(--fs-sm);">View, edit, or toggle availability of your listed vehicles.</p>
+              </div>
+              <a href="/owner/add-vehicle" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Add New Vehicle
+              </a>
+            </div>
+
+            <div class="vehicle-table-container">
+              <table class="dash-table" id="table-full-vehicles">
+                <thead>
+                  <tr>
+                    <th>Vehicle</th>
+                    <th>Category</th>
+                    <th>Rental Rate</th>
+                    <th>Deposit</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-full-vehicles">
+                  <tr><td colspan="6" class="text-center text-muted" style="padding: var(--space-8);">Loading vehicles...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 3: BOOKINGS -->
+          <div class="dash-tab-panel" id="panel-bookings" style="display: none;">
+            <div style="margin-bottom: var(--space-6);">
+              <h2 style="font-size: var(--fs-2xl); margin-bottom: 2px;">Vehicle Rental Bookings</h2>
+              <p class="text-muted" style="margin-bottom: 0; font-size: var(--fs-sm);">All customer reservations booked for your vehicles.</p>
+            </div>
+
+            <div class="vehicle-table-container">
+              <table class="dash-table" id="table-full-bookings">
+                <thead>
+                  <tr>
+                    <th>Booking Ref</th>
+                    <th>Vehicle</th>
+                    <th>Customer</th>
+                    <th>Pickup Date</th>
+                    <th>Return Date</th>
+                    <th>Rental Status</th>
+                    <th>Payment</th>
+                    <th>Your Earning</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-full-bookings">
+                  <tr><td colspan="8" class="text-center text-muted" style="padding: var(--space-8);">Loading bookings...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 4: EARNINGS -->
+          <div class="dash-tab-panel" id="panel-earnings" style="display: none;">
+            <div style="margin-bottom: var(--space-6);">
+              <h2 style="font-size: var(--fs-2xl); margin-bottom: 2px;">Rental Earnings &amp; Ledger</h2>
+              <p class="text-muted" style="margin-bottom: 0; font-size: var(--fs-sm);">Authoritative payout calculation from confirmed customer rentals.</p>
+            </div>
+
+            <div class="stat-kpi-grid">
+              <div class="stat-kpi-card" style="border-top: 3px solid #10B981;">
+                <div class="stat-val" style="color: #10B981;" id="stat-paid-earnings">₹0</div>
+                <div class="stat-lbl">Total Paid Earnings</div>
+              </div>
+              <div class="stat-kpi-card" style="border-top: 3px solid #F59E0B;">
+                <div class="stat-val" style="color: #F59E0B;" id="stat-pending-earnings">₹0</div>
+                <div class="stat-lbl">Pending Upcoming Rentals</div>
+              </div>
+              <div class="stat-kpi-card" style="border-top: 3px solid var(--primary);">
+                <div class="stat-val" style="color: var(--primary);" id="stat-completed-earnings">₹0</div>
+                <div class="stat-lbl">Completed Rentals Payout</div>
+              </div>
+            </div>
+
+            <h3 style="font-size: var(--fs-lg); margin-bottom: var(--space-4);">Payout Transaction History</h3>
+            <div class="vehicle-table-container">
+              <table class="dash-table" id="table-earnings-ledger">
+                <thead>
+                  <tr>
+                    <th>Booking Ref</th>
+                    <th>Vehicle</th>
+                    <th>Rental Period</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-earnings-ledger">
+                  <tr><td colspan="5" class="text-center text-muted" style="padding: var(--space-8);">Loading transaction ledger...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 5: PROFILE -->
+          <div class="dash-tab-panel" id="panel-profile" style="display: none;">
+            <div style="margin-bottom: var(--space-6);">
+              <h2 style="font-size: var(--fs-2xl); margin-bottom: 2px;">Vehicle Owner Profile</h2>
+              <p class="text-muted" style="margin-bottom: 0; font-size: var(--fs-sm);">Your owner credentials and location details.</p>
+            </div>
+
+            <div class="form-card" style="max-width: 600px;">
+              <form id="owner-profile-form">
+                <div class="form-group">
+                  <label for="prof-name">Full Name</label>
+                  <input type="text" id="prof-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="prof-email">Email Address</label>
+                  <input type="email" id="prof-email" class="form-control" disabled style="opacity: 0.7;">
+                </div>
+                <div class="form-group">
+                  <label for="prof-phone">Contact Phone Number</label>
+                  <input type="tel" id="prof-phone" class="form-control" placeholder="+91 98765 43210">
+                </div>
+                <div class="form-group">
+                  <label for="prof-city">Primary Operating Hub / City</label>
+                  <input type="text" id="prof-city" class="form-control" placeholder="e.g. Bangalore">
+                </div>
+                <div class="form-group">
+                  <label for="prof-address">Pickup Hub Address</label>
+                  <input type="text" id="prof-address" class="form-control" placeholder="e.g. Sector 4, HSR Layout, Bangalore">
+                </div>
+                <div class="form-group">
+                  <label for="prof-id-num">Identity / Verification Reference</label>
+                  <input type="text" id="prof-id-num" class="form-control" disabled style="opacity: 0.7;">
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-save-profile">
+                  <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Edit Vehicle Modal -->
+  <div class="modal-overlay" id="edit-vehicle-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; align-items: center; justify-content: center;">
+    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); max-width: 540px; width: 90%; max-height: 90vh; overflow-y: auto; padding: var(--space-6);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+        <h3 style="margin-bottom: 0;"><i class="fa-solid fa-pen-to-square text-primary"></i> Edit Vehicle Listing</h3>
+        <button type="button" id="btn-close-edit-modal" style="background: transparent; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="edit-vehicle-form">
+        <input type="hidden" id="edit-veh-id">
+        <div class="form-group">
+          <label for="edit-veh-name">Vehicle Display Name</label>
+          <input type="text" id="edit-veh-name" class="form-control" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-veh-rate">Rental Price / Day (₹)</label>
+            <input type="number" id="edit-veh-rate" class="form-control" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-veh-deposit">Security Deposit (₹)</label>
+            <input type="number" id="edit-veh-deposit" class="form-control" min="0">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-veh-location">Pickup Location Name</label>
+          <input type="text" id="edit-veh-location" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-veh-desc">Description</label>
+          <textarea id="edit-veh-desc" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="btn-submit-edit-vehicle">Save Vehicle Updates</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer" style="margin-top: var(--space-16);">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/vehicles">Fleet</a>
+          <a href="/owner-dashboard">Owner Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/toast.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/owner-dashboard.js"></script>
+</body>
+</html>

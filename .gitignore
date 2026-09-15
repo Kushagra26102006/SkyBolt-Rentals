@@ -1,0 +1,85 @@
+# ==============================================================================
+# SkyBolt Rentals - Git Ignore Rules
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Environment & Secret Configuration Files
+# ------------------------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production
+.env.production.local
+.env.*.local
+**/.env
+**/.env.local
+**/.env.*.local
+backend/.env
+backend/.env.production
+backend/.env.staging
+backend/.env.local
+
+# Explicitly ensure .env.example remains tracked
+!.env.example
+!**/.env*.example
+
+# ------------------------------------------------------------------------------
+# 2. Dependency Directories
+# ------------------------------------------------------------------------------
+node_modules/
+jspm_packages/
+web_modules/
+
+# ------------------------------------------------------------------------------
+# 3. Build & Distribution Artifacts
+# ------------------------------------------------------------------------------
+dist/
+build/
+out/
+.cache/
+.parcel-cache/
+backups/
+*.archive.gz
+*.sha256
+
+# ------------------------------------------------------------------------------
+# 4. Logs & Debug Output
+# ------------------------------------------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ------------------------------------------------------------------------------
+# 5. Operating System & Editor Files
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ------------------------------------------------------------------------------
+# 6. Test & Coverage Outputs
+# ------------------------------------------------------------------------------
+coverage/
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+test-results/

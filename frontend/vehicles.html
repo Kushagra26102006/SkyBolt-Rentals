@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com;">
+  
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Vehicle Fleet Catalog - SkyBolt Rentals</title>
+  <meta name="description" content="Explore and filter our complete vehicle rental fleet including mountain bikes, sport motorcycles, SUVs, luxury sedans, and smart e-scooters.">
+  
+  <meta property="og:title" content="Vehicle Fleet Catalog - SkyBolt Rentals">
+  <meta property="og:description" content="Browse and filter our complete vehicle rental fleet with instant digital reservation.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Modular Design System Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    .filter-sidebar {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: calc(var(--header-height) + 1.25rem);
+    }
+
+    .filter-group {
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .filter-group:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .filter-title {
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .catalog-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      background-color: var(--surface);
+      padding: var(--space-4) var(--space-6);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      margin-bottom: var(--space-6);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .fav-card-btn {
+      position: absolute;
+      top: var(--space-3);
+      right: var(--space-3);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      z-index: 5;
+    }
+
+    .fav-card-btn.active {
+      color: var(--danger);
+      background-color: #FFFFFF;
+    }
+
+    .fav-card-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .mobile-filter-toggle {
+      display: none;
+      width: 100%;
+      margin-bottom: var(--space-4);
+    }
+
+    .radio-pill {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--fs-sm);
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      transition: background-color var(--transition-fast);
+    }
+
+    .radio-pill:hover {
+      background-color: var(--surface-muted);
+      color: var(--text-primary);
+    }
+
+    .radio-pill input[type="radio"] {
+      accent-color: var(--primary);
+    }
+
+    @media (max-width: 960px) {
+      .catalog-layout {
+        grid-template-columns: 1fr;
+      }
+      .mobile-filter-toggle {
+        display: block;
+      }
+      .filter-sidebar {
+        display: none;
+        position: static;
+      }
+      .filter-sidebar.active {
+        display: block;
+      }
+    }
+
+    /* ===================================================================
+       AI Recommendation Engine Modal & Card Styles
+       =================================================================== */
+    .ai-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-normal);
+    }
+
+    .ai-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .ai-modal-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-2xl);
+      width: 100%;
+      max-width: 960px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform var(--transition-normal);
+    }
+
+    .ai-modal-overlay.active .ai-modal-container {
+      transform: translateY(0);
+    }
+
+    .ai-modal-header {
+      background: linear-gradient(135deg, #1e1b4b 0%, #31104b 100%);
+      color: #ffffff;
+      padding: var(--space-6) var(--space-8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top-left-radius: var(--radius-2xl);
+      border-top-right-radius: var(--radius-2xl);
+    }
+
+    .ai-modal-header h2 {
+      font-size: var(--fs-2xl);
+      font-weight: 800;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+    }
+
+    .ai-close-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #ffffff;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition-fast);
+    }
+
+    .ai-close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .ai-modal-body {
+      padding: var(--space-6) var(--space-8);
+    }
+
+    .ai-query-box {
+      background: var(--surface-muted);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-5);
+      margin-bottom: var(--space-6);
+    }
+
+    .ai-rec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+      display: grid;
+      grid-template-columns: 200px 1fr 220px;
+      gap: var(--space-6);
+      align-items: center;
+      transition: all var(--transition-fast);
+    }
+
+    .ai-rec-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+
+    .ai-reason-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(124, 58, 237, 0.1);
+      color: #7c3aed;
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+    }
+
+    .ai-highlight-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      background: var(--surface-muted);
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .ai-rec-card {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navbar Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/vehicles" class="nav-link active">Vehicles</a></li>
+          <li><a href="/bikes" class="nav-link">Bikes</a></li>
+          <li><a href="/cars" class="nav-link">Cars</a></li>
+          <li><a href="/scooters" class="nav-link">E-Scooters</a></li>
+          <li><a href="/#offers-section" class="nav-link">Offers</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link">Contact</a></li>
+          <li class="nav-actions-mobile">
+            <a href="/login" class="btn btn-outline">Login</a>
+            <a href="/vehicles" class="btn btn-primary">Book Now</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+        <a href="/login" class="btn btn-outline" id="btn-login">Login</a>
+        <a href="/vehicles" class="btn btn-primary" id="btn-book-now">Book Now</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="section-sm" style="background-color: var(--surface); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <span class="badge badge-primary mb-2">Verified Mobility Fleet</span>
+      <h1 style="font-size: var(--fs-3xl); margin-bottom: var(--space-2);">Fleet Catalog</h1>
+      <p style="margin-bottom: 0;">Explore motorcycles, trail bikes, luxury cars, SUVs, and electric scooters available for immediate rental.</p>
+    </div>
+  </section>
+
+  <!-- Main Catalog Section -->
+  <main class="section">
+    <div class="container">
+      
+      <!-- Mobile Filter Toggle Button -->
+      <button class="btn btn-outline mobile-filter-toggle" id="toggle-filter-sidebar">
+        <i class="fa-solid fa-sliders"></i> Show Filters & Sorting
+      </button>
+
+      <div class="catalog-layout">
+        
+        <!-- Left Column: Filter Sidebar -->
+        <aside class="filter-sidebar" id="filter-sidebar">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 1px solid var(--border);">
+            <h3 style="font-size: var(--fs-md);"><i class="fa-solid fa-filter text-primary"></i> Filters</h3>
+            <button class="btn btn-ghost btn-sm" id="btn-reset-filters">Reset All</button>
+          </div>
+
+          <!-- Vehicle Category -->
+          <div class="filter-group">
+            <div class="filter-title">Category</div>
+            <div style="display: flex; flex-direction: column; gap: var(--space-1);">
+              <label class="radio-pill">
+                <input type="radio" name="filter-category" value="all" checked> All Categories
+              </label>
+              <label class="radio-pill">
+                <input type="radio" name="filter-category" value="bike"> Bikes & Motorcycles
+              </label>
+              <label class="radio-pill">
+                <input type="radio" name="filter-category" value="car"> Cars & SUVs
+              </label>
+              <label class="radio-pill">
+                <input type="radio" name="filter-category" value="scooter"> Electric Scooters
+              </label>
+            </div>
+          </div>
+
+          <!-- Max Price Range -->
+          <div class="filter-group">
+            <div class="filter-title">
+              <span>Max Daily Price</span>
+              <span id="price-range-value" class="text-primary" style="font-weight: 800;">₹1000</span>
+            </div>
+            <input type="range" id="filter-price-range" min="200" max="1500" step="50" value="1000" style="width: 100%; accent-color: var(--primary);">
+            <div style="display: flex; justify-content: space-between; font-size: var(--fs-2xs); color: var(--text-muted); margin-top: 4px;">
+              <span>₹200</span>
+              <span>₹1500</span>
+            </div>
+          </div>
+
+          <!-- Location Dropdown -->
+          <div class="filter-group">
+            <div class="filter-title">Pickup Hub</div>
+            <select id="filter-location" class="form-control">
+              <option value="all">All Locations</option>
+              <option value="Bangalore">Bangalore Tech Hub</option>
+              <option value="Delhi">Delhi Aerocity Hub</option>
+              <option value="Ludhiana">Ludhiana Central Hub</option>
+              <option value="New York">New York Central Depot</option>
+            </select>
+          </div>
+
+          <!-- Fuel Type -->
+          <div class="filter-group">
+            <div class="filter-title">Fuel Type</div>
+            <select id="filter-fuel" class="form-control">
+              <option value="all">All Fuel Types</option>
+              <option value="Petrol">Petrol</option>
+              <option value="Electric">Electric</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Manual">Manual (Bicycle)</option>
+            </select>
+          </div>
+
+          <!-- Transmission -->
+          <div class="filter-group">
+            <div class="filter-title">Transmission</div>
+            <select id="filter-transmission" class="form-control">
+              <option value="all">All Transmissions</option>
+              <option value="Automatic">Automatic</option>
+              <option value="Manual">Manual</option>
+            </select>
+          </div>
+
+          <!-- Rating -->
+          <div class="filter-group">
+            <div class="filter-title">Minimum Rating</div>
+            <select id="filter-rating" class="form-control">
+              <option value="0">All Ratings</option>
+              <option value="4.5">★ 4.5 & Above</option>
+              <option value="4.8">★ 4.8 & Above</option>
+            </select>
+          </div>
+
+        </aside>
+
+        <!-- Right Column: Catalog Main Section -->
+        <div>
+          
+          <!-- Catalog Toolbar -->
+          <div class="catalog-toolbar">
+            <div style="font-weight: 700; color: var(--text-primary);" id="results-count-display">
+              Loading fleet...
+            </div>
+
+            <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
+              <!-- AI Vehicle Assistant Trigger -->
+              <button class="btn btn-primary" id="btn-open-ai-recommendation" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 700; background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%); border: none; padding: 0.6rem 1rem; border-radius: var(--radius-lg); cursor: pointer;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> AI Vehicle Assistant
+              </button>
+
+              <!-- Search Bar -->
+              <input type="text" id="catalog-search-input" class="form-control" placeholder="Search vehicle or hub..." style="max-width: 240px;">
+              
+              <!-- Sort Dropdown -->
+              <select id="catalog-sort-select" class="form-control" style="max-width: 200px;">
+                <option value="popular">Sort: Popular</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating">Highest Rated</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Dynamic Vehicle Cards Grid -->
+          <div class="cards-grid" id="vehicles-grid-container">
+            <!-- Rendered dynamically by js/vehicles.js -->
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- AI Recommendation Engine Modal -->
+    <div class="ai-modal-overlay" id="ai-rec-modal" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title">
+      <div class="ai-modal-container">
+        <div class="ai-modal-header">
+          <div>
+            <h2 id="ai-modal-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Vehicle Assistant</h2>
+            <p style="margin: 4px 0 0 0; opacity: 0.85; font-size: var(--fs-sm);">
+              Advisory vehicle discovery powered by verified availability & authoritative pricing
+            </p>
+          </div>
+          <button class="ai-close-btn" id="btn-close-ai-rec" aria-label="Close Assistant">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="ai-modal-body">
+          <form id="ai-rec-form">
+            <!-- Natural Language Trip Box -->
+            <div class="ai-query-box">
+              <label for="ai-rec-query" style="font-weight: 700; display: block; margin-bottom: 6px; color: var(--text-primary);">
+                <i class="fa-solid fa-sparkles" style="color: #7c3aed;"></i> Describe your trip or requirement:
+              </label>
+              <textarea id="ai-rec-query" class="form-control" rows="2" placeholder="e.g. Planning a weekend trip with 4 friends to the hills, need a comfortable automatic SUV under ₹3,500/day..." style="resize: vertical; font-size: 0.95rem;"></textarea>
+            </div>
+
+            <!-- Structured Preference Selectors -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-5);">
+              <div>
+                <label style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Pickup Date</label>
+                <input type="datetime-local" id="ai-rec-pickup" class="form-control" style="font-size: 0.85rem;">
+              </div>
+
+              <div>
+                <label style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Return Date</label>
+                <input type="datetime-local" id="ai-rec-return" class="form-control" style="font-size: 0.85rem;">
+              </div>
+
+              <div>
+                <label style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Passengers</label>
+                <select id="ai-rec-passengers" class="form-control">
+                  <option value="">Any Passengers</option>
+                  <option value="1">1 Person (Solo)</option>
+                  <option value="2">2 People (Couple)</option>
+                  <option value="4">4 People</option>
+                  <option value="5" selected>5 People (Family/Group)</option>
+                  <option value="7">7+ People (Large SUV)</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Category</label>
+                <select id="ai-rec-category" class="form-control">
+                  <option value="">Any Category</option>
+                  <option value="SUV">SUV</option>
+                  <option value="SEDAN">Sedan</option>
+                  <option value="HATCHBACK">Hatchback</option>
+                  <option value="BIKE">Motorcycle</option>
+                  <option value="SCOOTER">E-Scooter</option>
+                  <option value="EV">Electric Vehicle (EV)</option>
+                  <option value="LUXURY">Luxury</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Transmission</label>
+                <select id="ai-rec-transmission" class="form-control">
+                  <option value="">Any Transmission</option>
+                  <option value="AUTOMATIC">Automatic</option>
+                  <option value="MANUAL">Manual</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Max Daily Budget</label>
+                <select id="ai-rec-budget" class="form-control">
+                  <option value="">No Budget Limit</option>
+                  <option value="1500">Under ₹1,500/day</option>
+                  <option value="2500">Under ₹2,500/day</option>
+                  <option value="4000">Under ₹4,000/day</option>
+                  <option value="7000">Under ₹7,000/day</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--space-3); margin-bottom: var(--space-6);">
+              <button type="button" class="btn btn-secondary" id="btn-reset-ai-rec" style="font-weight: 600;">Reset</button>
+              <button type="submit" class="btn btn-primary" id="btn-submit-ai-rec" style="font-weight: 700; background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%); border: none;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Find Recommended Vehicles
+              </button>
+            </div>
+          </form>
+
+          <!-- Recommendation Results Section -->
+          <div id="ai-rec-results-area" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4); padding-bottom: var(--space-2); border-bottom: 1px solid var(--border);">
+              <h3 style="font-size: var(--fs-lg); margin: 0; font-weight: 800; color: var(--text-primary);">
+                Recommended Vehicles
+              </h3>
+              <span id="ai-rec-source-pill" class="badge" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.3); font-size: 0.75rem;">
+                AI Assisted
+              </span>
+            </div>
+
+            <!-- Dynamic Result Cards List -->
+            <div id="ai-rec-cards-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> SkyBolt Rentals</h3>
+          <p>Move freely. Rent smarter. Verified vehicle rentals nationwide.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Fleet</h4>
+          <ul>
+            <li><a href="/vehicles">All Vehicles</a></li>
+            <li><a href="/bikes">Bikes</a></li>
+            <li><a href="/cars">Cars</a></li>
+            <li><a href="/scooters">E-Scooters</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Customer Care</a></li>
+            <li><a href="/#offers-section">Promotions</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/contact">Help Center</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Sign Up</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/vehicles">Fleet</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/vehicles.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

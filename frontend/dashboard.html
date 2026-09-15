@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com;">
+  
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Customer Dashboard - SkyBolt Rentals</title>
+  <meta name="description" content="Manage your SkyBolt Rentals profile, view upcoming reservations, check past trips, and inspect favorite vehicles.">
+  
+  <meta property="og:title" content="Customer Dashboard - SkyBolt Rentals">
+  <meta property="og:description" content="Manage your reservations and profile.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Razorpay Official Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Modular Design System Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    .dash-sidebar {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: calc(var(--header-height) + 1.25rem);
+    }
+
+    .dash-user-badge {
+      text-align: center;
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: var(--space-6);
+    }
+
+    .dash-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--primary) 0%, #1D4ED8 100%);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0 auto var(--space-3);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dash-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .dash-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: all var(--transition-fast);
+    }
+
+    .dash-tab-btn:hover {
+      background-color: var(--surface-muted);
+      color: var(--text-primary);
+    }
+
+    .dash-tab-btn.active {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .dash-tab-btn i {
+      width: 18px;
+      text-align: center;
+    }
+
+    .dash-content-panel {
+      display: none;
+    }
+
+    .dash-content-panel.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .booking-history-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-5);
+      margin-bottom: var(--space-4);
+      box-shadow: var(--shadow-xs);
+      display: flex;
+      gap: var(--space-5);
+      align-items: center;
+      transition: box-shadow var(--transition-fast);
+    }
+
+    .booking-history-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .booking-card-media {
+      width: 120px;
+      height: 80px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background-color: var(--surface-muted);
+      flex-shrink: 0;
+    }
+
+    .booking-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .booking-card-body {
+      flex: 1;
+    }
+
+    @media (max-width: 960px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+      .booking-history-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .booking-card-media {
+        width: 100%;
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navbar Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/vehicles" class="nav-link">Vehicles</a></li>
+          <li><a href="/bikes" class="nav-link">Bikes</a></li>
+          <li><a href="/cars" class="nav-link">Cars</a></li>
+          <li><a href="/scooters" class="nav-link">E-Scooters</a></li>
+          <li><a href="/#offers-section" class="nav-link">Offers</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link">Contact</a></li>
+          <li class="nav-actions-mobile">
+            <a href="/login" class="btn btn-outline">Login</a>
+            <a href="/vehicles" class="btn btn-primary">Book Now</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+        <a href="/login" class="btn btn-outline" id="btn-login">Login</a>
+        <a href="/vehicles" class="btn btn-primary" id="btn-book-now">Book Now</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="section-sm" style="background-color: var(--surface); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <span class="badge badge-primary mb-2">Member Portal</span>
+      <h1 style="font-size: var(--fs-3xl); margin-bottom: var(--space-2);">Customer Dashboard</h1>
+      <p style="margin-bottom: 0;">Manage upcoming trips, review rental history, inspect favorited rides, and update verified profile details.</p>
+    </div>
+  </section>
+
+  <!-- Dashboard Main Layout -->
+  <main class="section">
+    <div class="container">
+      
+      <div class="dashboard-layout">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="dash-sidebar">
+          <div class="dash-user-badge">
+            <div class="dash-avatar" id="user-avatar">JD</div>
+            <h3 id="user-name-display" style="font-size: var(--fs-md); margin-bottom: 0.25rem;">John Doe</h3>
+            <p id="user-email-display" style="font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 0;">john@example.com</p>
+          </div>
+
+          <div class="dash-nav">
+            <button class="dash-tab-btn active" data-tab="upcoming">
+              <i class="fa-solid fa-calendar-check"></i> Upcoming Trips
+            </button>
+            <button class="dash-tab-btn" data-tab="history">
+              <i class="fa-solid fa-clock-rotate-left"></i> Trip History
+            </button>
+            <button class="dash-tab-btn" data-tab="reviews" id="dash-tab-reviews">
+              <i class="fa-solid fa-star"></i> My Reviews
+            </button>
+            <button class="dash-tab-btn" data-tab="favorites">
+              <i class="fa-solid fa-heart"></i> Saved Favorites
+            </button>
+            <button class="dash-tab-btn" data-tab="profile">
+              <i class="fa-solid fa-user-gear"></i> Profile & License
+            </button>
+            <button class="dash-tab-btn" id="dash-logout-btn" style="color: var(--danger); margin-top: var(--space-4);">
+              <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+            </button>
+          </div>
+        </aside>
+
+        <!-- Right Content Area -->
+        <div>
+          
+          <!-- TAB 1: Upcoming Bookings -->
+          <div class="dash-content-panel active" data-panel="upcoming">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-3);">
+              <h2>Upcoming Reservations</h2>
+              <a href="/vehicles" class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Reserve Vehicle</a>
+            </div>
+
+            <div id="upcoming-bookings-list">
+              <!-- Dynamically populated by js/dashboard.js -->
+            </div>
+          </div>
+
+          <!-- TAB 2: Booking History -->
+          <div class="dash-content-panel" data-panel="history">
+            <h2 style="margin-bottom: var(--space-6);">Completed & Cancelled Trips</h2>
+            <div id="history-bookings-list">
+              <!-- Dynamically populated by js/dashboard.js -->
+            </div>
+          </div>
+
+          <!-- TAB 3: Favorites Grid -->
+          <div class="dash-content-panel" data-panel="favorites">
+            <h2 style="margin-bottom: var(--space-6);">Saved Vehicles</h2>
+            <div class="cards-grid" id="favorites-grid">
+              <!-- Dynamically populated by js/dashboard.js -->
+            </div>
+          </div>
+
+          <!-- TAB 4: Profile & License Details -->
+          <div class="dash-content-panel" data-panel="profile">
+            <h2 style="margin-bottom: var(--space-6);">Verified Profile Information</h2>
+            
+            <div class="form-card" style="max-width: 640px; margin: 0;">
+              <form id="profile-update-form">
+                <div class="form-group">
+                  <label for="prof-name">Full Name</label>
+                  <input type="text" id="prof-name" class="form-control" required>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="prof-email">Email Address</label>
+                    <input type="email" id="prof-email" class="form-control" readonly style="background-color: var(--surface-muted); color: var(--text-muted);">
+                  </div>
+                  <div class="form-group">
+                    <label for="prof-phone">Phone Number</label>
+                    <input type="tel" id="prof-phone" class="form-control" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="prof-license">Driving License Number</label>
+                  <input type="text" id="prof-license" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- TAB 5: My Reviews -->
+          <div class="dash-content-panel" data-panel="reviews">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-3);">
+              <div>
+                <h2 style="margin-bottom: var(--space-1);">My Verified Reviews</h2>
+                <p style="font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: 0;">
+                  Customer reviews submitted for completed rentals. You can edit reviews within 30 days of completion.
+                </p>
+              </div>
+            </div>
+            <div id="my-reviews-list">
+              <!-- Dynamically populated by js/dashboard.js -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Customer Review Modal -->
+  <div class="modal-overlay" id="review-modal">
+    <div class="modal-dialog" style="max-width: 560px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="review-modal-title"><i class="fa-solid fa-star text-primary"></i> Rate & Review Your Rental</h3>
+        <button class="modal-close-btn" id="close-review-modal-btn" aria-label="Close review dialog"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="review-submission-form">
+          <input type="hidden" id="review-form-booking-id">
+          <input type="hidden" id="review-form-review-id">
+          <input type="hidden" id="review-form-rating-val" value="5">
+
+          <div style="margin-bottom: var(--space-4); background: var(--surface-muted); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-secondary);" id="review-form-vehicle-name">Vehicle</span>
+            <span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Verified Rental</span>
+          </div>
+
+          <!-- Star Rating Selector -->
+          <div class="form-group" style="text-align: center; margin-bottom: var(--space-4);">
+            <label style="display: block; font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: var(--space-2);">Your Star Rating *</label>
+            <div id="rating-star-selector" style="font-size: 2rem; color: #f59e0b; cursor: pointer; display: inline-flex; gap: 8px;">
+              <i class="fa-solid fa-star star-opt" data-val="1"></i>
+              <i class="fa-solid fa-star star-opt" data-val="2"></i>
+              <i class="fa-solid fa-star star-opt" data-val="3"></i>
+              <i class="fa-solid fa-star star-opt" data-val="4"></i>
+              <i class="fa-solid fa-star star-opt" data-val="5"></i>
+            </div>
+            <div id="rating-score-label" style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-primary); margin-top: 4px;">5 - Excellent</div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label for="review-title" style="font-size: var(--fs-sm); font-weight: 600;">Headline / Title *</label>
+            <input type="text" id="review-title" class="form-control" required minlength="3" maxlength="100" placeholder="e.g. Clean vehicle, smooth journey, great support">
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label for="review-comment" style="font-size: var(--fs-sm); font-weight: 600;">Detailed Review *</label>
+            <textarea id="review-comment" class="form-control" rows="4" required minlength="10" maxlength="2000" placeholder="Share specific thoughts on vehicle condition, mileage, return process..."></textarea>
+            <div style="display: flex; justify-content: space-between; font-size: var(--fs-2xs); color: var(--text-muted); margin-top: 4px;">
+              <span>Min 10 characters</span>
+              <span id="comment-char-count">0 / 2000</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: var(--space-3); justify-content: flex-end; margin-top: var(--space-5);">
+            <button type="button" class="btn btn-outline" id="btn-cancel-review">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-review">Publish Review</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Booking Confirmation Modal -->
+  <div class="modal-overlay" id="cancel-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Cancel Reservation</h3>
+        <button class="modal-close-btn" id="btn-modal-keep" aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p id="cancel-modal-desc" class="lead" style="margin-bottom: var(--space-4);">Are you sure you want to cancel booking SKY-2026-XXXXX?</p>
+        <p style="font-size: var(--fs-xs); color: var(--text-muted); margin-bottom: var(--space-6);">Free cancellation applies if requested more than 24 hours prior to scheduled pickup.</p>
+        <div style="display: flex; gap: var(--space-3); justify-content: flex-end;">
+          <button class="btn btn-outline" id="btn-modal-cancel-dismiss">Keep Reservation</button>
+          <button class="btn btn-danger" id="btn-modal-confirm-cancel">Confirm Cancellation</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/vehicles">Fleet</a>
+          <a href="/admin">Admin</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/payment-gateway.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

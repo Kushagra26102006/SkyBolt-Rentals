@@ -1,0 +1,48 @@
+{
+  "name": "skybolt-rentals",
+  "version": "1.0.0",
+  "description": "SkyBolt Rentals - Modern Responsive Vehicle Rental Platform",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve frontend -l 8080",
+    "dev:all": "npm run backend:dev & npm run frontend:dev",
+    "local": "npm run backend:dev & npm run frontend:dev",
+    "start": "npx serve frontend -l 8080",
+    "frontend:dev": "npx serve frontend -l 8080",
+    "test:syntax": "node --check frontend/js/*.js scripts/*.js",
+    "test:integrity": "node scripts/verify-integrity.js",
+    "test": "npm run test:syntax && npm run test:integrity",
+    "admin:create": "node scripts/create-admin.js",
+    "type-check": "npm --prefix backend run type-check && npx --prefix backend tsc -p tsconfig.json --noEmit",
+    "lint": "npm run test:syntax",
+    "build": "npm run test && npm run backend:build",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:worker": "npm --prefix backend run worker",
+    "backend:worker:dev": "npm --prefix backend run dev:worker",
+    "backend:worker:start": "npm --prefix backend run start:worker",
+    "backend:build": "npm --prefix backend run build",
+    "backend:start": "npm --prefix backend start",
+    "backend:test": "npm --prefix backend test",
+    "backend:test:db": "npm --prefix backend run test:db",
+    "backend:test:smoke": "npm --prefix backend run test:smoke",
+    "backend:test:disaster": "npm --prefix backend run test:disaster",
+    "backend:type-check": "npm --prefix backend run type-check",
+    "backend:lint": "npm --prefix backend run lint",
+    "backup": "node scripts/backup-mongodb.js",
+    "restore": "node scripts/restore-mongodb.js",
+    "smoke-test": "npm --prefix backend run test:smoke",
+    "disaster-test": "npm --prefix backend run test:disaster"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "vehicle-rental",
+    "bike-rental",
+    "car-rental",
+    "e-scooter",
+    "vanilla-js"
+  ],
+  "author": "Kushagra",
+  "license": "MIT"
+}

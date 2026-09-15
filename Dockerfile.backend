@@ -1,0 +1,46 @@
+# ==============================================================================
+# SkyBolt Rentals — Production Express Backend API Container
+# Multi-stage build with non-root security context and minimal image footprint
+# ==============================================================================
+
+# --- Stage 1: Build & Compile ---
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install build dependencies
+COPY backend/package*.json ./backend/
+RUN cd backend && npm ci
+
+# Copy TypeScript source and configurations
+COPY backend/tsconfig.json ./backend/
+COPY backend/src ./backend/src
+
+# Compile TypeScript to dist/
+RUN cd backend && npm run build
+
+# --- Stage 2: Production Runtime ---
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+ENV NODE_ENV=production
+
+# Security: Run as non-root user
+USER node
+
+# Copy production package specifications & install production dependencies only
+COPY --chown=node:node backend/package*.json ./
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy compiled JavaScript output
+COPY --chown=node:node --from=builder /app/backend/dist ./dist
+
+# Expose HTTP Port
+EXPOSE 5001
+
+# Production Health Check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:5001/health || exit 1
+
+# Start Production Server
+CMD ["node", "dist/server.js"]

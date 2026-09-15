@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com https://maps.google.com https://www.google.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com https://maps.google.com https://www.google.com;">
+  
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Customer Care & Support - SkyBolt Rentals</title>
+  <meta name="description" content="Get in touch with SkyBolt Rentals customer support for vehicle rental assistance, booking modifications, corporate inquiries, or roadside assistance.">
+  
+  <meta property="og:title" content="Customer Care & Support - SkyBolt Rentals">
+  <meta property="og:description" content="24/7 customer care and rental assistance.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Modular Design System Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/vehicles" class="nav-link">Vehicles</a></li>
+          <li><a href="/bikes" class="nav-link">Bikes</a></li>
+          <li><a href="/cars" class="nav-link">Cars</a></li>
+          <li><a href="/scooters" class="nav-link">E-Scooters</a></li>
+          <li><a href="/#offers-section" class="nav-link">Offers</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link active">Contact</a></li>
+          <li class="nav-actions-mobile">
+            <a href="/login" class="btn btn-outline">Login</a>
+            <a href="/vehicles" class="btn btn-primary">Book Now</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+        <a href="/login" class="btn btn-outline" id="btn-login">Login</a>
+        <a href="/vehicles" class="btn btn-primary" id="btn-book-now">Book Now</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="section-sm" style="background-color: var(--surface); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <span class="badge badge-primary mb-2"><i class="fa-solid fa-headset"></i> 24/7 Assistance</span>
+      <h1 style="font-size: var(--fs-3xl); margin-bottom: var(--space-2);">Customer Care & Support</h1>
+      <p style="margin-bottom: 0;">We are ready to assist with reservations, roadside dispatch, and corporate fleet partnerships.</p>
+    </div>
+  </section>
+
+  <!-- Contact Form & Details Section -->
+  <main class="section">
+    <div class="container">
+      
+      <div class="hero-grid" style="align-items: start; gap: var(--space-10);">
+        
+        <!-- Left: Contact Details Cards -->
+        <div>
+          <span class="badge badge-secondary mb-4">Direct Channels</span>
+          <h2>We're Here to Help</h2>
+          <p style="margin-bottom: var(--space-6); color: var(--text-secondary);">Reach out to our customer care team anytime for immediate dispatch or booking modifications.</p>
+
+          <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+            
+            <div class="feature-card" style="display: flex; flex-direction: row; gap: var(--space-4); align-items: center; padding: var(--space-5);">
+              <div class="feature-icon-wrapper" style="margin-bottom: 0; flex-shrink: 0;">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <h4 style="margin-bottom: 2px;">Email Support</h4>
+                <p style="margin-bottom: 0;"><a href="mailto:support@skyboltrentals.com" style="color: var(--primary); font-weight: 600;">support@skyboltrentals.com</a></p>
+              </div>
+            </div>
+
+            <div class="feature-card" style="display: flex; flex-direction: row; gap: var(--space-4); align-items: center; padding: var(--space-5);">
+              <div class="feature-icon-wrapper" style="margin-bottom: 0; flex-shrink: 0;">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <h4 style="margin-bottom: 2px;">Helpline & WhatsApp</h4>
+                <p style="margin-bottom: 0;"><a href="tel:+919876543210" style="color: var(--text-primary); font-weight: 600;">+91 98765 43210</a> (Toll Free 24/7)</p>
+              </div>
+            </div>
+
+            <div class="feature-card" style="display: flex; flex-direction: row; gap: var(--space-4); align-items: center; padding: var(--space-5);">
+              <div class="feature-icon-wrapper" style="margin-bottom: 0; flex-shrink: 0;">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <h4 style="margin-bottom: 2px;">Central Operational Hub</h4>
+                <p style="margin-bottom: 4px;">Bangalore Tech Hub, Outer Ring Road, Bangalore 560103</p>
+                <a href="#hubs-map-section" style="display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--primary); font-weight: 700; text-decoration: none;">
+                  <i class="fa-solid fa-map"></i> View Station on Google Maps &darr;
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right: Inquiry Form -->
+        <div class="form-card">
+          <h3 style="margin-bottom: var(--space-1);">Send Us an Inquiry</h3>
+          <p style="font-size: var(--fs-xs); color: var(--text-secondary); margin-bottom: var(--space-6);">Submissions are verified and stored securely in our support queue.</p>
+          
+          <form id="contact-form">
+            <div class="form-group">
+              <label for="contact-name">Full Name</label>
+              <input type="text" id="contact-name" class="form-control" placeholder="John Doe" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="contact-email">Email Address</label>
+              <input type="email" id="contact-email" class="form-control" placeholder="john@example.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-subject">Topic</label>
+              <select id="contact-subject" class="form-control">
+                <option value="general">General Question</option>
+                <option value="booking">Reservation Assistance</option>
+                <option value="corporate">Corporate / Long-Term Hire</option>
+                <option value="feedback">Fleet Feedback</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="contact-message">Message Details</label>
+              <textarea id="contact-message" class="form-control" rows="4" placeholder="How can our support team assist you?" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: var(--space-4);">
+              Send Message <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Interactive Google Maps Hub Locator Section -->
+  <section class="hubs-map-section" id="hubs-map-section">
+    <div class="container">
+      
+      <div class="section-header text-center" style="max-width: 680px; margin-left: auto; margin-right: auto; margin-bottom: var(--space-8);">
+        <span class="badge badge-primary mb-2"><i class="fa-solid fa-map-location-dot"></i> Network Stations</span>
+        <h2 style="font-size: var(--fs-3xl); margin-bottom: var(--space-3);">Find Our Hubs & Stations</h2>
+        <p style="color: var(--text-secondary); font-size: var(--fs-base);">Visit our express handoff centers for test drives, 24/7 key dispatch, EV rapid charging, and in-person assistance.</p>
+      </div>
+
+      <!-- Hub Selector Tabs -->
+      <div class="hub-tabs-wrapper" role="tablist" aria-label="Select Rental Hub">
+        <button type="button" class="hub-tab-btn active" data-hub="bangalore" role="tab" aria-selected="true">
+          <span class="hub-tab-dot"></span>
+          <span>Bangalore Tech Hub</span>
+        </button>
+        <button type="button" class="hub-tab-btn" data-hub="delhi" role="tab" aria-selected="false">
+          <span class="hub-tab-dot"></span>
+          <span>Delhi Aerocity Hub</span>
+        </button>
+        <button type="button" class="hub-tab-btn" data-hub="ludhiana" role="tab" aria-selected="false">
+          <span class="hub-tab-dot"></span>
+          <span>Ludhiana Central Hub</span>
+        </button>
+        <button type="button" class="hub-tab-btn" data-hub="newyork" role="tab" aria-selected="false">
+          <span class="hub-tab-dot"></span>
+          <span>New York Central Depot</span>
+        </button>
+      </div>
+
+      <!-- Map & Details Grid -->
+      <div class="hub-map-grid">
+        
+        <!-- Left: Hub Info Card -->
+        <div class="hub-info-card">
+          <div>
+            <div class="hub-info-header">
+              <div>
+                <div class="hub-city-tag" id="hub-info-city">Bangalore, Karnataka</div>
+                <h3 class="hub-title" id="hub-info-title">Bangalore Tech Hub</h3>
+              </div>
+              <div class="hub-status-badge" id="hub-info-status">
+                <span class="status-pulse"></span> Operational 24/7
+              </div>
+            </div>
+
+            <div class="hub-detail-list">
+              <div class="hub-detail-item">
+                <div class="hub-detail-icon"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="hub-detail-content">
+                  <h5>Hub Address</h5>
+                  <p id="hub-info-address">Electronic City Phase 1, Hosur Road, Bangalore 560100</p>
+                  <button type="button" class="hub-address-copy-btn" id="hub-copy-address-btn">
+                    <i class="fa-regular fa-copy"></i> Copy Address
+                  </button>
+                </div>
+              </div>
+
+              <div class="hub-detail-item">
+                <div class="hub-detail-icon"><i class="fa-solid fa-clock"></i></div>
+                <div class="hub-detail-content">
+                  <h5>Operating Hours</h5>
+                  <p id="hub-info-hours">Open 24/7 (All 365 Days)</p>
+                </div>
+              </div>
+
+              <div class="hub-detail-item">
+                <div class="hub-detail-icon"><i class="fa-solid fa-phone"></i></div>
+                <div class="hub-detail-content">
+                  <h5>Direct Station Line</h5>
+                  <p><a href="tel:+919880011223" id="hub-info-phone" style="color: var(--primary); font-weight: 700;">+91 98800 11223</a></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="hub-amenities-wrap">
+              <div class="hub-amenities-label">Station Amenities</div>
+              <div class="hub-amenity-tags" id="hub-info-amenities">
+                <span class="hub-amenity-tag"><i class="fa-solid fa-check text-primary"></i> EV Supercharging (120kW)</span>
+                <span class="hub-amenity-tag"><i class="fa-solid fa-check text-primary"></i> 3-Min Express Handoff</span>
+                <span class="hub-amenity-tag"><i class="fa-solid fa-check text-primary"></i> 24/7 Key Drop Locker</span>
+                <span class="hub-amenity-tag"><i class="fa-solid fa-check text-primary"></i> Pre-Trip Inspection Bay</span>
+                <span class="hub-amenity-tag"><i class="fa-solid fa-check text-primary"></i> Customer Lounge & Wi-Fi</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hub-actions">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=12.8452,77.6602" target="_blank" rel="noopener" class="btn btn-primary" id="hub-directions-btn">
+              Get Directions <i class="fa-solid fa-diamond-turn-right"></i>
+            </a>
+            <a href="/booking?location=Bangalore" class="btn btn-outline" id="hub-book-btn">
+              Book at this Hub <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Live Google Map Frame -->
+        <div class="hub-map-frame-wrap">
+          <div class="hub-map-top-bar">
+            <div class="hub-map-indicator">
+              <i class="fa-solid fa-location-pin"></i>
+              <span id="hub-map-indicator-text">Bangalore Tech Hub (Bangalore, Karnataka)</span>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query=Electronic+City+Phase+1+Hosur+Road+Bangalore" target="_blank" rel="noopener" class="hub-map-open-link" id="hub-map-open-link">
+              <span>View in Google Maps</span>
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </div>
+          <iframe
+            id="hub-map-iframe"
+            class="hub-map-iframe"
+            title="SkyBolt Hub Location Map"
+            src="https://maps.google.com/maps?q=Electronic%20City%20Phase%201%20Hosur%20Road%20Bangalore&t=&z=14&ie=UTF8&iwloc=&output=embed"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3><i class="fa-solid fa-bolt" style="color: var(--primary);"></i> SkyBolt Rentals</h3>
+          <p>Move freely. Rent smarter. 24/7 mobility customer support.</p>
+        </div>
+        <div class="footer-column">
+          <h4>Fleet</h4>
+          <ul>
+            <li><a href="/vehicles">All Fleet</a></li>
+            <li><a href="/bikes">Bikes</a></li>
+            <li><a href="/cars">Cars</a></li>
+            <li><a href="/scooters">E-Scooters</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Customer Support</a></li>
+            <li><a href="/#offers-section">Promotions</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/login">Sign In</a></li>
+            <li><a href="/register">Create Account</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/vehicles">Fleet</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/map.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const contactForm = document.getElementById('contact-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const nameInput = document.getElementById('contact-name');
+          const emailInput = document.getElementById('contact-email');
+          const subjectInput = document.getElementById('contact-subject');
+          const messageInput = document.getElementById('contact-message');
+          const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+          const name = nameInput ? nameInput.value.trim() : '';
+          const email = emailInput ? emailInput.value.trim() : '';
+          const subject = subjectInput ? subjectInput.value.trim() : 'general';
+          const message = messageInput ? messageInput.value.trim() : '';
+
+          if (!name || !email || !message) {
+            if (typeof showToast === 'function') {
+              showToast('Please fill in all required fields.', 'error');
+            }
+            return;
+          }
+
+          const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'Send Message';
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending Message...';
+          }
+
+          try {
+            const res = await window.SkyBoltApi.post('/contact', {
+              name,
+              email,
+              subject,
+              message
+            });
+
+            if (res && res.success) {
+              if (typeof showToast === 'function') {
+                showToast(res.message || 'Thank you! Your message has been received.', 'success');
+              }
+              contactForm.reset();
+            } else {
+              const errMsg = res && res.error ? res.error.message : 'Failed to send message. Please try again.';
+              if (typeof showToast === 'function') {
+                showToast(errMsg, 'error');
+              }
+            }
+          } catch (err) {
+            if (typeof showToast === 'function') {
+              showToast('Network error while connecting to support service.', 'error');
+            }
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnHtml;
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

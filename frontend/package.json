@@ -1,0 +1,10 @@
+{
+  "name": "skybolt-rentals-frontend",
+  "version": "1.0.0",
+  "description": "SkyBolt Rentals Frontend",
+  "private": true,
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "start": "python3 -m http.server 8080"
+  }
+}

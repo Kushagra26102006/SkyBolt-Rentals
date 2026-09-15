@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com;">
+  
+  <!-- Anti-FOUC Theme Switcher Script -->
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- SEO Meta Tags -->
+  <title>SkyBolt Rentals | Premium Bike, Car & E-Scooter Rentals</title>
+  <meta name="description" content="Rent premium motorcycles, cars, and smart electric scooters at transparent rates. Fast digital booking, 40-point safety inspection, and 24/7 support.">
+  <meta name="keywords" content="vehicle rental, motorcycle rental, car rental, e-scooter rental, bike hire, SkyBolt Rentals">
+  <meta name="author" content="SkyBolt Rentals">
+
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="SkyBolt Rentals | Premium Vehicle Rentals">
+  <meta property="og:description" content="Move freely. Rent smarter. Premium bikes, cars, and electric scooters available on demand.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Design System Modular Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+
+  <!-- Sticky Navbar Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      
+      <!-- Brand Logo Left -->
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark">
+          <i class="fa-solid fa-bolt"></i>
+        </div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <!-- Center Navigation Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link active">Home</a></li>
+          <li><a href="/vehicles" class="nav-link">Vehicles</a></li>
+          <li><a href="/bikes" class="nav-link">Bikes</a></li>
+          <li><a href="/cars" class="nav-link">Cars</a></li>
+          <li><a href="/scooters" class="nav-link">E-Scooters</a></li>
+          <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="#offers-section" class="nav-link">Offers</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link">Contact</a></li>
+          <li class="nav-actions-mobile">
+            <a href="/login" class="btn btn-outline">Login</a>
+            <a href="/vehicles" class="btn btn-primary">Book Now</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Right Action Buttons -->
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+        <a href="/login" class="btn btn-outline" id="btn-login">Login</a>
+        <a href="/vehicles" class="btn btn-primary" id="btn-book-now">Book Now</a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="nav-toggle" aria-label="Toggle mobile menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <main>
+    
+    <!-- Hero Section -->
+    <section class="hero" id="hero-section">
+      <div class="container hero-grid">
+        
+        <div class="hero-content">
+          <span class="badge badge-primary"><i class="fa-solid fa-shield-halved"></i> 100% Verified Rental Fleet</span>
+          <h1>Move freely. <span>Rent smarter.</span></h1>
+          <p>Experience the ultimate flexibility with our curated fleet of motorcycles, cars, and smart e-scooters. Transparent pricing, zero hidden deposits, and instant digital check-in.</p>
+          
+          <div class="hero-actions">
+            <a href="/vehicles" class="btn btn-primary btn-lg" id="btn-hero-explore">
+              Explore Fleet <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="#search-card" class="btn btn-secondary btn-lg" id="btn-hero-book">
+              Find Rental
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-media">
+          <div class="hero-image-wrapper">
+            <img src="assets/images/hero-bg.webp?v=2" alt="SkyBolt Rentals premium vehicle trip" id="hero-img">
+            <div class="hero-floating-pill">
+              <i class="fa-solid fa-circle-check"></i> 40-Point Safety Inspected
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Dominant Hero Rental Search Widget -->
+    <div class="container search-widget-container" id="search-card">
+      <div class="search-widget-card">
+        <div class="search-widget-header">
+          <div class="search-widget-title">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Find & Reserve Your Vehicle</span>
+          </div>
+          <span class="badge badge-neutral"><i class="fa-solid fa-bolt text-primary"></i> Instant Confirmation</span>
+        </div>
+
+        <form action="/vehicles" method="GET" class="search-form-grid" id="search-form-widget">
+          <div class="form-group-compact">
+            <label for="pickup-location"><i class="fa-solid fa-location-dot"></i> Pickup Hub</label>
+            <select id="pickup-location" name="location">
+              <option value="all">All Available Hubs</option>
+              <option value="Bangalore">Bangalore Tech Hub</option>
+              <option value="Delhi">Delhi Aerocity Hub</option>
+              <option value="Ludhiana">Ludhiana Central Hub</option>
+              <option value="New York">New York Central Depot</option>
+            </select>
+          </div>
+
+          <div class="form-group-compact">
+            <label for="pickup-date"><i class="fa-solid fa-calendar-day"></i> Pickup Date</label>
+            <input type="date" id="pickup-date" name="pickup">
+          </div>
+
+          <div class="form-group-compact">
+            <label for="return-date"><i class="fa-solid fa-calendar-check"></i> Return Date</label>
+            <input type="date" id="return-date" name="return">
+          </div>
+
+          <div class="form-group-compact">
+            <label for="vehicle-type-select"><i class="fa-solid fa-car-side"></i> Vehicle Type</label>
+            <select id="vehicle-type-select" name="type">
+              <option value="all">All Categories</option>
+              <option value="bike">Bikes & Motorcycles</option>
+              <option value="car">Cars & SUVs</option>
+              <option value="scooter">Electric Scooters</option>
+            </select>
+          </div>
+
+          <div class="search-submit-btn-wrapper">
+            <button type="submit" class="btn btn-primary search-submit-btn" id="btn-search-submit">
+              <i class="fa-solid fa-magnifying-glass"></i> Search Fleet
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-secondary">Seamless Experience</span>
+          <h2>How SkyBolt Works</h2>
+          <p>Get on the road in 3 straightforward steps with our fully digital booking and handoff process.</p>
+        </div>
+
+        <div class="process-grid">
+          <div class="process-card">
+            <div class="process-step-num">1</div>
+            <div class="process-icon"><i class="fa-solid fa-car"></i></div>
+            <h3>Select Your Ride</h3>
+            <p>Choose from bikes, luxury sedans, rugged SUVs, or eco-friendly e-scooters tailored to your journey.</p>
+          </div>
+
+          <div class="process-card">
+            <div class="process-step-num">2</div>
+            <div class="process-icon"><i class="fa-solid fa-id-card"></i></div>
+            <h3>Verify & Reserve</h3>
+            <p>Complete fast online verification with transparent rates and secure payment authorization.</p>
+          </div>
+
+          <div class="process-card">
+            <div class="process-step-num">3</div>
+            <div class="process-icon"><i class="fa-solid fa-key"></i></div>
+            <h3>Pickup & Go</h3>
+            <p>Grab your keys at your chosen hub with zero paperwork friction and enjoy unlimited freedom.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vehicle Categories: Choose Your Ride -->
+    <section class="section" style="background-color: var(--surface);" id="categories-section">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="badge badge-primary">Fleet Overview</span>
+          <h2>Browse by Category</h2>
+          <p>Discover hand-picked vehicles engineered for urban navigation, highway cruising, and weekend getaways.</p>
+        </div>
+
+        <div class="cards-grid" id="category-cards-grid">
+          
+          <!-- Category 1: Bike -->
+          <a href="/bikes" class="category-card">
+            <img src="assets/images/bike-tour.webp" alt="Motorcycles and Trail Bikes" loading="lazy">
+            <div class="category-overlay">
+              <h3>Bikes & Motorcycles</h3>
+              <p>Sport motorcycles, cruisers, and mountain trail bikes for solo adventures.</p>
+              <div class="category-price-tag">From ₹500 / day</div>
+              <div>
+                <span class="btn btn-primary btn-sm">Explore Bikes <i class="fa-solid fa-arrow-right"></i></span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Category 2: Car -->
+          <a href="/cars" class="category-card">
+            <img src="assets/images/car-tour.webp" alt="Cars and SUVs" loading="lazy">
+            <div class="category-overlay">
+              <h3>Cars & SUVs</h3>
+              <p>Spacious 5-seater SUVs, premium executive sedans, and convertibles.</p>
+              <div class="category-price-tag">From ₹800 / day</div>
+              <div>
+                <span class="btn btn-primary btn-sm">Explore Cars <i class="fa-solid fa-arrow-right"></i></span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Category 3: E-Scooter -->
+          <a href="/scooters" class="category-card">
+            <img src="assets/images/ola-s1-pro.webp" alt="Electric Scooter" loading="lazy">
+            <div class="category-overlay">
+              <h3>Electric Scooters</h3>
+              <p>Smart zero-emission urban scooters designed for effortless city commuting.</p>
+              <div class="category-price-tag">From ₹300 / day</div>
+              <div>
+                <span class="btn btn-primary btn-sm">Explore E-Scooters <i class="fa-solid fa-arrow-right"></i></span>
+              </div>
+            </div>
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Popular Vehicles Section -->
+    <section class="section" id="popular-vehicles-section">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="badge badge-primary">Featured Selection</span>
+          <h2>Popular Vehicles</h2>
+          <p>Customer-favorite rides regularly maintained, thoroughly sanitized, and ready for immediate booking.</p>
+        </div>
+
+        <div class="cards-grid">
+
+          <!-- Popular 1: Mountain Bike -->
+          <article class="vehicle-card">
+            <div class="card-media">
+              <span class="badge badge-primary card-badge">Bike</span>
+              <img src="assets/images/mountain-bike.webp" alt="Mountain Trail Bike" loading="lazy">
+              <div class="card-rating-badge">
+                <i class="fa-solid fa-star"></i> 4.9 <span>(84)</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-header-row">
+                <h3 class="card-title">Mountain Trail Bike</h3>
+                <div class="card-price">₹500 <span>/ day</span></div>
+              </div>
+              <div class="card-location">
+                <i class="fa-solid fa-location-dot"></i> Central Park Hub
+              </div>
+              <div class="card-specs">
+                <span class="spec-pill"><i class="fa-solid fa-gear"></i> 21 Gears</span>
+                <span class="spec-pill"><i class="fa-solid fa-shield"></i> Disc Brakes</span>
+                <span class="spec-pill"><i class="fa-solid fa-person"></i> 1 Rider</span>
+              </div>
+              <div class="card-footer">
+                <a href="vehicle-details?id=SKY-VHC-005" class="btn btn-outline btn-sm">Details</a>
+                <a href="vehicle-details?id=SKY-VHC-005#booking-panel" class="btn btn-primary btn-sm">Reserve</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Popular 2: Yamaha FZ-v3 -->
+          <article class="vehicle-card">
+            <div class="card-media">
+              <span class="badge badge-primary card-badge">Motorcycle</span>
+              <img src="assets/images/yamaha-bike.jpg" alt="Yamaha FZ-v3 Sport Bike" loading="lazy">
+              <div class="card-rating-badge">
+                <i class="fa-solid fa-star"></i> 4.8 <span>(156)</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-header-row">
+                <h3 class="card-title">Yamaha FZ-v3 Sport</h3>
+                <div class="card-price">₹600 <span>/ day</span></div>
+              </div>
+              <div class="card-location">
+                <i class="fa-solid fa-location-dot"></i> San Francisco Hub
+              </div>
+              <div class="card-specs">
+                <span class="spec-pill"><i class="fa-solid fa-gauge-high"></i> 149cc</span>
+                <span class="spec-pill"><i class="fa-solid fa-bolt"></i> ABS Brakes</span>
+                <span class="spec-pill"><i class="fa-solid fa-gas-pump"></i> Petrol</span>
+              </div>
+              <div class="card-footer">
+                <a href="vehicle-details?id=SKY-VHC-006" class="btn btn-outline btn-sm">Details</a>
+                <a href="vehicle-details?id=SKY-VHC-006#booking-panel" class="btn btn-primary btn-sm">Reserve</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Popular 3: Tesla Model 3 -->
+          <article class="vehicle-card">
+            <div class="card-media">
+              <span class="badge badge-success card-badge">EV Sedan</span>
+              <img src="assets/images/tesla.jpg" alt="Tesla Model 3 Electric Sedan" loading="lazy">
+              <div class="card-rating-badge">
+                <i class="fa-solid fa-star"></i> 5.0 <span>(312)</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-header-row">
+                <h3 class="card-title">Tesla Model 3</h3>
+                <div class="card-price">₹1000 <span>/ day</span></div>
+              </div>
+              <div class="card-location">
+                <i class="fa-solid fa-location-dot"></i> New York Hub
+              </div>
+              <div class="card-specs">
+                <span class="spec-pill"><i class="fa-solid fa-bolt"></i> 491 km Range</span>
+                <span class="spec-pill"><i class="fa-solid fa-car"></i> Autopilot</span>
+                <span class="spec-pill"><i class="fa-solid fa-users"></i> 5 Seats</span>
+              </div>
+              <div class="card-footer">
+                <a href="vehicle-details?id=SKY-VHC-009" class="btn btn-outline btn-sm">Details</a>
+                <a href="vehicle-details?id=SKY-VHC-009#booking-panel" class="btn btn-primary btn-sm">Reserve</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Popular 4: Ford Mustang Convertible -->
+          <article class="vehicle-card">
+            <div class="card-media">
+              <span class="badge badge-secondary card-badge">Convertible</span>
+              <img src="assets/images/mustang.jpg" alt="Ford Mustang GT Convertible" loading="lazy">
+              <div class="card-rating-badge">
+                <i class="fa-solid fa-star"></i> 5.0 <span>(98)</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-header-row">
+                <h3 class="card-title">Ford Mustang Convertible</h3>
+                <div class="card-price">₹950 <span>/ day</span></div>
+              </div>
+              <div class="card-location">
+                <i class="fa-solid fa-location-dot"></i> Los Angeles Station
+              </div>
+              <div class="card-specs">
+                <span class="spec-pill"><i class="fa-solid fa-sun"></i> Open Top</span>
+                <span class="spec-pill"><i class="fa-solid fa-car"></i> 5.0L V8</span>
+                <span class="spec-pill"><i class="fa-solid fa-users"></i> 2 Seats</span>
+              </div>
+              <div class="card-footer">
+                <a href="vehicle-details?id=SKY-VHC-010" class="btn btn-outline btn-sm">Details</a>
+                <a href="vehicle-details?id=SKY-VHC-010#booking-panel" class="btn btn-primary btn-sm">Reserve</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Popular 5: Ola S1 Pro -->
+          <article class="vehicle-card">
+            <div class="card-media">
+              <span class="badge badge-success card-badge">Electric</span>
+              <img src="assets/images/ola-s1-pro.webp" alt="Ola S1 Pro E-Scooter" loading="lazy">
+              <div class="card-rating-badge">
+                <i class="fa-solid fa-star"></i> 4.9 <span>(210)</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-header-row">
+                <h3 class="card-title">Ola S1 Pro Gen 2</h3>
+                <div class="card-price">₹300 <span>/ day</span></div>
+              </div>
+              <div class="card-location">
+                <i class="fa-solid fa-location-dot"></i> New York Hub
+              </div>
+              <div class="card-specs">
+                <span class="spec-pill"><i class="fa-solid fa-bolt"></i> 195 km Range</span>
+                <span class="spec-pill"><i class="fa-solid fa-gauge"></i> 120 km/h</span>
+                <span class="spec-pill"><i class="fa-solid fa-leaf"></i> Zero Emission</span>
+              </div>
+              <div class="card-footer">
+                <a href="vehicle-details?id=SKY-VHC-002" class="btn btn-outline btn-sm">Details</a>
+                <a href="vehicle-details?id=SKY-VHC-002#booking-panel" class="btn btn-primary btn-sm">Reserve</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Popular 6: VW Passat Sedan -->
+          <article class="vehicle-card">
+            <div class="card-media">
+              <span class="badge badge-secondary card-badge">Sedan</span>
+              <img src="assets/images/sedan.avif" alt="VW Passat Sedan" loading="lazy">
+              <div class="card-rating-badge">
+                <i class="fa-solid fa-star"></i> 4.8 <span>(140)</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-header-row">
+                <h3 class="card-title">VW Passat SE Sedan</h3>
+                <div class="card-price">₹900 <span>/ day</span></div>
+              </div>
+              <div class="card-location">
+                <i class="fa-solid fa-location-dot"></i> Chicago Downtown
+              </div>
+              <div class="card-specs">
+                <span class="spec-pill"><i class="fa-solid fa-car-side"></i> Full Size</span>
+                <span class="spec-pill"><i class="fa-solid fa-users"></i> 5 Seats</span>
+                <span class="spec-pill"><i class="fa-solid fa-snowflake"></i> Climate Control</span>
+              </div>
+              <div class="card-footer">
+                <a href="vehicle-details?id=SKY-VHC-011" class="btn btn-outline btn-sm">Details</a>
+                <a href="vehicle-details?id=SKY-VHC-011#booking-panel" class="btn btn-primary btn-sm">Reserve</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Why Choose SkyBolt Section -->
+    <section class="section" style="background-color: var(--surface);" id="why-us-section">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="badge badge-secondary">The SkyBolt Advantage</span>
+          <h2>Why Choose SkyBolt</h2>
+          <p>We blend modern fleet management with transparent digital pricing to deliver a frictionless rental experience.</p>
+        </div>
+
+        <div class="features-grid">
+          
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="fa-solid fa-tags"></i>
+            </div>
+            <h3>Transparent Pricing</h3>
+            <p>Guaranteed clear daily rates inclusive of taxes with zero hidden maintenance or checkout fees.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="fa-solid fa-shield-check"></i>
+            </div>
+            <h3>40-Point Inspection</h3>
+            <p>Every vehicle undergoes strict multi-point safety testing and professional sanitization before key handoff.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <h3>Instant Digital Booking</h3>
+            <p>Book and confirm your vehicle in under 2 minutes with cryptographic reservation locking.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <h3>24/7 Roadside Assistance</h3>
+            <p>Dedicated customer support and emergency roadside assistance ready at all times across all operating hubs.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Exclusive Offers & Deals Section -->
+    <section class="section" id="offers-section">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="badge badge-success"><i class="fa-solid fa-ticket"></i> Verified Promotions</span>
+          <h2>Exclusive Offers & Deals</h2>
+          <p>Apply valid promo codes during reservation checkout for instant savings across all categories.</p>
+        </div>
+
+        <div class="offers-grid">
+
+          <!-- Offer 1 -->
+          <div class="coupon-card">
+            <div>
+              <div class="coupon-badge">20% OFF</div>
+              <h3 class="coupon-title">First Ride Welcome</h3>
+              <p class="coupon-desc">Enjoy 20% off on your first rental reservation with SkyBolt across any vehicle type.</p>
+            </div>
+            <div class="coupon-code-row">
+              <span>PROMO CODE</span>
+              <span class="coupon-code">FIRST20</span>
+            </div>
+          </div>
+
+          <!-- Offer 2 -->
+          <div class="coupon-card">
+            <div>
+              <div class="coupon-badge" style="background-color: var(--secondary);">15% OFF</div>
+              <h3 class="coupon-title">Weekend Getaway Special</h3>
+              <p class="coupon-desc">Enjoy 15% off on all car and SUV rentals booked between Friday and Sunday.</p>
+            </div>
+            <div class="coupon-code-row">
+              <span>PROMO CODE</span>
+              <span class="coupon-code">WEEKEND15</span>
+            </div>
+          </div>
+
+          <!-- Offer 3 -->
+          <div class="coupon-card">
+            <div>
+              <div class="coupon-badge" style="background-color: var(--dark-surface);">30% OFF</div>
+              <h3 class="coupon-title">Long Journey Discount</h3>
+              <p class="coupon-desc">Rent any vehicle for 7 or more consecutive days and receive an automatic 30% discount.</p>
+            </div>
+            <div class="coupon-code-row">
+              <span>PROMO CODE</span>
+              <span class="coupon-code">LONGRID30</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Customer Testimonials Section -->
+    <section class="section" style="background-color: var(--surface);" id="testimonials-section">
+      <div class="container">
+        
+        <div class="section-header">
+          <span class="badge badge-primary">Rider Feedback</span>
+          <h2>What Our Riders Say</h2>
+          <p>Authentic feedback from verified customers who travel with SkyBolt Rentals.</p>
+        </div>
+
+        <div class="testimonials-grid">
+
+          <!-- Testimonial 1 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="testimonial-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p class="testimonial-text">"SkyBolt made my weekend trip effortless. The Ford Edge SUV was spotless and pickup at the hub took less than 3 minutes!"</p>
+            </div>
+            <div class="testimonial-author">
+              <div class="author-avatar">AM</div>
+              <div class="author-info">
+                <h4>Alex Morgan</h4>
+                <span>Verified Rider</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="testimonial-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p class="testimonial-text">"Renting the Ola S1 Pro e-scooter was fantastic for my daily city commute. Super smooth, highly responsive, and zero emissions."</p>
+            </div>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background: linear-gradient(135deg, #0EA5E9 0%, #10B981 100%);">SC</div>
+              <div class="author-info">
+                <h4>Sarah Chen</h4>
+                <span>Verified Commuter</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="testimonial-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+              <p class="testimonial-text">"Best vehicle rental service in town. Transparent daily rates, genuine condition vehicles, and zero hidden charges on return."</p>
+            </div>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);">MV</div>
+              <div class="author-info">
+                <h4>Marcus Vance</h4>
+                <span>Verified Rider</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Final Call to Action Banner -->
+    <section class="section" style="background: linear-gradient(135deg, var(--primary) 0%, #1D4ED8 100%); color: #FFFFFF;">
+      <div class="container text-center" style="max-width: 680px;">
+        <h2 style="color: #FFFFFF; font-size: var(--fs-3xl); margin-bottom: var(--space-4);">Ready to hit the open road?</h2>
+        <p style="color: rgba(255, 255, 255, 0.88); font-size: var(--fs-md); margin-bottom: var(--space-8);">Reserve your vehicle in under 2 minutes. Transparent rates, guaranteed availability, and 24/7 roadside assistance.</p>
+        <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+          <a href="/vehicles" class="btn btn-secondary btn-lg" style="background-color: #FFFFFF; color: var(--primary); border-color: #FFFFFF;">Explore All Vehicles</a>
+          <a href="/register" class="btn btn-outline btn-lg" style="color: #FFFFFF; border-color: rgba(255, 255, 255, 0.4);">Create Free Account</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" id="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-brand">
+          <h3>
+            <i class="fa-solid fa-bolt" style="color: var(--primary);"></i>
+            SkyBolt Rentals
+          </h3>
+          <p>Move freely. Rent smarter. Your trusted mobility partner for motorcycles, cars, and e-scooters nationwide.</p>
+          <div class="footer-socials">
+            <a href="https://twitter.com" aria-label="Twitter" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://instagram.com" aria-label="Instagram" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4>Rentals</h4>
+          <ul>
+            <li><a href="/vehicles">All Vehicle Fleet</a></li>
+            <li><a href="/bikes">Bikes & Motorcycles</a></li>
+            <li><a href="/cars">Cars & SUVs</a></li>
+            <li><a href="/scooters">Electric Scooters</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Customer Care</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#offers-section">Offers & Promo Codes</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Support & Legal</h4>
+          <ul>
+            <li><a href="/contact">Help Center</a></li>
+            <li><a href="/login">Sign In</a></li>
+            <li><a href="/register">Create Account</a></li>
+            <li><a href="/contact#cancellation-terms">Cancellation Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals Inc. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/about">Security</a>
+          <a href="/contact">Support</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

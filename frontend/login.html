@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com;">
+
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Sign In - SkyBolt Rentals</title>
+  <meta name="description" content="Sign in to your verified SkyBolt Rentals account to manage rentals, view invoices, and track your reservations.">
+  
+  <meta property="og:title" content="Sign In - SkyBolt Rentals">
+  <meta property="og:description" content="Sign in to your SkyBolt Rentals account.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/vehicles" class="nav-link">Vehicles</a></li>
+          <li><a href="/bikes" class="nav-link">Bikes</a></li>
+          <li><a href="/cars" class="nav-link">Cars</a></li>
+          <li><a href="/scooters" class="nav-link">E-Scooters</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+        <a href="/register" class="btn btn-outline">Create Account</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Login Section -->
+  <main class="section" style="min-height: calc(85vh - var(--header-height)); display: flex; align-items: center;">
+    <div class="container" style="max-width: 480px;">
+      <div class="form-card">
+        <div class="text-center" style="margin-bottom: var(--space-6);">
+          <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background-color: var(--primary-light); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: var(--space-3);">
+            <i class="fa-solid fa-user-lock"></i>
+          </div>
+          <h2 style="font-size: var(--fs-2xl); margin-bottom: var(--space-1);">Welcome Back</h2>
+          <p style="color: var(--text-secondary); font-size: var(--fs-sm); margin-bottom: 0;">Sign in to your SkyBolt Rentals account</p>
+        </div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-email">Email Address</label>
+            <input type="email" id="login-email" class="form-control" placeholder="name@example.com" required autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-1);">
+              <label for="login-password" style="margin-bottom: 0;">Password</label>
+              <a href="#" id="forgot-password-link" style="font-size: var(--fs-xs);">Forgot Password?</a>
+            </div>
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: var(--space-4);" id="btn-submit-login">
+            Sign In <i class="fa-solid fa-right-to-bracket"></i>
+          </button>
+
+          <div id="login-error-msg" style="display: none; color: var(--danger); font-size: var(--fs-xs); margin-top: var(--space-3); text-align: center; font-weight: 600;"></div>
+
+          <!-- Quick Demo Credentials Box -->
+          <div class="demo-credentials-box" style="margin-top: var(--space-4); padding: var(--space-3); background: var(--bg-tertiary, #f8fafc); border: 1px dashed var(--border-light, #cbd5e1); border-radius: var(--radius-md); font-size: var(--fs-xs);">
+            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: var(--space-2); display: flex; align-items: center; justify-content: space-between;">
+              <span><i class="fa-solid fa-key" style="margin-right: 4px; color: var(--primary);"></i> Quick Demo Credentials</span>
+              <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">Click to auto-fill</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
+              <button type="button" class="btn btn-sm btn-outline" id="btn-demo-admin" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
+                <strong style="color: var(--primary);"><i class="fa-solid fa-shield-halved"></i> Admin</strong>
+                <span style="color: var(--text-secondary); font-size: 9px;">admin@skybolt.com</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline" id="btn-demo-owner" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
+                <strong style="color: #7c3aed;"><i class="fa-solid fa-key"></i> Owner</strong>
+                <span style="color: var(--text-secondary); font-size: 9px;">owner@skybolt.com</span>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline" id="btn-demo-customer" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
+                <strong style="color: #059669;"><i class="fa-solid fa-user"></i> Customer</strong>
+                <span style="color: var(--text-secondary); font-size: 9px;">customer@skybolt.com</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="text-center" style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border-light); font-size: var(--fs-sm); color: var(--text-secondary);">
+            Don't have an account? <a href="/register" style="font-weight: 700;">Create account</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/vehicles">Fleet</a>
+          <a href="/about">About</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

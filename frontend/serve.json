@@ -1,0 +1,21 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/vehicle-details", "destination": "/vehicle-details.html" },
+    { "source": "/vehicles", "destination": "/vehicles.html" },
+    { "source": "/bikes", "destination": "/bikes.html" },
+    { "source": "/cars", "destination": "/cars.html" },
+    { "source": "/scooters", "destination": "/scooters.html" },
+    { "source": "/booking", "destination": "/booking.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/register", "destination": "/register.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/fleet", "destination": "/fleet.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/owner-dashboard", "destination": "/owner-dashboard.html" },
+    { "source": "/owner/add-vehicle", "destination": "/owner-add-vehicle.html" },
+    { "source": "/owner-add-vehicle", "destination": "/owner-add-vehicle.html" }
+  ]
+}

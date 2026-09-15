@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com;">
+  
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Admin Operations Control Center - SkyBolt Rentals</title>
+  <meta name="description" content="Production Admin Operations Control Center for SkyBolt Rentals. Fleet monitoring, booking oversight, hub logistics, safety inspections, work orders, payments, and audit activity.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Modular Design System Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    /* Admin Control Center Layout */
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+      background-color: var(--background);
+    }
+    
+    .admin-sidebar {
+      width: 260px;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      transition: var(--transition-fast);
+    }
+
+    .admin-brand {
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .admin-brand i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    .admin-brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .admin-brand-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      background: var(--primary);
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    .admin-nav {
+      padding: var(--space-4) var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    .admin-nav-item:hover {
+      color: var(--primary);
+      background: var(--bg-alt);
+    }
+    .admin-nav-item.active {
+      color: var(--primary);
+      background: var(--primary-light);
+      font-weight: 700;
+    }
+    .admin-nav-item i {
+      width: 20px;
+      text-align: center;
+      font-size: 1rem;
+    }
+    .admin-nav-badge {
+      margin-left: auto;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: var(--border);
+      color: var(--text-muted);
+    }
+    .admin-nav-badge.danger {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .admin-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .admin-topbar {
+      height: 70px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-6);
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+    .topbar-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--fs-sm);
+      color: var(--text-muted);
+    }
+    .topbar-breadcrumbs span.active {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    /* Health Alerts Dropdown */
+    .alerts-dropdown-btn {
+      position: relative;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text);
+      transition: var(--transition-fast);
+    }
+    .alerts-dropdown-btn:hover {
+      background: var(--bg-alt);
+    }
+    .alerts-counter {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      line-height: 1;
+      border: 2px solid var(--white);
+    }
+
+    .alerts-popover {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      width: 360px;
+      max-height: 480px;
+      overflow-y: auto;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-4);
+      z-index: 200;
+    }
+    .alerts-popover.active {
+      display: block;
+    }
+    .alert-item-card {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      font-size: var(--fs-xs);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+    .alert-item-card.critical {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #991b1b;
+    }
+    .alert-item-card.high {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: #9a3412;
+    }
+    .alert-item-card.medium {
+      background: #fefce8;
+      border-color: #fef08a;
+      color: #854d0e;
+    }
+
+    .admin-user-pill {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      font-size: var(--fs-xs);
+    }
+    .admin-user-role-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: var(--primary);
+      color: var(--white);
+      text-transform: uppercase;
+    }
+
+    /* Content Panes */
+    .admin-content {
+      padding: var(--space-6);
+      flex: 1;
+    }
+    .admin-pane {
+      display: none;
+    }
+    .admin-pane.active {
+      display: block;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tables & Cards */
+    .ops-table-container {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: var(--space-6);
+    }
+    .ops-table-header {
+      padding: var(--space-4) var(--space-6);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-alt);
+    }
+    .ops-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--fs-sm);
+      text-align: left;
+    }
+    .ops-table th {
+      padding: 12px 16px;
+      background: var(--bg-alt);
+      border-bottom: 2px solid var(--border);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .ops-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .ops-table tr:hover td {
+      background-color: var(--bg-alt);
+    }
+
+    .ops-pagination {
+      padding: var(--space-3) var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      background: var(--white);
+      font-size: var(--fs-xs);
+      color: var(--text-muted);
+    }
+
+    /* Status Badges */
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .badge-available { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+    .badge-reserved { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+    .badge-rental { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+    .badge-maintenance { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+    .badge-inspection { background: #fefce8; color: #ca8a04; border: 1px solid #fef08a; }
+    .badge-transit { background: #ecfeff; color: #0891b2; border: 1px solid #a5f3fc; }
+    .badge-retired { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    /* Modals */
+    .ops-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+    }
+    .ops-modal-backdrop.active {
+      display: flex;
+    }
+    .ops-modal-card {
+      background: var(--white);
+      border-radius: var(--radius-2xl);
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
+    }
+    .ops-modal-header {
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ops-modal-body {
+      padding: var(--space-6);
+    }
+    .ops-modal-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-3);
+      background: var(--bg-alt);
+    }
+
+    @media (max-width: 900px) {
+      .admin-sidebar {
+        width: 70px;
+      }
+      .admin-brand-title, .admin-brand-badge, .admin-nav-text, .admin-nav-badge {
+        display: none;
+      }
+      .admin-brand {
+        padding: var(--space-4);
+        justify-content: center;
+      }
+      .admin-nav-item {
+        justify-content: center;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    
+    <!-- Sidebar Navigation (11 Sections) -->
+    <aside class="admin-sidebar">
+      <a href="/admin" class="admin-brand">
+        <i class="fa-solid fa-bolt"></i>
+        <div>
+          <div class="admin-brand-title">SkyBolt<span>Admin</span></div>
+          <span class="admin-brand-badge">Command Center</span>
+        </div>
+      </a>
+
+      <nav class="admin-nav">
+        <button class="admin-nav-item active" data-tab="overview" id="nav-tab-overview">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span class="admin-nav-text">Overview</span>
+        </button>
+        <button class="admin-nav-item" data-tab="bookings" id="nav-tab-bookings">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span class="admin-nav-text">Bookings</span>
+        </button>
+        <button class="admin-nav-item" data-tab="fleet" id="nav-tab-fleet">
+          <i class="fa-solid fa-car-side"></i>
+          <span class="admin-nav-text">Fleet Operations</span>
+        </button>
+        <button class="admin-nav-item" data-tab="vehicles" id="nav-tab-vehicles">
+          <i class="fa-solid fa-list"></i>
+          <span class="admin-nav-text">Vehicles Dossier</span>
+        </button>
+        <button class="admin-nav-item" data-tab="hubs" id="nav-tab-hubs">
+          <i class="fa-solid fa-warehouse"></i>
+          <span class="admin-nav-text">Hubs Logistics</span>
+        </button>
+        <button class="admin-nav-item" data-tab="maintenance" id="nav-tab-maintenance">
+          <i class="fa-solid fa-wrench"></i>
+          <span class="admin-nav-text">Maintenance</span>
+        </button>
+        <button class="admin-nav-item" data-tab="inspections" id="nav-tab-inspections">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <span class="admin-nav-text">Inspections</span>
+        </button>
+        <button class="admin-nav-item" data-tab="transfers" id="nav-tab-transfers">
+          <i class="fa-solid fa-truck-arrow-right"></i>
+          <span class="admin-nav-text">Transfers</span>
+        </button>
+        <button class="admin-nav-item" data-tab="payments" id="nav-tab-payments">
+          <i class="fa-solid fa-credit-card"></i>
+          <span class="admin-nav-text">Payments &amp; Recon</span>
+        </button>
+        <button class="admin-nav-item" data-tab="users" id="nav-tab-users">
+          <i class="fa-solid fa-users-gear"></i>
+          <span class="admin-nav-text">User Management</span>
+        </button>
+        <button class="admin-nav-item" data-tab="audit" id="nav-tab-audit">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span class="admin-nav-text">Audit Logs</span>
+        </button>
+        <button class="admin-nav-item" data-tab="reviews" id="nav-tab-reviews">
+          <i class="fa-solid fa-star-half-stroke"></i>
+          <span class="admin-nav-text">Reviews &amp; Moderation</span>
+        </button>
+        <button class="admin-nav-item" data-tab="queues" id="nav-tab-queues">
+          <i class="fa-solid fa-server"></i>
+          <span class="admin-nav-text">Queues &amp; Workers</span>
+        </button>
+        <button class="admin-nav-item" data-tab="recommendations" id="nav-tab-recommendations">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span class="admin-nav-text">AI Recommendations</span>
+        </button>
+
+        <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border);">
+          <a href="/" class="admin-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span class="admin-nav-text">Public Website</span>
+          </a>
+          <a href="/fleet" class="admin-nav-item">
+            <i class="fa-solid fa-sliders"></i>
+            <span class="admin-nav-text">Fleet Portal</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="admin-main">
+      
+      <!-- Top Navigation Bar -->
+      <header class="admin-topbar">
+        <div class="topbar-breadcrumbs">
+          <i class="fa-solid fa-shield-halved text-primary"></i>
+          <span>SkyBolt Operations</span>
+          <i class="fa-solid fa-chevron-right" style="font-size: 0.7rem;"></i>
+          <span class="active" id="current-crumb">Overview</span>
+        </div>
+
+        <div class="topbar-actions">
+          <!-- Operational Health Alerts Bell -->
+          <div style="position: relative;">
+            <button class="alerts-dropdown-btn" id="btn-alerts-toggle" aria-label="Operational health notifications">
+              <i class="fa-regular fa-bell"></i>
+              <span class="alerts-counter" id="alerts-counter-badge" style="display: none;">0</span>
+            </button>
+            <div class="alerts-popover" id="alerts-popover-menu">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border);">
+                <strong style="font-size: var(--fs-sm);"><i class="fa-solid fa-triangle-exclamation text-danger"></i> Operational Alerts</strong>
+                <span id="alerts-menu-count" class="badge-pill badge-maintenance">0 Active</span>
+              </div>
+              <div id="alerts-popover-items">
+                <!-- Dynamically filled -->
+                <p style="color: var(--text-muted); font-size: var(--fs-xs); text-align: center; padding: 20px;">No critical operational issues detected.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button class="theme-toggle-btn" aria-label="Toggle theme" style="width: 40px; height: 40px; border-radius: var(--radius-full); border: 1px solid var(--border); background: transparent; cursor: pointer; color: var(--text);">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+
+          <!-- Current Staff / Admin User Pill -->
+          <div class="admin-user-pill" id="admin-user-pill">
+            <i class="fa-solid fa-user-shield"></i>
+            <div>
+              <div id="admin-user-name" style="font-weight: 700; line-height: 1.1;">Admin</div>
+              <span class="admin-user-role-badge" id="admin-user-role">STAFF</span>
+            </div>
+          </div>
+
+          <!-- Sign Out -->
+          <button class="btn btn-outline btn-sm" id="btn-admin-logout" style="color: #dc2626; border-color: #fca5a5;">
+            <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard Content Panes -->
+      <main class="admin-content">
+        
+        <!-- ===================================================================
+             1. OVERVIEW PANE
+             =================================================================== -->
+        <section class="admin-pane active" id="pane-overview">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Operational Control Center</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Authoritative real-time fleet telemetry, bookings, and logistical health.</p>
+            </div>
+            <div style="display: flex; gap: var(--space-3);">
+              <button class="btn btn-outline btn-sm" id="btn-refresh-overview">
+                <i class="fa-solid fa-rotate"></i> Refresh Telemetry
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <div class="card" style="padding: var(--space-5); display: flex; align-items: center; gap: var(--space-4);">
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class="fa-solid fa-car-side"></i></div>
+              <div>
+                <div style="font-size: 1.75rem; font-weight: 800;" id="kpi-available-vehs">-</div>
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Available Fleet</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding: var(--space-5); display: flex; align-items: center; gap: var(--space-4);">
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class="fa-solid fa-key"></i></div>
+              <div>
+                <div style="font-size: 1.75rem; font-weight: 800;" id="kpi-active-rentals">-</div>
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Active Rentals</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding: var(--space-5); display: flex; align-items: center; gap: var(--space-4);">
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background: #fff7ed; color: #ea580c; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class="fa-solid fa-wrench"></i></div>
+              <div>
+                <div style="font-size: 1.75rem; font-weight: 800;" id="kpi-maintenance-vehs">-</div>
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">In Maintenance</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding: var(--space-5); display: flex; align-items: center; gap: var(--space-4);">
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background: #fefce8; color: #ca8a04; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class="fa-solid fa-clipboard-check"></i></div>
+              <div>
+                <div style="font-size: 1.75rem; font-weight: 800;" id="kpi-inspection-vehs">-</div>
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Under Inspection</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding: var(--space-5); display: flex; align-items: center; gap: var(--space-4);">
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background: #f5f3ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+              <div>
+                <div style="font-size: 1.75rem; font-weight: 800;" id="kpi-revenue-total">-</div>
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Captured Revenue</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding: var(--space-5); display: flex; align-items: center; gap: var(--space-4);">
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background: #ecfeff; color: #0891b2; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;"><i class="fa-solid fa-warehouse"></i></div>
+              <div>
+                <div style="font-size: 1.75rem; font-weight: 800;" id="kpi-hub-occupancy">-</div>
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Hub Occupancy</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Operational Health & Live Alerts -->
+          <div class="card" style="padding: var(--space-6); margin-bottom: var(--space-6); border-left: 4px solid var(--primary);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-4);">
+              <h3 style="font-size: 1.15rem; margin-bottom: 0;"><i class="fa-solid fa-heart-pulse text-danger"></i> Authoritative Operational Health</h3>
+              <span class="badge-pill badge-available" id="system-health-tag">Systems Operational</span>
+            </div>
+            <div id="overview-alerts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-3);">
+              <!-- Filled dynamically with health alerts -->
+            </div>
+          </div>
+
+          <!-- Recent Audit Stream -->
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <h3 style="font-size: 1.1rem; margin-bottom: 0;"><i class="fa-solid fa-clock-rotate-left text-primary"></i> Recent Privileged Operations</h3>
+              <button class="btn btn-outline btn-sm" onclick="document.getElementById('nav-tab-audit').click();">View All Logs &rarr;</button>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Actor</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                    <th>Target Entity</th>
+                    <th>Entity ID</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-recent-audit-body">
+                  <tr><td colspan="6" style="text-align: center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading recent activity...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             2. BOOKINGS MANAGEMENT PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-bookings">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Bookings &amp; Handover Operations</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Authoritative reservation records, customer verification, and vehicle handovers.</p>
+            </div>
+          </div>
+
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                <input type="text" id="bookings-search" placeholder="Search reference or customer..." class="form-input" style="width: 260px; padding: 8px 12px; font-size: var(--fs-sm);">
+                <select id="bookings-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Statuses</option>
+                  <option value="CONFIRMED">Confirmed</option>
+                  <option value="ACTIVE">Active Rental</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="CANCELLED">Cancelled</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="PAYMENT_PENDING">Payment Pending</option>
+                </select>
+                <select id="bookings-payment-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Payments</option>
+                  <option value="PAID">Paid</option>
+                  <option value="PENDING">Payment Pending</option>
+                  <option value="FAILED">Payment Failed</option>
+                  <option value="REFUNDED">Refunded</option>
+                </select>
+              </div>
+              <button class="btn btn-outline btn-sm" id="btn-refresh-bookings"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Booking Reference</th>
+                    <th>Customer</th>
+                    <th>Assigned Vehicle</th>
+                    <th>Pickup Interval</th>
+                    <th>Booking State</th>
+                    <th>Payment</th>
+                    <th>Total (INR)</th>
+                    <th style="text-align: right;">Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="bookings-table-body">
+                  <tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading authoritative bookings...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="bookings-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-bookings-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-bookings-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             3. FLEET OPERATIONS PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-fleet">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Fleet Operations &amp; Inventory</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Physical fleet states, hub assignments, readiness ratings, and quick actions.</p>
+            </div>
+          </div>
+
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                <input type="text" id="fleet-search" placeholder="Search registration or model..." class="form-input" style="width: 240px; padding: 8px 12px; font-size: var(--fs-sm);">
+                <select id="fleet-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Fleet States</option>
+                  <option value="AVAILABLE">Available</option>
+                  <option value="RESERVED">Reserved</option>
+                  <option value="ACTIVE_RENTAL">Active Rental</option>
+                  <option value="MAINTENANCE">In Maintenance</option>
+                  <option value="INSPECTION">Under Inspection</option>
+                  <option value="TRANSFER_PENDING">In Transit</option>
+                  <option value="UNAVAILABLE">Unavailable</option>
+                  <option value="RETIRED">Retired</option>
+                </select>
+                <select id="fleet-category-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Categories</option>
+                  <option value="CAR">Car</option>
+                  <option value="BIKE">Bike</option>
+                  <option value="SCOOTER">Scooter</option>
+                </select>
+              </div>
+              <button class="btn btn-outline btn-sm" id="btn-refresh-fleet"><i class="fa-solid fa-rotate"></i> Refresh Fleet</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Registration &amp; Model</th>
+                    <th>Category</th>
+                    <th>Assigned Hub</th>
+                    <th>Fleet State</th>
+                    <th>Odometer</th>
+                    <th>Readiness</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="fleet-table-body">
+                  <tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading fleet inventory...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="fleet-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-fleet-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-fleet-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             4. VEHICLES DOSSIER PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-vehicles">
+          <div style="margin-bottom: var(--space-6);">
+            <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Vehicle Operations Dossier</h1>
+            <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Comprehensive operational intelligence, maintenance history, and safety audits.</p>
+          </div>
+
+          <div class="card" style="padding: var(--space-6); margin-bottom: var(--space-6);">
+            <div style="display: flex; gap: var(--space-4); align-items: center; max-width: 600px;">
+              <input type="text" id="dossier-search-input" placeholder="Enter Registration (e.g. KA01AB1234) or Vehicle ID..." class="form-input" style="flex: 1;">
+              <button class="btn btn-primary" id="btn-lookup-dossier"><i class="fa-solid fa-magnifying-glass"></i> Inspect Dossier</button>
+            </div>
+          </div>
+
+          <div id="dossier-results-area">
+            <!-- Filled dynamically upon vehicle lookup -->
+            <p style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-car"></i> Select or look up a vehicle to view its operational dossier.</p>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             5. HUBS LOGISTICS PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-hubs">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Logistics Hubs Management</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Hub capacities, operational status, and vehicle distribution.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="btn-open-create-hub"><i class="fa-solid fa-plus"></i> Add New Hub</button>
+          </div>
+
+          <div id="hubs-grid-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <!-- Hub cards filled dynamically -->
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             6. MAINTENANCE OPERATIONS PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-maintenance">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Maintenance &amp; Work Orders</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Service scheduling, workshop lifecycles, and repair cost auditing.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="btn-open-schedule-maintenance"><i class="fa-solid fa-wrench"></i> Schedule Service</button>
+          </div>
+
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                <select id="maintenance-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Statuses</option>
+                  <option value="SCHEDULED">Scheduled</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="CANCELLED">Cancelled</option>
+                </select>
+                <select id="maintenance-priority-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Priorities</option>
+                  <option value="CRITICAL">Critical</option>
+                  <option value="HIGH">High</option>
+                  <option value="MEDIUM">Medium</option>
+                  <option value="LOW">Low</option>
+                </select>
+              </div>
+              <button class="btn btn-outline btn-sm" id="btn-refresh-maintenance"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Work Order #</th>
+                    <th>Vehicle</th>
+                    <th>Service Type</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Scheduled Date</th>
+                    <th>Cost (INR)</th>
+                    <th style="text-align: right;">Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="maintenance-table-body">
+                  <tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading maintenance records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="maintenance-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-maintenance-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-maintenance-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             7. INSPECTIONS PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-inspections">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Vehicle Safety Inspections</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Multi-point quality checklists, return assessments, and defect tracking.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="btn-open-create-inspection"><i class="fa-solid fa-clipboard-check"></i> Record Inspection</button>
+          </div>
+
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                <select id="inspections-result-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Results</option>
+                  <option value="PASSED">Passed</option>
+                  <option value="FAILED">Failed</option>
+                  <option value="CONDITIONAL">Conditional</option>
+                </select>
+                <select id="inspections-type-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Inspection Types</option>
+                  <option value="PRE_RENTAL">Pre Rental</option>
+                  <option value="POST_RENTAL">Post Rental</option>
+                  <option value="ROUTINE">Routine Safety</option>
+                  <option value="POST_MAINTENANCE">Post Maintenance</option>
+                </select>
+              </div>
+              <button class="btn btn-outline btn-sm" id="btn-refresh-inspections"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Inspection #</th>
+                    <th>Vehicle</th>
+                    <th>Inspector</th>
+                    <th>Type</th>
+                    <th>Outcome</th>
+                    <th>Issues Flagged</th>
+                    <th>Date</th>
+                    <th style="text-align: right;">Details</th>
+                  </tr>
+                </thead>
+                <tbody id="inspections-table-body">
+                  <tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading inspection reports...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="inspections-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-inspections-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-inspections-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             8. TRANSFERS PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-transfers">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Inter-Hub Logistics Transfers</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Vehicle redistribution between hubs, transit tracking, and handover completion.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="btn-open-create-transfer"><i class="fa-solid fa-truck-arrow-right"></i> Initiate Transfer</button>
+          </div>
+
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <select id="transfers-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm); width: 200px;">
+                <option value="">All Transfer States</option>
+                <option value="PENDING">Pending</option>
+                <option value="IN_TRANSIT">In Transit</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+              </select>
+              <button class="btn btn-outline btn-sm" id="btn-refresh-transfers"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Transfer #</th>
+                    <th>Vehicle</th>
+                    <th>Origin Hub</th>
+                    <th>Destination Hub</th>
+                    <th>Status</th>
+                    <th>Initiated By</th>
+                    <th>Date</th>
+                    <th style="text-align: right;">Operations</th>
+                  </tr>
+                </thead>
+                <tbody id="transfers-table-body">
+                  <tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading transfer records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="transfers-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-transfers-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-transfers-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             9. PAYMENTS & RECONCILIATION PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-payments">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Payment Ledgers &amp; Gateway Reconciliation</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Authoritative Razorpay payment records and anomaly diagnostics.</p>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btn-refresh-payments"><i class="fa-solid fa-rotate"></i> Refresh Reconciliation</button>
+          </div>
+
+          <!-- Discrepancies Box -->
+          <div id="payments-discrepancies-box" style="margin-bottom: var(--space-6);"></div>
+
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; gap: var(--space-3); align-items: center;">
+                <input type="text" id="payments-search" placeholder="Search reference or order ID..." class="form-input" style="width: 260px; padding: 8px 12px; font-size: var(--fs-sm);">
+                <select id="payments-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Payment Statuses</option>
+                  <option value="CAPTURED">Captured</option>
+                  <option value="ORDER_CREATED">Order Created</option>
+                  <option value="FAILED">Failed</option>
+                  <option value="REFUNDED">Refunded</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Payment Reference</th>
+                    <th>Booking Reference</th>
+                    <th>Customer</th>
+                    <th>Amount (INR)</th>
+                    <th>Status</th>
+                    <th>Razorpay Order ID</th>
+                    <th>Razorpay Payment ID</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="payments-table-body">
+                  <tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading financial records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="payments-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-payments-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-payments-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             10. USER MANAGEMENT PANE (Strictly ADMIN)
+             =================================================================== -->
+        <section class="admin-pane" id="pane-users">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">User &amp; Staff Role Management</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Manage platform accounts, enforce RBAC roles, and control account statuses.</p>
+            </div>
+          </div>
+
+          <div id="users-access-denied" style="display: none; padding: 40px; text-align: center; background: var(--white); border-radius: var(--radius-xl); border: 1px solid var(--border);">
+            <i class="fa-solid fa-lock text-danger" style="font-size: 2.5rem; margin-bottom: 12px;"></i>
+            <h3>Access Restricted to Platform Administrators</h3>
+            <p style="color: var(--text-muted);">Only administrators with role <code>ADMIN</code> are authorized to manage user accounts and assign staff privileges.</p>
+          </div>
+
+          <div class="ops-table-container" id="users-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                <input type="text" id="users-search" placeholder="Search name, email, or phone..." class="form-input" style="width: 260px; padding: 8px 12px; font-size: var(--fs-sm);">
+                <select id="users-role-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Roles</option>
+                  <option value="CUSTOMER">Customer</option>
+                  <option value="STAFF">Staff</option>
+                  <option value="FLEET_MANAGER">Fleet Manager</option>
+                  <option value="ADMIN">Administrator</option>
+                </select>
+                <select id="users-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Account Statuses</option>
+                  <option value="ACTIVE">Active</option>
+                  <option value="SUSPENDED">Suspended</option>
+                  <option value="DEACTIVATED">Deactivated</option>
+                </select>
+              </div>
+              <button class="btn btn-outline btn-sm" id="btn-refresh-users"><i class="fa-solid fa-rotate"></i> Refresh</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>User Details</th>
+                    <th>Email Address</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Account Status</th>
+                    <th>Registered On</th>
+                    <th style="text-align: right;">Privilege Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="users-table-body">
+                  <tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading directory...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="users-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-users-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-users-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             11. AUDIT LOGS PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-audit">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">System Audit Trail</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Authoritative, immutable event records of privileged staff &amp; admin operations.</p>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btn-refresh-audit"><i class="fa-solid fa-rotate"></i> Refresh Audit Trail</button>
+          </div>
+
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                <select id="audit-entity-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Entities</option>
+                  <option value="VEHICLE">Vehicle</option>
+                  <option value="HUB">Hub</option>
+                  <option value="TRANSFER">Transfer</option>
+                  <option value="MAINTENANCE">Maintenance</option>
+                  <option value="INSPECTION">Inspection</option>
+                  <option value="BOOKING">Booking</option>
+                  <option value="USER">User</option>
+                  <option value="PAYMENT">Payment</option>
+                  <option value="REVIEW">Review</option>
+                  <option value="REVIEW_REPORT">Review Report</option>
+                </select>
+                <input type="text" id="audit-action-filter" placeholder="Filter by action (e.g. USER_ROLE_UPDATED)..." class="form-input" style="width: 280px; padding: 8px 12px; font-size: var(--fs-sm);">
+              </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Actor</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                    <th>Entity Type</th>
+                    <th>Entity ID</th>
+                    <th style="text-align: right;">State Diff</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-table-body">
+                  <tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading audit logs...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="audit-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-audit-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-audit-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             12. REVIEWS & CONTENT MODERATION PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-reviews">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Reviews &amp; Content Moderation</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Authoritative inspection of verified customer feedback, content moderation, and report resolution.</p>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btn-refresh-reviews"><i class="fa-solid fa-rotate"></i> Refresh Reviews &amp; Reports</button>
+          </div>
+
+          <!-- Moderation KPI Summary Cards -->
+          <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Total Reviews</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary); margin: 4px 0;" id="rev-stat-total">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--success);"><i class="fa-solid fa-shield-check"></i> Authoritative database count</div>
+            </div>
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Pending Moderation</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #f59e0b; margin: 4px 0;" id="rev-stat-pending">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Awaiting staff review</div>
+            </div>
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Flagged Reports</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--danger); margin: 4px 0;" id="rev-stat-reports">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--danger);">Unresolved abuse flags</div>
+            </div>
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Fleet Avg Rating</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #f59e0b; margin: 4px 0;" id="rev-stat-rating">0.0 ★</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Authoritative fleet average</div>
+            </div>
+          </div>
+
+          <!-- Reviews Subtabs -->
+          <div style="display: flex; gap: var(--space-2); border-bottom: 1px solid var(--border); margin-bottom: var(--space-5);">
+            <button class="btn btn-sm btn-ghost active" id="subtab-reviews-btn" style="border-bottom: 2px solid var(--primary); border-radius: 0; font-weight: 700; color: var(--primary);">
+              <i class="fa-solid fa-list-check"></i> Customer Reviews
+            </button>
+            <button class="btn btn-sm btn-ghost" id="subtab-reports-btn" style="border-radius: 0; font-weight: 600; color: var(--text-muted);">
+              <i class="fa-solid fa-flag"></i> Abuse Reports <span class="badge badge-danger" id="badge-reports-count" style="margin-left: 4px;">0</span>
+            </button>
+          </div>
+
+          <!-- Section 1: Reviews Table Container -->
+          <div id="subpane-reviews" class="ops-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                <select id="admin-rev-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Moderation States</option>
+                  <option value="PUBLISHED">Published</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="HIDDEN">Hidden</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+                <select id="admin-rev-rating-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Ratings</option>
+                  <option value="5">5 Stars</option>
+                  <option value="4">4 Stars</option>
+                  <option value="3">3 Stars</option>
+                  <option value="2">2 Stars</option>
+                  <option value="1">1 Star</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Vehicle</th>
+                    <th>Customer</th>
+                    <th>Rating</th>
+                    <th>Title &amp; Comment</th>
+                    <th>Verified</th>
+                    <th>Status</th>
+                    <th>Helpful / Reports</th>
+                    <th style="text-align: right;">Moderation Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-reviews-table-body">
+                  <tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading reviews...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="rev-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-rev-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-rev-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Reports Table Container -->
+          <div id="subpane-reports" class="ops-table-container" style="display: none;">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                <select id="admin-rep-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm);">
+                  <option value="">All Report Statuses</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="INVESTIGATING">Investigating</option>
+                  <option value="RESOLVED">Resolved</option>
+                  <option value="DISMISSED">Dismissed</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Review Title</th>
+                    <th>Reported By</th>
+                    <th>Reason</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Reported At</th>
+                    <th style="text-align: right;">Resolution</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-reports-table-body">
+                  <tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading reports...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="rep-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-rep-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-rep-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             13. QUEUES & BACKGROUND WORKERS PANE
+             =================================================================== -->
+        <section class="admin-pane" id="pane-queues">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">Queues &amp; Background Workers</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">Operational BullMQ queue monitoring, job observability, failure analytics, and safe retries.</p>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btn-refresh-queues"><i class="fa-solid fa-rotate"></i> Refresh Queue Metrics</button>
+          </div>
+
+          <!-- Queue Health & Metrics Grid -->
+          <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Redis Health</div>
+              <div style="font-size: 1.5rem; font-weight: 800; margin: 4px 0;" id="queue-redis-status"><span class="badge badge-success"><i class="fa-solid fa-check-circle"></i> Connected</span></div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);" id="queue-redis-latency">Cache &amp; Queue Operational</div>
+            </div>
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Active Jobs</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #3b82f6; margin: 4px 0;" id="queue-stat-active">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Currently in worker execution</div>
+            </div>
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Waiting Jobs</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #f59e0b; margin: 4px 0;" id="queue-stat-waiting">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Pending in worker dispatch queue</div>
+            </div>
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Completed Jobs</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--success); margin: 4px 0;" id="queue-stat-completed">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Successfully executed</div>
+            </div>
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Failed Jobs</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--danger); margin: 4px 0;" id="queue-stat-failed">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--danger);">Exhausted retry / unhandled</div>
+            </div>
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Delayed Jobs</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--text-muted); margin: 4px 0;" id="queue-stat-delayed">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Scheduled / backoff wait</div>
+            </div>
+          </div>
+
+          <!-- Queue Breakdown Cards -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-3); margin-bottom: var(--space-6);" id="queues-breakdown-container">
+            <!-- Populated via JS -->
+          </div>
+
+          <!-- Job Inspection Table Container -->
+          <div class="ops-table-container">
+            <div class="ops-table-header">
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; width: 100%;">
+                <div style="display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;">
+                  <label style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted);">Queue:</label>
+                  <select id="admin-queue-name-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm); min-width: 180px;">
+                    <option value="notification-queue">notification-queue</option>
+                    <option value="booking-queue">booking-queue</option>
+                    <option value="maintenance-queue">maintenance-queue</option>
+                    <option value="reconciliation-queue">reconciliation-queue</option>
+                  </select>
+
+                  <label style="font-size: var(--fs-xs); font-weight: 700; color: var(--text-muted);">Status:</label>
+                  <select id="admin-queue-status-filter" class="form-select" style="padding: 8px 12px; font-size: var(--fs-sm); min-width: 130px;">
+                    <option value="failed">Failed</option>
+                    <option value="waiting">Waiting</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                    <option value="delayed">Delayed</option>
+                  </select>
+                </div>
+                <button class="btn btn-outline btn-sm" id="btn-refresh-jobs"><i class="fa-solid fa-arrows-rotate"></i> Reload Jobs</button>
+              </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="ops-table">
+                <thead>
+                  <tr>
+                    <th>Job ID</th>
+                    <th>Name / Type</th>
+                    <th>Attempts</th>
+                    <th>Enqueued At</th>
+                    <th>Sanitized Payload</th>
+                    <th>Status / Failure Reason</th>
+                    <th style="text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-queues-table-body">
+                  <tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Loading queue jobs...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="ops-pagination">
+              <span id="queue-page-info">Showing page 1</span>
+              <div style="display: flex; gap: var(--space-2);">
+                <button class="btn btn-outline btn-sm" id="btn-queue-prev" disabled>&larr; Prev</button>
+                <button class="btn btn-outline btn-sm" id="btn-queue-next" disabled>Next &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             14. AI RECOMMENDATION ENGINE TELEMETRY PANE (TASK 16)
+             =================================================================== -->
+        <section class="admin-pane" id="pane-recommendations">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6); flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+              <h1 style="font-size: 1.75rem; margin-bottom: 4px;">AI Recommendation Engine Telemetry</h1>
+              <p style="color: var(--text-muted); font-size: var(--fs-sm); margin-bottom: 0;">
+                Operational monitoring, heuristic &amp; LLM telemetry, latency tracking, cache ratio, and advisory boundary invariants.
+              </p>
+            </div>
+            <button class="btn btn-outline btn-sm" id="btn-refresh-rec-metrics"><i class="fa-solid fa-rotate"></i> Refresh AI Metrics</button>
+          </div>
+
+          <!-- AI Metrics Grid -->
+          <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Total Requests</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary); margin: 4px 0;" id="rec-stat-total">0</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Lifetime recommendations</div>
+            </div>
+
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">AI Success Rate</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: var(--success); margin: 4px 0;" id="rec-stat-success-rate">100%</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Ranked by AI engine</div>
+            </div>
+
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Fallback Rate</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #f59e0b; margin: 4px 0;" id="rec-stat-fallback-rate">0%</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Deterministic heuristic fallback</div>
+            </div>
+
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Avg Latency</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #3b82f6; margin: 4px 0;" id="rec-stat-latency">0 ms</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Execution time per request</div>
+            </div>
+
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Cache Hit Rate</div>
+              <div style="font-size: 1.75rem; font-weight: 800; color: #8b5cf6; margin: 4px 0;" id="rec-stat-cache-hit">0%</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Redis cache ratio (180s TTL)</div>
+            </div>
+
+            <div class="metric-card" style="background: var(--surface); padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-lg);">
+              <div style="font-size: var(--fs-xs); color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Active Provider</div>
+              <div style="font-size: 1.1rem; font-weight: 800; color: var(--primary); margin: 6px 0;" id="rec-stat-provider">mock (Local Heuristic)</div>
+              <div style="font-size: var(--fs-2xs); color: var(--text-muted);">Provider-agnostic abstraction</div>
+            </div>
+          </div>
+
+          <!-- Architectural Invariants Verification Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-4); margin-bottom: var(--space-6);">
+            <div style="background: var(--surface); padding: var(--space-5); border: 1px solid var(--border); border-radius: var(--radius-xl);">
+              <h3 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: var(--space-3); display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-shield-halved" style="color: var(--success);"></i> AI Safety Invariant Verification
+              </h3>
+              <ul style="list-style: none; padding: 0; margin: 0; font-size: var(--fs-sm); line-height: 1.8;">
+                <li><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> <strong>Advisory Only:</strong> AI has zero authority for bookings or payments</li>
+                <li><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> <strong>Authoritative Availability:</strong> Filtered via Task 07 availability</li>
+                <li><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> <strong>Authoritative Pricing:</strong> Quotes generated strictly via Task 09</li>
+                <li><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> <strong>Hallucination Defense:</strong> Unknown candidate IDs are discarded</li>
+                <li><i class="fa-solid fa-circle-check" style="color: var(--success);"></i> <strong>Cache Isolation:</strong> Personalized cache keys are user-hashed</li>
+              </ul>
+            </div>
+
+            <div style="background: var(--surface); padding: var(--space-5); border: 1px solid var(--border); border-radius: var(--radius-xl);">
+              <h3 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: var(--space-3); display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-bolt" style="color: #7c3aed;"></i> Pipeline Performance &amp; SLA
+              </h3>
+              <ul style="list-style: none; padding: 0; margin: 0; font-size: var(--fs-sm); line-height: 1.8;">
+                <li><strong>Max Candidates:</strong> Bounded to 25 vehicles per query</li>
+                <li><strong>Strict Timeout:</strong> 2500ms AbortController threshold</li>
+                <li><strong>Fallback Strategy:</strong> Seamless deterministic fallback on timeout/500</li>
+                <li><strong>Cache Invalidation:</strong> 180-second TTL prevents stale availability</li>
+                <li><strong>Telemetry:</strong> Privacy-conscious, 30-day automatic MongoDB TTL</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Operational Modals -->
+  <!-- 1. Generic State & Diff Modal -->
+  <div class="ops-modal-backdrop" id="ops-diff-modal">
+    <div class="ops-modal-card">
+      <div class="ops-modal-header">
+        <h3 style="margin-bottom: 0;" id="diff-modal-title">Audit Record Inspection</h3>
+        <button class="btn-close" style="background: none; border: none; font-size: 1.25rem; cursor: pointer;" onclick="document.getElementById('ops-diff-modal').classList.remove('active');">&times;</button>
+      </div>
+      <div class="ops-modal-body" id="diff-modal-content">
+        <!-- Filled dynamically -->
+      </div>
+      <div class="ops-modal-footer">
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('ops-diff-modal').classList.remove('active');">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Booking Dossier & Handover Modal -->
+  <div class="ops-modal-backdrop" id="ops-booking-modal">
+    <div class="ops-modal-card" style="max-width: 700px;">
+      <div class="ops-modal-header">
+        <h3 style="margin-bottom: 0;" id="booking-modal-title">Booking Operational Dossier</h3>
+        <button class="btn-close" style="background: none; border: none; font-size: 1.25rem; cursor: pointer;" onclick="document.getElementById('ops-booking-modal').classList.remove('active');">&times;</button>
+      </div>
+      <div class="ops-modal-body" id="booking-modal-content">
+        <!-- Filled dynamically -->
+      </div>
+      <div class="ops-modal-footer" id="booking-modal-footer">
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('ops-booking-modal').classList.remove('active');">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. User Role & Status Mutation Modal -->
+  <div class="ops-modal-backdrop" id="ops-user-mutation-modal">
+    <div class="ops-modal-card">
+      <div class="ops-modal-header">
+        <h3 style="margin-bottom: 0;" id="user-mutation-title">Modify User Permissions</h3>
+        <button class="btn-close" style="background: none; border: none; font-size: 1.25rem; cursor: pointer;" onclick="document.getElementById('ops-user-mutation-modal').classList.remove('active');">&times;</button>
+      </div>
+      <div class="ops-modal-body">
+        <div id="user-mutation-warning" style="display: none; padding: 12px; background: #fff7ed; border-left: 4px solid #ea580c; border-radius: var(--radius-md); font-size: var(--fs-xs); margin-bottom: 16px; color: #9a3412;"></div>
+        <div class="form-group" id="user-role-group">
+          <label class="form-label" for="user-mutation-role">Assign New RBAC Role</label>
+          <select id="user-mutation-role" class="form-select">
+            <option value="CUSTOMER">CUSTOMER (Regular Client)</option>
+            <option value="STAFF">STAFF (Ground Operations &amp; Handovers)</option>
+            <option value="FLEET_MANAGER">FLEET_MANAGER (Fleet Logistics &amp; Audits)</option>
+            <option value="ADMIN">ADMIN (Full Platform Authority)</option>
+          </select>
+        </div>
+        <div class="form-group" id="user-status-group" style="display: none;">
+          <label class="form-label" for="user-mutation-status">Account Operational Status</label>
+          <select id="user-mutation-status" class="form-select">
+            <option value="ACTIVE">ACTIVE (Normal Access)</option>
+            <option value="SUSPENDED">SUSPENDED (Access Blocked)</option>
+            <option value="DEACTIVATED">DEACTIVATED (Account Deactivated)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="user-mutation-reason">Audit Justification / Reason</label>
+          <input type="text" id="user-mutation-reason" placeholder="State operational reason for privilege change..." class="form-input">
+        </div>
+      </div>
+      <div class="ops-modal-footer">
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('ops-user-mutation-modal').classList.remove('active');">Cancel</button>
+        <button class="btn btn-primary btn-sm" id="btn-submit-user-mutation">Confirm &amp; Audit Change</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Review Report Resolution Modal -->
+  <div class="ops-modal-backdrop" id="ops-report-resolve-modal">
+    <div class="ops-modal-card">
+      <div class="ops-modal-header">
+        <h3 style="margin-bottom: 0;" id="report-resolve-title">Resolve Abuse Report</h3>
+        <button class="btn-close" style="background: none; border: none; font-size: 1.25rem; cursor: pointer;" onclick="document.getElementById('ops-report-resolve-modal').classList.remove('active');">&times;</button>
+      </div>
+      <div class="ops-modal-body">
+        <input type="hidden" id="admin-target-report-id">
+        <input type="hidden" id="admin-target-review-id">
+
+        <div style="background: var(--surface-muted); padding: 12px; border-radius: var(--radius-md); margin-bottom: 16px; font-size: var(--fs-xs);">
+          <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;" id="admin-report-review-title">Review Title</div>
+          <div style="color: var(--text-secondary);" id="admin-report-reason-display">Reason: SPAM</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin-report-action-select">Resolution Decision *</label>
+          <select id="admin-report-action-select" class="form-select">
+            <option value="RESOLVED_HIDE">RESOLVED — Hide Review from Public</option>
+            <option value="RESOLVED_REJECT">RESOLVED — Reject Review Entirely</option>
+            <option value="DISMISSED">DISMISSED — Dismiss Report (Keep Review Published)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin-report-notes">Moderator Resolution Notes (Optional)</label>
+          <input type="text" id="admin-report-notes" placeholder="Notes for audit history..." class="form-input">
+        </div>
+      </div>
+      <div class="ops-modal-footer">
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('ops-report-resolve-modal').classList.remove('active');">Cancel</button>
+        <button class="btn btn-primary btn-sm" id="btn-submit-report-resolution">Confirm Resolution</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

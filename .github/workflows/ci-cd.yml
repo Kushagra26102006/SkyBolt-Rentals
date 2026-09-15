@@ -1,0 +1,178 @@
+name: SkyBolt Rentals CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ============================================================================
+  # Stage 1-7: Verification, Linting, Typecheck, Security & Automated Tests
+  # ============================================================================
+  quality-gate:
+    name: Quality Gate & Test Suites
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:7-jammy
+        ports:
+          - 27017:27017
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: 'backend/package-lock.json'
+
+      - name: 1. Install Dependencies
+        run: |
+          npm ci --prefix backend
+
+      - name: 2. Dependency Vulnerability Audit
+        run: |
+          npm --prefix backend audit --production --audit-level=high
+
+      - name: 3. Syntax & Integrity Verification
+        run: |
+          node --check frontend/js/*.js scripts/*.js
+          node scripts/verify-integrity.js
+
+      - name: 4. TypeScript Strict Compilation Check
+        run: |
+          npm --prefix backend run type-check
+
+      - name: 5 & 6. Unit & Integration Test Suite (Vitest)
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/skybolt_test
+          REDIS_URL: redis://localhost:6379
+          JWT_SECRET: test_jwt_secret_key_minimum_32_characters_long_12345
+        run: |
+          npm --prefix backend run test
+
+      - name: 7. Security Checks (Secret Leakage Scan)
+        run: |
+          # Verify no committed production secrets or API keys
+          ! grep -rn "sk_live_" backend/ src/ frontend/ 2>/dev/null || exit 1
+          ! grep -rn "rzp_live_" backend/ src/ frontend/ 2>/dev/null || exit 1
+
+  # ============================================================================
+  # Stage 8-11: Production Builds & Artifact Validation
+  # ============================================================================
+  build-and-package:
+    name: Production Build & Containerization
+    needs: quality-gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: 8. Build Frontend Static Assets
+        run: |
+          # Verify HTML, CSS, JS asset trees
+          test -f frontend/index.html
+          test -f frontend/css/styles.css
+          test -f frontend/js/config.js
+
+      - name: 9 & 10. Build Backend API & Workers
+        run: |
+          npm ci --prefix backend
+          npm --prefix backend run build
+          test -f backend/dist/server.js
+          test -f backend/dist/worker.js
+
+      - name: 11. Production Artifact Validation
+        run: |
+          node --check backend/dist/server.js
+          node --check backend/dist/worker.js
+          echo "Production artifacts compiled and validated."
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Backend Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.backend
+          push: false
+          tags: skybolt/backend:${{ github.sha }}
+
+      - name: Build Worker Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.worker
+          push: false
+          tags: skybolt/worker:${{ github.sha }}
+
+      - name: Build Frontend Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.frontend
+          push: false
+          tags: skybolt/frontend:${{ github.sha }}
+
+  # ============================================================================
+  # Stage 12-13: Staging Deployment & Automated Staging Smoke Tests
+  # ============================================================================
+  deploy-staging:
+    name: Deploy Staging & Smoke Tests
+    needs: build-and-package
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 12. Deploy to Staging Cluster
+        run: |
+          echo "Deploying release ${{ github.sha }} to Staging environment..."
+
+      - name: 13. Execute Staging Smoke Tests
+        run: |
+          npm ci --prefix backend
+          npx --prefix backend vitest run tests/production-smoke.test.ts
+
+  # ============================================================================
+  # Stage 14-16: Manual Approval Gate, Production Deploy & Production Smoke Tests
+  # ============================================================================
+  deploy-production:
+    name: Production Release & Verification
+    needs: deploy-staging
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 14 & 15. Execute Rolling Production Deployment
+        run: |
+          echo "Deploying verified release ${{ github.sha }} to Production..."
+
+      - name: 16. Execute Post-Deployment Production Smoke Tests
+        run: |
+          npm ci --prefix backend
+          npx --prefix backend vitest run tests/production-smoke.test.ts

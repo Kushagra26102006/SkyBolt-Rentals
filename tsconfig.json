@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "typeRoots": [
+      "./backend/node_modules/@types",
+      "./node_modules/@types"
+    ]
+  },
+  "include": [
+    "frontend/src/**/*"
+  ],
+  "exclude": [
+    "backend",
+    "node_modules",
+    "**/node_modules/*"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "name": "skybolt-rentals-backend",
+  "version": "1.0.0",
+  "description": "SkyBolt Rentals - Production Backend API Foundation",
+  "private": true,
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "dev:worker": "tsx watch src/worker.ts",
+    "worker": "tsx src/worker.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "start:worker": "node dist/worker.js",
+    "seed:admin": "tsx src/seeds/admin.seed.ts",
+    "seed:vehicles": "tsx src/seeds/vehicle.seed.ts",
+    "type-check": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:db": "vitest run tests/database.test.ts",
+    "test:smoke": "vitest run tests/production-smoke.test.ts",
+    "test:disaster": "vitest run tests/production-disaster-recovery.test.ts",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "bullmq": "^6.3.4",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "ioredis": "^6.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.4",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/ioredis": "^4.28.10",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.13.9",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^7.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "overrides": {
+    "qs": "^6.16.0"
+  },
+  "license": "MIT"
+}

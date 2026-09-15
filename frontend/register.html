@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://checkout.razorpay.com https://*.razorpay.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://*.razorpay.com; connect-src 'self' http://localhost:5000 http://localhost:5001 http://127.0.0.1:5000 http://127.0.0.1:5001 https://api.razorpay.com https://*.razorpay.com https://lumberjack.razorpay.com; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com; child-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.razorpay.com;">
+
+  <script>
+    (function() {
+      try {
+        const t = localStorage.getItem('skybolt_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Create Account - SkyBolt Rentals</title>
+  <meta name="description" content="Create a verified SkyBolt Rentals customer account to rent motorcycles, cars, and smart e-scooters with instant digital checkout.">
+  
+  <meta property="og:title" content="Create Account - SkyBolt Rentals">
+  <meta property="og:description" content="Create your SkyBolt Rentals account and hit the road in minutes.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/hero-bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/cards.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header" id="main-header">
+    <div class="container navbar">
+      <a href="/" class="nav-brand" id="nav-brand-logo">
+        <div class="nav-brand-mark"><i class="fa-solid fa-bolt"></i></div>
+        <div class="nav-brand-text">
+          <div class="nav-brand-title">SkyBolt<span>Rentals</span></div>
+          <span class="nav-tagline">Move freely. Rent smarter.</span>
+        </div>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-menu" id="primary-nav">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/vehicles" class="nav-link">Vehicles</a></li>
+          <li><a href="/bikes" class="nav-link">Bikes</a></li>
+          <li><a href="/cars" class="nav-link">Cars</a></li>
+          <li><a href="/scooters" class="nav-link">E-Scooters</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
+          <li><a href="/contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" aria-label="Toggle dark/light theme"><i class="fa-solid fa-moon"></i></button>
+        <a href="/login" class="btn btn-outline" id="btn-login">Sign In</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Toggle navigation menu" id="mobile-menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Registration Main Section -->
+  <main class="section">
+    <div class="container" style="max-width: 620px;">
+      <div class="form-card">
+        <div class="text-center" style="margin-bottom: var(--space-6);">
+          <div style="width: 52px; height: 52px; border-radius: var(--radius-lg); background-color: var(--primary-light); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: var(--space-3);">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <h2 style="font-size: var(--fs-2xl); margin-bottom: var(--space-1);">Join SkyBolt Rentals</h2>
+          <p style="color: var(--text-secondary); font-size: var(--fs-sm); margin-bottom: 0;">How will you use SkyBolt Rentals today?</p>
+        </div>
+
+        <form id="register-form">
+          
+          <!-- Role Selection Cards -->
+          <div class="role-selector-container" style="margin-bottom: var(--space-6);">
+            <label style="font-size: var(--fs-sm); font-weight: 700; display: block; margin-bottom: var(--space-3); color: var(--text);">Select Account Type</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+              
+              <!-- Option 1: Customer -->
+              <label class="role-option-card active" id="role-card-customer" style="border: 2px solid var(--primary); background: var(--primary-light); padding: var(--space-4); border-radius: var(--radius-lg); cursor: pointer; display: flex; flex-direction: column; gap: var(--space-2); transition: all 0.25s ease; position: relative;">
+                <input type="radio" name="account-role" value="CUSTOMER" checked style="position: absolute; opacity: 0; pointer-events: none;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div style="width: 38px; height: 38px; border-radius: var(--radius-md); background: var(--white); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: var(--shadow-sm);">
+                    <i class="fa-solid fa-car"></i>
+                  </div>
+                  <i class="fa-solid fa-circle-check role-check-icon" style="color: var(--primary); font-size: 1.15rem;"></i>
+                </div>
+                <div>
+                  <div style="font-weight: 700; font-size: var(--fs-base); color: var(--text);">Rent a Vehicle</div>
+                  <div style="font-size: var(--fs-xs); color: var(--text-secondary); margin-top: 2px;">Find and rent bikes, cars and scooters.</div>
+                </div>
+              </label>
+
+              <!-- Option 2: Owner -->
+              <label class="role-option-card" id="role-card-owner" style="border: 1px solid var(--border); background: var(--surface); padding: var(--space-4); border-radius: var(--radius-lg); cursor: pointer; display: flex; flex-direction: column; gap: var(--space-2); transition: all 0.25s ease; position: relative;">
+                <input type="radio" name="account-role" value="OWNER" style="position: absolute; opacity: 0; pointer-events: none;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <div style="width: 38px; height: 38px; border-radius: var(--radius-md); background: var(--bg-alt); color: var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: var(--shadow-sm);">
+                    <i class="fa-solid fa-key"></i>
+                  </div>
+                  <i class="fa-regular fa-circle role-check-icon" style="color: var(--text-muted); font-size: 1.15rem;"></i>
+                </div>
+                <div>
+                  <div style="font-weight: 700; font-size: var(--fs-base); color: var(--text);">List My Vehicle</div>
+                  <div style="font-size: var(--fs-xs); color: var(--text-secondary); margin-top: 2px;">List your bike or vehicle and earn by renting it.</div>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-name">Full Legal Name <span style="color: var(--danger);">*</span></label>
+            <input type="text" id="reg-name" class="form-control" placeholder="John Doe" required autocomplete="name">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-email">Email Address <span style="color: var(--danger);">*</span></label>
+              <input type="email" id="reg-email" class="form-control" placeholder="name@example.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="reg-phone">Phone Number <span style="color: var(--danger);" id="phone-req-indicator">*</span></label>
+              <input type="tel" id="reg-phone" class="form-control" placeholder="+91 98765 43210" required autocomplete="tel">
+            </div>
+          </div>
+
+          <!-- Customer-specific License Field -->
+          <div class="form-group" id="group-customer-license">
+            <label for="reg-license">Driving License Number <span style="color: var(--text-muted); font-weight: normal;">(Optional now)</span></label>
+            <input type="text" id="reg-license" class="form-control" placeholder="e.g. DL-04-2022-1234567">
+            <div class="form-hint">Optional now. Required before vehicle key handoff.</div>
+          </div>
+
+          <!-- Owner-specific Onboarding Fields -->
+          <div id="group-owner-fields" style="display: none; background: var(--bg-alt); padding: var(--space-4); border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: var(--space-4);">
+            <div style="font-size: var(--fs-xs); font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-3);">
+              <i class="fa-solid fa-shield-halved"></i> Vehicle Owner Onboarding Details
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom: var(--space-3);">
+                <label for="reg-city">City / Operating Hub <span style="color: var(--danger);">*</span></label>
+                <input type="text" id="reg-city" class="form-control" placeholder="e.g. Bangalore, Delhi, Mumbai">
+              </div>
+              <div class="form-group" style="margin-bottom: var(--space-3);">
+                <label for="reg-id-number">Govt ID / PAN Number <span style="color: var(--danger);">*</span></label>
+                <input type="text" id="reg-id-number" class="form-control" placeholder="e.g. ABCDE1234F">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="reg-address">Pickup Address / Hub Location</label>
+              <input type="text" id="reg-address" class="form-control" placeholder="e.g. Sector 4, HSR Layout, Bangalore">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">Password (Minimum 8 characters) <span style="color: var(--danger);">*</span></label>
+            <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required minlength="8" autocomplete="new-password">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-confirm-password">Confirm Password <span style="color: var(--danger);">*</span></label>
+            <input type="password" id="reg-confirm-password" class="form-control" placeholder="••••••••" required minlength="8" autocomplete="new-password">
+          </div>
+
+          <div id="reg-error-msg" class="form-alert-error" style="display: none;"></div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: var(--space-4);" id="btn-submit-register">
+            <span id="submit-btn-text">Create Customer Account</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+
+          <div class="text-center" style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border-light); font-size: var(--fs-sm); color: var(--text-secondary);">
+            Already have an account? <a href="/login" style="font-weight: 700;">Sign in here</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 SkyBolt Rentals. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="/vehicles">Fleet</a>
+          <a href="/about">About</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+# ==============================================================================
+# SkyBolt Rentals — Staging Docker Compose Stack
+# Self-contained staging environment with isolated MongoDB, Redis, API, Worker & Frontend
+# ==============================================================================
+
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: skybolt-frontend-staging
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - skybolt-staging-net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: skybolt-backend-staging
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=staging
+      - PORT=5001
+      - MONGODB_URI=mongodb://staging_mongo:27017/skybolt_rentals_staging
+      - REDIS_URL=redis://:staging_redis_password@staging_redis:6379
+      - JWT_SECRET=staging_only_super_secure_jwt_secret_minimum_32_chars_long_123
+      - CORS_ORIGIN=http://localhost:8080,http://127.0.0.1:8080
+      - LOG_LEVEL=info
+      - RAZORPAY_KEY_ID=rzp_test_staging_placeholder
+      - RAZORPAY_KEY_SECRET=rzp_test_staging_secret
+      - RAZORPAY_WEBHOOK_SECRET=rzp_test_staging_webhook
+    ports:
+      - "5001:5001"
+    depends_on:
+      staging_mongo:
+        condition: service_healthy
+      staging_redis:
+        condition: service_healthy
+    networks:
+      - skybolt-staging-net
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: skybolt-worker-staging
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=staging
+      - MONGODB_URI=mongodb://staging_mongo:27017/skybolt_rentals_staging
+      - REDIS_URL=redis://:staging_redis_password@staging_redis:6379
+    depends_on:
+      staging_mongo:
+        condition: service_healthy
+      staging_redis:
+        condition: service_healthy
+    networks:
+      - skybolt-staging-net
+
+  staging_mongo:
+    image: mongo:7-jammy
+    container_name: skybolt-mongo-staging
+    restart: unless-stopped
+    volumes:
+      - staging_mongo_data:/data/db
+    networks:
+      - skybolt-staging-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  staging_redis:
+    image: redis:7-alpine
+    container_name: skybolt-redis-staging
+    restart: unless-stopped
+    command: redis-server --requirepass staging_redis_password --maxmemory 256mb --maxmemory-policy volatile-lru
+    volumes:
+      - staging_redis_data:/data
+    networks:
+      - skybolt-staging-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "staging_redis_password", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+networks:
+  skybolt-staging-net:
+    driver: bridge
+
+volumes:
+  staging_mongo_data:
+    driver: local
+  staging_redis_data:
+    driver: local
