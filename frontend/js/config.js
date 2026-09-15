@@ -66,7 +66,7 @@
     },
     production: {
       appBaseUrl: origin,
-      apiBaseUrl: `${origin}/api/v1`,
+      apiBaseUrl: global.__SKYBOLT_API_URL__ || 'https://skybolt-rentals-backend.onrender.com/api/v1',
       logLevel: 'info'
     }
   };

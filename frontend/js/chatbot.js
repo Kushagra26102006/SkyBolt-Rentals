@@ -29,9 +29,9 @@
       if (typeof location !== 'undefined') {
         const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         if (isLocal) return 'http://localhost:5001/api/v1';
-        return `${location.origin}/api/v1`;
+        return 'https://skybolt-rentals-backend.onrender.com/api/v1';
       }
-      return 'http://localhost:5001/api/v1';
+      return 'https://skybolt-rentals-backend.onrender.com/api/v1';
     }
 
     _initStorage() {

@@ -13,7 +13,15 @@
      * @param {number} [options.timeoutMs] - Default request timeout in milliseconds (default 10,000ms)
      */
     constructor(options = {}) {
-      this.baseUrl = options.baseUrl || (global.SkyBoltConfig && global.SkyBoltConfig.apiBaseUrl) || 'http://localhost:5001/api/v1';
+      const isLocal = typeof location !== 'undefined' && (
+        location.hostname === 'localhost' ||
+        location.hostname === '127.0.0.1' ||
+        location.port === '8080' ||
+        location.port === '5173' ||
+        location.port === '3000'
+      );
+      const fallbackUrl = isLocal ? 'http://localhost:5001/api/v1' : 'https://skybolt-rentals-backend.onrender.com/api/v1';
+      this.baseUrl = options.baseUrl || (global.SkyBoltConfig && global.SkyBoltConfig.apiBaseUrl) || fallbackUrl;
       this.timeoutMs = options.timeoutMs || 10000;
     }
 

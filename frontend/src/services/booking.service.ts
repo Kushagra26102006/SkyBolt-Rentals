@@ -5,9 +5,7 @@ import {
   BookingListQuery
 } from '../types/booking.types';
 
-const API_BASE_URL =
-  (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) ||
-  'http://localhost:5001/api/v1';
+import { API_BASE_URL } from './api.config';
 
 class ReactBookingService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {

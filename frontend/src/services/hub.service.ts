@@ -1,9 +1,7 @@
 import { HubDTO, CreateHubInput, UpdateHubInput, HubListQuery } from '../types/fleet.types';
 import { VehicleDTO } from '../types/vehicle.types';
 
-const API_BASE_URL =
-  (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) ||
-  'http://localhost:5001/api/v1';
+import { API_BASE_URL } from './api.config';
 
 class ReactHubService {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
