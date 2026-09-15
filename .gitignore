@@ -83,3 +83,7 @@ coverage/
 cypress/videos/
 cypress/screenshots/
 test-results/
+
+# Dependencies
+node_modules/
+**/node_modules/
