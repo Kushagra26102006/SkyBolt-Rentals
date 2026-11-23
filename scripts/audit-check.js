@@ -25,11 +25,9 @@ function runAudit() {
 
   const vulnerabilities = Object.values(audit.vulnerabilities || {});
   
-  // Documented Audit Exception: zod 3.x (GHSA-mrhx-c7xc-m3w5)
-  // Upgrading to zod 4.x introduces 61 breaking changes in schemas.
-  // Mitigated in production via strict Express body-parser size limits (100kb).
+  // Zero-tolerance policy: fail on any high or critical production vulnerabilities
   const unhandled = vulnerabilities.filter(
-    v => v.name !== 'zod' && (v.severity === 'high' || v.severity === 'critical')
+    v => (v.severity === 'high' || v.severity === 'critical')
   );
 
   if (unhandled.length > 0) {
@@ -40,11 +38,7 @@ function runAudit() {
     process.exit(1);
   }
 
-  const exceptionCount = vulnerabilities.filter(v => v.name === 'zod').length;
-  console.log(
-    `[SkyBolt Audit] PASS: 0 unapproved vulnerabilities found.` +
-    (exceptionCount > 0 ? ` (1 documented exception: zod 3.x / GHSA-mrhx-c7xc-m3w5)` : '')
-  );
+  console.log('[SkyBolt Audit] PASS: 0 vulnerabilities found. Production dependencies are secure.');
 }
 
 runAudit();

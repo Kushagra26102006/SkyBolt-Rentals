@@ -104,12 +104,12 @@ export const vehicleImageInputSchema = z.object({
 
 export const createVehicleSchema = z
   .object({
-    brand: z.string({ required_error: 'Brand is required' }).trim().min(1).max(50),
-    model: z.string({ required_error: 'Model is required' }).trim().min(1).max(50),
-    name: z.string({ required_error: 'Vehicle name is required' }).trim().min(1).max(100),
+    brand: z.string({ error: 'Brand is required' }).trim().min(1).max(50),
+    model: z.string({ error: 'Model is required' }).trim().min(1).max(50),
+    name: z.string({ error: 'Vehicle name is required' }).trim().min(1).max(100),
     variant: z.string().trim().max(50).optional(),
     year: z
-      .number({ required_error: 'Year is required' })
+      .number({ error: 'Year is required' })
       .int()
       .min(1990)
       .max(new Date().getFullYear() + 2),
@@ -141,15 +141,11 @@ export const createVehicleSchema = z
     description: z.string().trim().max(2000).optional(),
     adminNotes: z.string().trim().max(1000).optional()
   })
-  .strict({
-    message: 'Unexpected fields provided. Mass assignment of privileged fields is rejected.'
-  });
+  .strict();
 
 export const updateVehicleSchema = createVehicleSchema
   .partial()
-  .strict({
-    message: 'Unexpected fields provided. Protected fields cannot be modified.'
-  });
+  .strict();
 
 export const vehicleIdParamSchema = z.object({
   id: z.string().trim().min(1, 'Vehicle ID parameter is required')

@@ -4,7 +4,7 @@ import { config } from '../../config/env.config.js';
 export const chatMessageSchema = z.object({
   message: z
     .string({
-      required_error: 'Message is required'
+      error: 'Message is required'
     })
     .trim()
     .min(1, 'Message cannot be empty')
@@ -27,7 +27,7 @@ export const chatMessageSchema = z.object({
 export const conversationParamSchema = z.object({
   conversationId: z
     .string({
-      required_error: 'Conversation ID is required'
+      error: 'Conversation ID is required'
     })
     .trim()
     .min(1, 'Conversation ID cannot be empty')

@@ -38,14 +38,14 @@ export const updateUserStatusBodySchema = z.object({
 
 export const vehicleApprovalBodySchema = z.object({
   status: z.enum(['ACTIVE', 'REJECTED', 'SUSPENDED'], {
-    required_error: 'Status must be ACTIVE, REJECTED, or SUSPENDED'
+    error: 'Status must be ACTIVE, REJECTED, or SUSPENDED'
   }),
   reason: z.string().trim().max(500).optional()
 });
 
 export const ownerVerificationBodySchema = z.object({
   status: z.enum(['ACTIVE', 'SUSPENDED'], {
-    required_error: 'Verification status must be ACTIVE (approved) or SUSPENDED (rejected)'
+    error: 'Verification status must be ACTIVE (approved) or SUSPENDED (rejected)'
   }),
   reason: z.string().trim().max(500).optional()
 });

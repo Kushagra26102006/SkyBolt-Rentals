@@ -71,8 +71,8 @@ function validateDateRange(
 
 export const availabilityQuerySchema = z
   .object({
-    pickupAt: z.string({ required_error: 'pickupAt query parameter is required' }).trim(),
-    returnAt: z.string({ required_error: 'returnAt query parameter is required' }).trim()
+    pickupAt: z.string({ error: 'pickupAt query parameter is required' }).trim(),
+    returnAt: z.string({ error: 'returnAt query parameter is required' }).trim()
   })
   .superRefine((data, ctx) => {
     validateDateRange(data.pickupAt, data.returnAt, ctx);
@@ -80,13 +80,11 @@ export const availabilityQuerySchema = z
 
 export const createHoldSchema = z
   .object({
-    pickupAt: z.string({ required_error: 'pickupAt is required in request body' }).trim(),
-    returnAt: z.string({ required_error: 'returnAt is required in request body' }).trim(),
+    pickupAt: z.string({ error: 'pickupAt is required in request body' }).trim(),
+    returnAt: z.string({ error: 'returnAt is required in request body' }).trim(),
     ttlMinutes: z.number().int().min(1).max(60).optional()
   })
-  .strict({
-    message: 'Unexpected fields provided in hold request'
-  })
+  .strict()
   .superRefine((data, ctx) => {
     validateDateRange(data.pickupAt, data.returnAt, ctx);
   });

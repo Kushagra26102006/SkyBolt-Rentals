@@ -4,22 +4,21 @@ export const createReviewSchema = z
   .object({
     rating: z
       .number({
-        required_error: 'Rating is required',
-        invalid_type_error: 'Rating must be a number'
+        error: 'Rating is required'
       })
       .int('Rating must be an integer')
       .min(1, 'Rating cannot be less than 1')
       .max(5, 'Rating cannot be greater than 5'),
     title: z
       .string({
-        required_error: 'Review title is required'
+        error: 'Review title is required'
       })
       .trim()
       .min(3, 'Review title must be at least 3 characters')
       .max(100, 'Review title cannot exceed 100 characters'),
     comment: z
       .string({
-        required_error: 'Review comment is required'
+        error: 'Review comment is required'
       })
       .trim()
       .min(10, 'Review comment must be at least 10 characters')
@@ -53,7 +52,7 @@ export const updateReviewSchema = z
 export const createReportSchema = z
   .object({
     reason: z.enum(['SPAM', 'ABUSIVE', 'INAPPROPRIATE', 'FRAUDULENT', 'IRRELEVANT', 'OTHER'], {
-      required_error: 'Report reason is required'
+      error: 'Report reason is required'
     }),
     description: z
       .string()
@@ -66,7 +65,7 @@ export const createReportSchema = z
 export const moderateReviewSchema = z
   .object({
     status: z.enum(['PUBLISHED', 'HIDDEN', 'REJECTED'], {
-      required_error: 'Moderation status is required'
+      error: 'Moderation status is required'
     }),
     moderationStatus: z.enum(['APPROVED', 'PENDING', 'FLAGGED', 'REJECTED']).optional(),
     rejectionReason: z.string().trim().max(500).optional()
@@ -76,7 +75,7 @@ export const moderateReviewSchema = z
 export const resolveReportSchema = z
   .object({
     status: z.enum(['RESOLVED', 'DISMISSED'], {
-      required_error: 'Resolution status is required'
+      error: 'Resolution status is required'
     }),
     resolutionNotes: z.string().trim().max(500).optional(),
     hideReview: z.boolean().optional(),

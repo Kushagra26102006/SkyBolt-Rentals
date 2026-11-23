@@ -4,6 +4,7 @@
   "description": "SkyBolt Rentals Frontend",
   "private": true,
   "scripts": {
+    "build": "echo 'Static frontend build ready'",
     "dev": "python3 -m http.server 8080",
     "start": "python3 -m http.server 8080"
   }

@@ -77,7 +77,8 @@
   color: var(--primary);
 }
 
-.nav-brand-tagline {
+.nav-brand-tagline,
+.nav-tagline {
   font-size: var(--fs-2xs);
   font-weight: 500;
   color: var(--text-muted);

@@ -51,6 +51,7 @@ jobs:
 
       - name: 2. Dependency Vulnerability Audit
         run: |
+          npm --prefix backend audit --omit=dev --audit-level=high
           node scripts/audit-check.js
 
       - name: 3. Syntax & Integrity Verification

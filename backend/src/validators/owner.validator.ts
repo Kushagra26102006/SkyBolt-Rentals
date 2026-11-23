@@ -25,12 +25,12 @@ export const ownerVehicleImageSchema = z.object({
 
 export const createOwnerVehicleSchema = z
   .object({
-    brand: z.string({ required_error: 'Brand is required' }).trim().min(1).max(50),
-    model: z.string({ required_error: 'Model is required' }).trim().min(1).max(50),
-    name: z.string({ required_error: 'Vehicle name is required' }).trim().min(1).max(100),
+    brand: z.string({ error: 'Brand is required' }).trim().min(1).max(50),
+    model: z.string({ error: 'Model is required' }).trim().min(1).max(50),
+    name: z.string({ error: 'Vehicle name is required' }).trim().min(1).max(100),
     variant: z.string().trim().max(50).optional(),
     year: z
-      .number({ required_error: 'Year is required' })
+      .number({ error: 'Year is required' })
       .int()
       .min(1990)
       .max(new Date().getFullYear() + 2),
@@ -57,9 +57,7 @@ export const createOwnerVehicleSchema = z
     features: z.array(z.string().trim()).default([]).optional(),
     description: z.string().trim().max(2000).optional()
   })
-  .strict({
-    message: 'Unauthorized field provided. Ownership and approval status are managed securely by the server.'
-  });
+  .strict();
 
 export const updateOwnerVehicleSchema = z
   .object({
@@ -102,14 +100,12 @@ export const updateOwnerVehicleSchema = z
     features: z.array(z.string().trim()).optional(),
     description: z.string().trim().max(2000).optional()
   })
-  .strict({
-    message: 'Unauthorized fields cannot be modified.'
-  });
+  .strict();
 
 export const toggleOwnerVehicleStatusSchema = z
   .object({
     status: z.enum(['ACTIVE', 'INACTIVE'], {
-      required_error: 'Status must be ACTIVE or INACTIVE'
+      error: 'Status must be ACTIVE or INACTIVE'
     })
   })
   .strict();

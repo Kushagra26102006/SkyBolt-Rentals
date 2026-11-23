@@ -83,7 +83,7 @@ export const recommendationEventBodySchema = z.object({
     'RECOMMENDATION_CLICKED'
   ]),
   vehicleId: z.string().optional(),
-  metadata: z.record(z.unknown()).optional()
+  metadata: z.record(z.string(), z.unknown()).optional()
 });
 
 export const recommendationFeedbackBodySchema = z.object({
