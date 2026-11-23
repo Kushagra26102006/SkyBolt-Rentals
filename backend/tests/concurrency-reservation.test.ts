@@ -58,14 +58,15 @@ describe('Concurrency-Safe Reservation & Double-Booking Protection Suite', () =>
           phone: `+91 99000${String(i).padStart(5, '0')}`
         });
 
-      userCookies.push(reg.headers['set-cookie'][0]);
+      const cookie = ([] as string[]).concat(reg.headers['set-cookie'] ?? []).find((c) => c.startsWith('skybolt_auth=')) as string;
+      userCookies.push(cookie);
       userIds.push(reg.body.data.user.id);
     }
   }, 60000);
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   }, 20000);
 
   beforeEach(async () => {
@@ -82,8 +83,8 @@ describe('Concurrency-Safe Reservation & Double-Booking Protection Suite', () =>
   // 1. 20 CONCURRENT BOOKING ATTEMPTS FOR OVERLAPPING DATES
   // --------------------------------------------------------------------------
   it('Scenario 1: 20 simultaneous concurrent booking requests for overlapping dates -> exactly 1 succeeds, 19 rejected with 409', async () => {
-    const pickupAt = '2026-11-01T10:00:00.000Z';
-    const returnAt = '2026-11-05T10:00:00.000Z';
+    const pickupAt = new Date(Date.now() + 86400000 * 2).toISOString();
+    const returnAt = new Date(Date.now() + 86400000 * 5).toISOString();
 
     const concurrentCount = 20;
     const promises = Array.from({ length: concurrentCount }, (_, i) => {

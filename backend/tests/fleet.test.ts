@@ -172,7 +172,7 @@ describe('TASK 11: Production Fleet Management & Hub Logistics Integration Suite
   afterAll(async () => {
     await disconnectDatabase();
     if (mongoServer) {
-      await mongoServer.stop();
+      await mongoServer?.stop();
     }
   }, 20000);
 

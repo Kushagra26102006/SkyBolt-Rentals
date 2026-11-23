@@ -107,7 +107,7 @@ describe('TASK 14: Review Rating Validation, Content Sanitization & XSS Protecti
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(async () => {

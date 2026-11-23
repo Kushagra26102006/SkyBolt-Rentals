@@ -91,7 +91,7 @@ describe('Production Payment Lifecycle, Refund, Webhook, Coupon & Security Suite
     razorpayClient.setMockRefundCreator(null);
     razorpayClient.setMockOrderCreator(null);
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(() => {

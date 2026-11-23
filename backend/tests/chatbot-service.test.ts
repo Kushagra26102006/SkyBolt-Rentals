@@ -66,7 +66,7 @@ describe('Chatbot Service: Conversational Orchestration, Memory & Security', () 
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   it('should process general greetings and FAQ queries', async () => {

@@ -74,9 +74,9 @@ describe('SkyBolt Rentals — Production Smoke Test Suite (23 Verification Scena
 
   afterAll(async () => {
     await closeRedis();
-    await redisServer.stop();
+    await redisServer?.stop();
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
     delete process.env.REDIS_URL;
   });
 

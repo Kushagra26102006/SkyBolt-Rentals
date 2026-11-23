@@ -79,7 +79,7 @@ describe('TASK 13: Admin Notification Monitoring & Retries API Tests', () => {
     setEmailProvider(null);
     setSmsProvider(null);
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(async () => {

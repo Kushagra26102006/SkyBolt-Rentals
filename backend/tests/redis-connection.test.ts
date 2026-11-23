@@ -17,7 +17,7 @@ describe('Redis Centralized Connection & Health Checks', () => {
 
   afterAll(async () => {
     await closeRedis();
-    await redisServer.stop();
+    await redisServer?.stop();
     delete process.env.REDIS_URL;
   });
 

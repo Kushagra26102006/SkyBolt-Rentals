@@ -29,7 +29,7 @@ describe('Mongoose Database Debug Logger & Safe Serialization', () => {
     configureMongooseDebug(false);
     await disconnectDatabase().catch(() => {});
     if (mongoServer) {
-      await mongoServer.stop();
+      await mongoServer?.stop();
     }
   });
 

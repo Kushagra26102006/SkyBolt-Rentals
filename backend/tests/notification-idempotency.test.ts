@@ -36,7 +36,7 @@ describe('TASK 13: Notification Idempotency & Duplicate Suppression Tests', () =
     setEmailProvider(null);
     setSmsProvider(null);
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(async () => {

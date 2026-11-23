@@ -37,7 +37,7 @@ describe('TASK 13: Provider Abstraction & Retry Logic Tests', () => {
     setEmailProvider(null);
     setSmsProvider(null);
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(async () => {

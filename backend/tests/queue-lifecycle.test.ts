@@ -52,9 +52,9 @@ describe('TASK 15: BullMQ Queue Lifecycle, Worker Execution & Idempotency', () =
     }
     await queueRegistry.closeAllQueues();
     await closeRedis();
-    await redisServer.stop();
+    await redisServer?.stop();
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
     delete process.env.REDIS_URL;
   });
 

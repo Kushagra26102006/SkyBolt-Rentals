@@ -45,7 +45,7 @@ describe('TASK 16: Recommendation Engine & Grounded Scoring', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   describe('Hard Constraints Enforcement', () => {

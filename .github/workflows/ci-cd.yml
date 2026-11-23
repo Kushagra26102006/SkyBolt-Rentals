@@ -19,10 +19,20 @@ jobs:
         image: mongo:7-jammy
         ports:
           - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
       redis:
         image: redis:7-alpine
         ports:
           - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout Code
@@ -45,7 +55,7 @@ jobs:
 
       - name: 3. Syntax & Integrity Verification
         run: |
-          node --check frontend/js/*.js scripts/*.js
+          for f in frontend/js/*.js scripts/*.js; do node --check "$f" || exit 1; done
           node scripts/verify-integrity.js
 
       - name: 4. TypeScript Strict Compilation Check
@@ -57,6 +67,8 @@ jobs:
           NODE_ENV: test
           MONGODB_URI: mongodb://localhost:27017/skybolt_test
           REDIS_URL: redis://localhost:6379
+          TEST_MONGODB_URI: mongodb://localhost:27017
+          TEST_REDIS_URL: redis://localhost:6379
           JWT_SECRET: test_jwt_secret_key_minimum_32_characters_long_12345
         run: |
           npm --prefix backend run test
@@ -88,7 +100,8 @@ jobs:
         run: |
           # Verify HTML, CSS, JS asset trees
           test -f frontend/index.html
-          test -f frontend/css/styles.css
+          test -f frontend/css/global.css
+          test -f frontend/css/variables.css
           test -f frontend/js/config.js
 
       - name: 9 & 10. Build Backend API & Workers

@@ -59,7 +59,7 @@ describe('Contact Inquiry API & Validation Suite', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   describe('1. Public Inquiry Submission', () => {

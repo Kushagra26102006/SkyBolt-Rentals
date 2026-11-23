@@ -121,7 +121,7 @@ describe('TASK 09: Production Authoritative Server Pricing Engine', () => {
   afterAll(async () => {
     await disconnectDatabase();
     if (mongoServer) {
-      await mongoServer.stop();
+      await mongoServer?.stop();
     }
   });
 

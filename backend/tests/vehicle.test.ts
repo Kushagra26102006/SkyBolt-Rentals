@@ -73,7 +73,7 @@ describe('TASK 06: Production Vehicle Catalog API, Models & Management', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   }, 20000);
 
   // --------------------------------------------------------------------------

@@ -109,9 +109,9 @@ describe('TASK 15: Scheduled Background Jobs, Stale Job Protection & Reminders',
   afterAll(async () => {
     await queueRegistry.closeAllQueues();
     await closeRedis();
-    await redisServer.stop();
+    await redisServer?.stop();
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
     delete process.env.REDIS_URL;
   });
 

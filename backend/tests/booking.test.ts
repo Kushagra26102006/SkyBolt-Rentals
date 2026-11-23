@@ -97,7 +97,7 @@ describe('TASK 08: Production Booking State Machine & Reservations API', () => {
   afterAll(async () => {
     await disconnectDatabase();
     if (mongoServer) {
-      await mongoServer.stop();
+      await mongoServer?.stop();
     }
   });
 

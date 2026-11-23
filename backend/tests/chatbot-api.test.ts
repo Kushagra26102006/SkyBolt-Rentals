@@ -50,7 +50,7 @@ describe('Chatbot API Endpoints (/api/v1/chat & /api/chat)', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   describe('POST /api/v1/chat', () => {

@@ -249,7 +249,7 @@
               </div>
               <div id="key-input-container" style="display: none; margin-top: 8px;">
                 <div style="display: flex; gap: 6px;">
-                  <input type="text" id="custom-razorpay-key-input" class="form-control" placeholder="Paste rzp_test_... or rzp_live_..." value="${isPlaceholder ? '' : activeKey}" style="font-size: 11px; height: 32px; padding: 4px 8px;" />
+                  <input type="text" id="custom-razorpay-key-input" class="form-control" placeholder="Paste your Razorpay key (rzp_test_...)" value="${isPlaceholder ? '' : activeKey}" style="font-size: 11px; height: 32px; padding: 4px 8px;" />
                   <button type="button" id="btn-save-custom-key" class="btn btn-sm btn-primary" style="font-size: 11px; white-space: nowrap;">
                     Save &amp; Open Live Checkout
                   </button>

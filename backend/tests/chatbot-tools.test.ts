@@ -69,7 +69,7 @@ describe('Chatbot Tools: Authoritative Business Logic & Guardrails', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   it('Tool Registry: should register all 9 core rental tools', () => {

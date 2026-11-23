@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/cards.css">
   <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/auth.css">
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
@@ -75,63 +76,88 @@
   </header>
 
   <!-- Login Section -->
-  <main class="section" style="min-height: calc(85vh - var(--header-height)); display: flex; align-items: center;">
-    <div class="container" style="max-width: 480px;">
-      <div class="form-card">
-        <div class="text-center" style="margin-bottom: var(--space-6);">
-          <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background-color: var(--primary-light); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: var(--space-3);">
-            <i class="fa-solid fa-user-lock"></i>
+  <main class="auth-page">
+    <section class="auth-visual">
+      <img src="assets/images/hero-bg.webp" alt="SkyBolt Rentals vehicle showroom and fleet lineup" class="auth-visual-img" decoding="async">
+      <div class="auth-visual-content">
+        <div class="auth-visual-badge"><i class="fa-solid fa-bolt"></i> Premium Fleet</div>
+        <h1 class="auth-visual-title">Move freely. Rent smarter.</h1>
+        <p class="auth-visual-desc">Access India's largest verified fleet of high-performance bikes, premium cars, and smart e-scooters with instant digital checkout.</p>
+        <ul class="auth-perks">
+          <li class="auth-perk-item">
+            <span class="auth-perk-icon"><i class="fa-solid fa-check"></i></span>
+            <span>Instant contactless unlock &amp; digital KYC under 3 mins</span>
+          </li>
+          <li class="auth-perk-item">
+            <span class="auth-perk-icon"><i class="fa-solid fa-check"></i></span>
+            <span>Comprehensive insurance &amp; 24/7 roadside assistance included</span>
+          </li>
+          <li class="auth-perk-item">
+            <span class="auth-perk-icon"><i class="fa-solid fa-check"></i></span>
+            <span>Zero deposit options across 15+ central city hubs</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="auth-panel">
+      <div class="container" style="max-width: 480px;">
+        <div class="form-card">
+          <div class="text-center" style="margin-bottom: var(--space-6);">
+            <div style="width: 48px; height: 48px; border-radius: var(--radius-lg); background-color: var(--primary-light); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: var(--space-3);">
+              <i class="fa-solid fa-user-lock"></i>
+            </div>
+            <h2 style="font-size: var(--fs-2xl); margin-bottom: var(--space-1);">Welcome Back</h2>
+            <p style="color: var(--text-secondary); font-size: var(--fs-sm); margin-bottom: 0;">Sign in to your SkyBolt Rentals account</p>
           </div>
-          <h2 style="font-size: var(--fs-2xl); margin-bottom: var(--space-1);">Welcome Back</h2>
-          <p style="color: var(--text-secondary); font-size: var(--fs-sm); margin-bottom: 0;">Sign in to your SkyBolt Rentals account</p>
+
+          <form id="login-form">
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <input type="email" id="login-email" class="form-control" placeholder="name@example.com" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-1);">
+                <label for="login-password" style="margin-bottom: 0;">Password</label>
+                <a href="#" id="forgot-password-link" style="font-size: var(--fs-xs);">Forgot Password?</a>
+              </div>
+              <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: var(--space-4);" id="btn-submit-login">
+              Sign In <i class="fa-solid fa-right-to-bracket"></i>
+            </button>
+
+            <div id="login-error-msg" style="display: none; color: var(--danger); font-size: var(--fs-xs); margin-top: var(--space-3); text-align: center; font-weight: 600;"></div>
+
+            <!-- Quick Demo Credentials Box -->
+            <div class="demo-credentials-box" style="margin-top: var(--space-4); padding: var(--space-3); background: var(--bg-tertiary, #f8fafc); border: 1px dashed var(--border-light, #cbd5e1); border-radius: var(--radius-md); font-size: var(--fs-xs);">
+              <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: var(--space-2); display: flex; align-items: center; justify-content: space-between;">
+                <span><i class="fa-solid fa-key" style="margin-right: 4px; color: var(--primary);"></i> Quick Demo Credentials</span>
+                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">Click to auto-fill</span>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
+                <button type="button" class="btn btn-sm btn-outline" id="btn-demo-admin" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
+                  <strong style="color: var(--primary);"><i class="fa-solid fa-shield-halved"></i> Admin</strong>
+                  <span style="color: var(--text-secondary); font-size: 9px;">admin@skybolt.com</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" id="btn-demo-owner" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
+                  <strong style="color: #7c3aed;"><i class="fa-solid fa-key"></i> Owner</strong>
+                  <span style="color: var(--text-secondary); font-size: 9px;">owner@skybolt.com</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" id="btn-demo-customer" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
+                  <strong style="color: #059669;"><i class="fa-solid fa-user"></i> Customer</strong>
+                  <span style="color: var(--text-secondary); font-size: 9px;">customer@skybolt.com</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="text-center" style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border-light); font-size: var(--fs-sm); color: var(--text-secondary);">
+              Don't have an account? <a href="/register" style="font-weight: 700;">Create account</a>
+            </div>
+          </form>
         </div>
-
-        <form id="login-form">
-          <div class="form-group">
-            <label for="login-email">Email Address</label>
-            <input type="email" id="login-email" class="form-control" placeholder="name@example.com" required autocomplete="email">
-          </div>
-
-          <div class="form-group">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-1);">
-              <label for="login-password" style="margin-bottom: 0;">Password</label>
-              <a href="#" id="forgot-password-link" style="font-size: var(--fs-xs);">Forgot Password?</a>
-            </div>
-            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: var(--space-4);" id="btn-submit-login">
-            Sign In <i class="fa-solid fa-right-to-bracket"></i>
-          </button>
-
-          <div id="login-error-msg" style="display: none; color: var(--danger); font-size: var(--fs-xs); margin-top: var(--space-3); text-align: center; font-weight: 600;"></div>
-
-          <!-- Quick Demo Credentials Box -->
-          <div class="demo-credentials-box" style="margin-top: var(--space-4); padding: var(--space-3); background: var(--bg-tertiary, #f8fafc); border: 1px dashed var(--border-light, #cbd5e1); border-radius: var(--radius-md); font-size: var(--fs-xs);">
-            <div style="font-weight: 600; color: var(--text-secondary); margin-bottom: var(--space-2); display: flex; align-items: center; justify-content: space-between;">
-              <span><i class="fa-solid fa-key" style="margin-right: 4px; color: var(--primary);"></i> Quick Demo Credentials</span>
-              <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">Click to auto-fill</span>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;">
-              <button type="button" class="btn btn-sm btn-outline" id="btn-demo-admin" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
-                <strong style="color: var(--primary);"><i class="fa-solid fa-shield-halved"></i> Admin</strong>
-                <span style="color: var(--text-secondary); font-size: 9px;">admin@skybolt.com</span>
-              </button>
-              <button type="button" class="btn btn-sm btn-outline" id="btn-demo-owner" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
-                <strong style="color: #7c3aed;"><i class="fa-solid fa-key"></i> Owner</strong>
-                <span style="color: var(--text-secondary); font-size: 9px;">owner@skybolt.com</span>
-              </button>
-              <button type="button" class="btn btn-sm btn-outline" id="btn-demo-customer" style="font-size: 10px; padding: 6px 6px; text-align: left; display: flex; flex-direction: column; align-items: flex-start; background: #fff; cursor: pointer;">
-                <strong style="color: #059669;"><i class="fa-solid fa-user"></i> Customer</strong>
-                <span style="color: var(--text-secondary); font-size: 9px;">customer@skybolt.com</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="text-center" style="margin-top: var(--space-6); padding-top: var(--space-4); border-top: 1px solid var(--border-light); font-size: var(--fs-sm); color: var(--text-secondary);">
-            Don't have an account? <a href="/register" style="font-weight: 700;">Create account</a>
-          </div>
-        </form>
       </div>
     </div>
   </main>

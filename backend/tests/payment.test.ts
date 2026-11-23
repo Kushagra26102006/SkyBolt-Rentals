@@ -88,7 +88,7 @@ describe('TASK 10: Production Razorpay Payment Integration, Webhooks & Reconcili
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   // Helper: Create a fresh booking for Alice

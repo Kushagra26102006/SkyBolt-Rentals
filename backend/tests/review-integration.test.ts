@@ -139,7 +139,7 @@ describe('TASK 14: Review System End-to-End Integration & Moderation Workflow', 
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(async () => {

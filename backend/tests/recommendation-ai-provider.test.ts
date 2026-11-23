@@ -30,7 +30,7 @@ describe('TASK 16: AI Provider Abstraction, Hallucination Discarding & Timeout F
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   describe('Provider Abstraction & Heuristic Engine', () => {

@@ -110,7 +110,7 @@ describe('TASK 14: Review Eligibility & Booking Verification Tests', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(async () => {

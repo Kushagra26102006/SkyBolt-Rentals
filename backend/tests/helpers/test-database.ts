@@ -1,18 +1,43 @@
-import { spawn, ChildProcess } from 'child_process';
+import { spawn, ChildProcess, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
 
+function isBinaryOnPath(binary: string): boolean {
+  try {
+    const cmd = process.platform === 'win32' ? `where ${binary}` : `which ${binary}`;
+    execSync(cmd, { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Ephemeral In-Memory/Local MongoDB Server for Automated Testing
- * Launches an isolated mongod process with temporary dbpath and cleans up on exit.
+ * Launches an isolated mongod process with temporary dbpath and cleans up on exit,
+ * or attaches to an external MongoDB instance when TEST_MONGODB_URI is provided.
  */
 export class EphemeralMongoServer {
   private process: ChildProcess | null = null;
   private dbPath = '';
   private port = 0;
+  private isExternal = false;
+  private dbName = '';
 
   public async start(): Promise<string> {
+    if (process.env.TEST_MONGODB_URI) {
+      this.isExternal = true;
+      this.dbName = `skybolt_test_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+      const parsed = new URL(process.env.TEST_MONGODB_URI);
+      parsed.pathname = `/${this.dbName}`;
+      return parsed.toString();
+    }
+
+    if (!isBinaryOnPath('mongod')) {
+      throw new Error('mongod not found - install it or set TEST_MONGODB_URI');
+    }
+
     this.port = 27100 + Math.floor(Math.random() * 800);
     this.dbPath = fs.mkdtempSync(path.join(os.tmpdir(), 'skybolt-test-mongo-'));
 
@@ -57,6 +82,10 @@ export class EphemeralMongoServer {
   }
 
   public async stop(): Promise<void> {
+    if (this.isExternal) {
+      return;
+    }
+
     return new Promise((resolve) => {
       if (this.process && this.process.exitCode === null) {
         this.process.once('close', () => {

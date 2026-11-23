@@ -21,7 +21,7 @@ describe('TASK 05: Production Authentication, Authorization & User Management', 
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   }, 20000);
 
   // --------------------------------------------------------------------------

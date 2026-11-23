@@ -18,11 +18,13 @@ export function getRedisOptions(): RedisOptions {
   const host = process.env.REDIS_HOST || config.redis.host;
   const port = process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT, 10) : config.redis.port;
   const password = process.env.REDIS_PASSWORD || config.redis.password || undefined;
+  const keyPrefix = process.env.REDIS_KEY_PREFIX || config.redis.keyPrefix || undefined;
 
   const options: RedisOptions = {
     host,
     port,
     password,
+    keyPrefix: keyPrefix || undefined,
     connectTimeout: config.redis.connectTimeoutMs,
     maxRetriesPerRequest: null, // Required by BullMQ
     enableReadyCheck: false,

@@ -25,12 +25,15 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
+# Fix: Ensure /app is owned by node before switching to USER node
+RUN chown node:node /app
+
 # Security: Run as non-root user
 USER node
 
 # Copy production package specifications & install production dependencies only
 COPY --chown=node:node backend/package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # Copy compiled JavaScript output
 COPY --chown=node:node --from=builder /app/backend/dist ./dist

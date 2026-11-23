@@ -129,7 +129,7 @@ describe('TASK 13: End-to-End Notification Integration & Lifecycle', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   // Helper: Create a fresh booking for Alice

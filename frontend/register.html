@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/cards.css">
   <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/auth.css">
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
@@ -75,9 +76,33 @@
   </header>
 
   <!-- Registration Main Section -->
-  <main class="section">
-    <div class="container" style="max-width: 620px;">
-      <div class="form-card">
+  <main class="auth-page">
+    <section class="auth-visual">
+      <img src="assets/images/hero-vida.webp" alt="SkyBolt Rentals high-performance red sports bike" class="auth-visual-img" decoding="async">
+      <div class="auth-visual-content">
+        <div class="auth-visual-badge"><i class="fa-solid fa-bolt"></i> Join SkyBolt</div>
+        <h1 class="auth-visual-title">Hit the road in minutes.</h1>
+        <p class="auth-visual-desc">Join thousands of riders and drivers across India. Rent on your own terms or host your vehicle to generate steady passive income.</p>
+        <ul class="auth-perks">
+          <li class="auth-perk-item">
+            <span class="auth-perk-icon"><i class="fa-solid fa-check"></i></span>
+            <span>Flat 10% off your first trip with code SKYBOLT10</span>
+          </li>
+          <li class="auth-perk-item">
+            <span class="auth-perk-icon"><i class="fa-solid fa-check"></i></span>
+            <span>Earn up to ₹45,000/month by listing your idle vehicle</span>
+          </li>
+          <li class="auth-perk-item">
+            <span class="auth-perk-icon"><i class="fa-solid fa-check"></i></span>
+            <span>Free cancellation up to 24 hours prior to pickup</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="auth-panel">
+      <div class="container" style="max-width: 620px;">
+        <div class="form-card">
         <div class="text-center" style="margin-bottom: var(--space-6);">
           <div style="width: 52px; height: 52px; border-radius: var(--radius-lg); background-color: var(--primary-light); color: var(--primary); display: inline-flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: var(--space-3);">
             <i class="fa-solid fa-bolt"></i>
@@ -194,7 +219,8 @@
         </form>
       </div>
     </div>
-  </main>
+  </div>
+</main>
 
   <!-- Footer -->
   <footer class="site-footer">

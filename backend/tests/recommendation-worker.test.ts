@@ -100,9 +100,9 @@ describe('TASK 16: BullMQ Recommendation Worker & Background Learning Jobs', () 
     }
     await queueRegistry.closeAllQueues();
     await closeRedis();
-    await redisServer.stop();
+    await redisServer?.stop();
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
     delete process.env.REDIS_URL;
   });
 

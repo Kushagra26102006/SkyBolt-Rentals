@@ -138,7 +138,7 @@ describe('TASK 14 — Security & Abuse Tests (All 18 Scenarios)', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(async () => {

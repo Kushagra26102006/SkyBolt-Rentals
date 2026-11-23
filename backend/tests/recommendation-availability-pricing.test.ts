@@ -26,7 +26,7 @@ describe('TASK 16: Authoritative Availability (Task 07) & Pricing (Task 09) Inte
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   describe('Authoritative Availability Invariant (TASK 07)', () => {

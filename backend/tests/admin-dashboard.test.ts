@@ -255,7 +255,7 @@ describe('TASK 12: Production Admin Operational Dashboards Integration Suite', (
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   describe('1. Admin Access Control & RBAC Boundaries', () => {

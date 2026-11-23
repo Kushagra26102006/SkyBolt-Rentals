@@ -1,0 +1,248 @@
+/* ==========================================================================
+   SkyBolt Rentals - Split-Screen Authentication Layout (Login & Register)
+   ========================================================================== */
+
+/* Main Split-Screen Container */
+.auth-page {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  min-height: calc(100vh - var(--header-height));
+  background-color: var(--background);
+  position: relative;
+  width: 100%;
+}
+
+/* Left Hero Visual Column */
+.auth-visual {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
+  background-color: var(--dark-surface, #0f172a);
+}
+
+/* Background Hero Image */
+.auth-visual-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+}
+
+/* Gradient Overlay - Dark contrast ensures white text is always readable */
+.auth-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.2) 0%,
+    rgba(15, 23, 42, 0.5) 40%,
+    rgba(15, 23, 42, 0.85) 75%,
+    rgba(15, 23, 42, 0.96) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Overlay Text & Content Anchored to Bottom */
+.auth-visual-content {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  padding: var(--space-8);
+  width: 100%;
+  max-width: 600px;
+}
+
+.auth-visual-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  background: rgba(37, 99, 235, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  color: #93c5fd;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+}
+
+.auth-visual-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-3xl);
+  font-weight: 800;
+  line-height: var(--lh-tight);
+  color: #ffffff;
+  margin-bottom: var(--space-3);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.auth-visual-desc {
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: var(--space-6);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Perks List */
+.auth-perks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.auth-perk-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--fs-sm);
+  color: #ffffff;
+  font-weight: 500;
+  line-height: var(--lh-normal);
+}
+
+.auth-perk-icon {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: var(--radius-full);
+  background: rgba(37, 99, 235, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #60a5fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-xs);
+  flex-shrink: 0;
+}
+
+/* Right Form Panel */
+.auth-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-6);
+  background-color: var(--background);
+  min-height: 100%;
+}
+
+.auth-panel .container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Ensure Form Card fills panel appropriately */
+.auth-panel .form-card {
+  width: 100%;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+}
+
+/* Dark Theme Adjustments */
+[data-theme="dark"] .auth-page {
+  background-color: var(--background);
+}
+
+[data-theme="dark"] .auth-panel {
+  background-color: var(--background);
+}
+
+[data-theme="dark"] .auth-panel .form-card {
+  background-color: var(--card-bg);
+  border-color: var(--border);
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+/* Tablet & Mobile (< 900px): Single-column split with top banner */
+@media (max-width: 900px) {
+  .auth-page {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .auth-visual {
+    height: 190px;
+    min-height: 190px;
+    max-height: 190px;
+    justify-content: flex-end;
+  }
+
+  .auth-visual-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-4) var(--space-5);
+    max-width: 100%;
+    z-index: 3;
+  }
+
+  .auth-visual-badge {
+    margin-bottom: var(--space-1);
+    font-size: var(--fs-2xs);
+    padding: 2px var(--space-2);
+  }
+
+  .auth-visual-title {
+    font-size: var(--fs-xl);
+    line-height: var(--lh-tight);
+    margin-bottom: 0;
+  }
+
+  /* Hide paragraph and perks on mobile as required */
+  .auth-visual-desc,
+  .auth-perks {
+    display: none !important;
+  }
+
+  .auth-panel {
+    padding: var(--space-6) var(--space-4);
+    align-items: flex-start;
+  }
+}
+
+/* Mobile Small (<= 480px, e.g. 390px) */
+@media (max-width: 480px) {
+  .auth-visual {
+    height: 175px;
+    min-height: 175px;
+    max-height: 175px;
+  }
+
+  .auth-visual-content {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .auth-visual-title {
+    font-size: var(--fs-lg);
+  }
+
+  .auth-panel {
+    padding: var(--space-4) var(--space-2);
+  }
+
+  .auth-panel .form-card {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+  }
+}

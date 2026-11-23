@@ -22,11 +22,14 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
+# Fix: Ensure /app is owned by node before switching to USER node
+RUN chown node:node /app
+
 # Security: Run as non-root user
 USER node
 
 COPY --chown=node:node backend/package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --chown=node:node --from=builder /app/backend/dist ./dist
 

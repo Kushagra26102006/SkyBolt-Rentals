@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { vi, describe, it, expect, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 import mongoose from 'mongoose';
 import { createApp } from '../src/app.js';
@@ -22,6 +22,15 @@ describe('TASK 07: Production Availability Engine & Inventory Locking', () => {
   let testVehicleId: string;
   let maintenanceVehicleId: string;
 
+  beforeAll(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-11-01T00:00:00Z'));
+  });
+
+  afterAll(() => {
+    vi.useRealTimers();
+  });
+
   beforeAll(async () => {
     mongoServer = new EphemeralMongoServer();
     testMongoUri = await mongoServer.start();
@@ -40,7 +49,7 @@ describe('TASK 07: Production Availability Engine & Inventory Locking', () => {
         password: 'Password123!',
         phone: '+91 9800000001'
       });
-    userOneCookie = reg1.headers['set-cookie'][0];
+    userOneCookie = ([] as string[]).concat(reg1.headers['set-cookie'] ?? []).find((c) => c.startsWith('skybolt_auth=')) as string;
     userOneId = reg1.body.data.user.id;
 
     // Register User 2
@@ -52,7 +61,7 @@ describe('TASK 07: Production Availability Engine & Inventory Locking', () => {
         password: 'Password123!',
         phone: '+91 9800000002'
       });
-    userTwoCookie = reg2.headers['set-cookie'][0];
+    userTwoCookie = ([] as string[]).concat(reg2.headers['set-cookie'] ?? []).find((c) => c.startsWith('skybolt_auth=')) as string;
     userTwoId = reg2.body.data.user.id;
 
     // Fetch active test vehicle
@@ -77,7 +86,7 @@ describe('TASK 07: Production Availability Engine & Inventory Locking', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   }, 20000);
 
   // --------------------------------------------------------------------------
@@ -126,8 +135,8 @@ describe('TASK 07: Production Availability Engine & Inventory Locking', () => {
       const res = await request(app)
         .get(`/api/v1/vehicles/${testVehicleId}/availability`)
         .query({
-          pickupAt: '2026-10-01T10:00:00.000Z',
-          returnAt: '2027-02-01T10:00:00.000Z' // 123 days
+          pickupAt: '2026-11-02T10:00:00.000Z',
+          returnAt: '2027-03-05T10:00:00.000Z' // 123 days
         });
 
       expect(res.status).toBe(422);
@@ -285,8 +294,8 @@ describe('TASK 07: Production Availability Engine & Inventory Locking', () => {
       const res = await request(app)
         .get(`/api/v1/vehicles/${maintenanceVehicleId}/availability`)
         .query({
-          pickupAt: '2026-10-10T10:00:00.000Z',
-          returnAt: '2026-10-15T10:00:00.000Z'
+          pickupAt: '2026-11-10T10:00:00.000Z',
+          returnAt: '2026-11-15T10:00:00.000Z'
         });
 
       expect(res.status).toBe(200);
@@ -299,8 +308,8 @@ describe('TASK 07: Production Availability Engine & Inventory Locking', () => {
       const res = await request(app)
         .get(`/api/v1/vehicles/${fakeId}/availability`)
         .query({
-          pickupAt: '2026-10-10T10:00:00.000Z',
-          returnAt: '2026-10-15T10:00:00.000Z'
+          pickupAt: '2026-11-10T10:00:00.000Z',
+          returnAt: '2026-11-15T10:00:00.000Z'
         });
 
       expect(res.status).toBe(404);

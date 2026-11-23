@@ -68,9 +68,9 @@ describe('TASK 15: Admin Queue Monitoring, Job Retry & Security Suite', () => {
   afterAll(async () => {
     await queueRegistry.closeAllQueues();
     await closeRedis();
-    await redisServer.stop();
+    await redisServer?.stop();
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
     delete process.env.REDIS_URL;
   });
 

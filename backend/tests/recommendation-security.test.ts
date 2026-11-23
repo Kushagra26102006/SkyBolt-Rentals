@@ -63,7 +63,7 @@ describe('TASK 16: Recommendation Security, Prompt Injection & RBAC', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   describe('Prompt Injection Resilience', () => {

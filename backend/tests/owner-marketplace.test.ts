@@ -39,7 +39,7 @@ describe('Marketplace: Owner & Customer & Admin User Types', () => {
 
   afterAll(async () => {
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   }, 25000);
 
   // --------------------------------------------------------------------------

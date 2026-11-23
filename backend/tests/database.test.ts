@@ -21,7 +21,7 @@ describe('MongoDB Database Foundation & Health Probes', () => {
   afterAll(async () => {
     await disconnectDatabase().catch(() => {});
     if (mongoServer) {
-      await mongoServer.stop();
+      await mongoServer?.stop();
     }
   });
 

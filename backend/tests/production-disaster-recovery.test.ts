@@ -63,9 +63,9 @@ describe('SkyBolt Rentals — Production Disaster Recovery & Failure Injection S
 
   afterAll(async () => {
     await closeRedis();
-    await redisServer.stop();
+    await redisServer?.stop();
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
     delete process.env.REDIS_URL;
   });
 

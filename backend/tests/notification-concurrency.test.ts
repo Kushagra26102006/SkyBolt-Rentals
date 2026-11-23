@@ -41,7 +41,7 @@ describe('TASK 13: Notification Concurrency & Outbox Contention Tests', () => {
     setEmailProvider(null);
     setSmsProvider(null);
     await disconnectDatabase();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   beforeEach(async () => {
