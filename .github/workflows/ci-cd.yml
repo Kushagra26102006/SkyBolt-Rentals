@@ -51,7 +51,7 @@ jobs:
 
       - name: 2. Dependency Vulnerability Audit
         run: |
-          npm --prefix backend audit --production --audit-level=high
+          node scripts/audit-check.js
 
       - name: 3. Syntax & Integrity Verification
         run: |
@@ -154,15 +154,47 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
 
+    services:
+      mongodb:
+        image: mongo:7-jammy
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
 
       - name: 12. Deploy to Staging Cluster
         run: |
           echo "Deploying release ${{ github.sha }} to Staging environment..."
 
       - name: 13. Execute Staging Smoke Tests
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/skybolt_test
+          REDIS_URL: redis://localhost:6379
+          TEST_MONGODB_URI: mongodb://localhost:27017
+          TEST_REDIS_URL: redis://localhost:6379
+          JWT_SECRET: test_jwt_secret_key_minimum_32_characters_long_12345
         run: |
           npm ci --prefix backend
           npx --prefix backend vitest run tests/production-smoke.test.ts
@@ -177,15 +209,47 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
 
+    services:
+      mongodb:
+        image: mongo:7-jammy
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
 
       - name: 14 & 15. Execute Rolling Production Deployment
         run: |
           echo "Deploying verified release ${{ github.sha }} to Production..."
 
       - name: 16. Execute Post-Deployment Production Smoke Tests
+        env:
+          NODE_ENV: test
+          MONGODB_URI: mongodb://localhost:27017/skybolt_test
+          REDIS_URL: redis://localhost:6379
+          TEST_MONGODB_URI: mongodb://localhost:27017
+          TEST_REDIS_URL: redis://localhost:6379
+          JWT_SECRET: test_jwt_secret_key_minimum_32_characters_long_12345
         run: |
           npm ci --prefix backend
           npx --prefix backend vitest run tests/production-smoke.test.ts

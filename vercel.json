@@ -2,6 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "outputDirectory": "frontend",
+  "buildCommand": "node scripts/verify-integrity.js",
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/vehicles", "destination": "/vehicles.html" },
@@ -13,7 +14,6 @@
     { "source": "/register", "destination": "/register.html" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/owner-dashboard", "destination": "/owner-dashboard.html" },
-    { "source": "/owner/add-vehicle", "destination": "/owner-add-vehicle" },
     { "source": "/owner/add-vehicle", "destination": "/owner-add-vehicle.html" },
     { "source": "/owner-add-vehicle", "destination": "/owner-add-vehicle.html" },
     { "source": "/fleet", "destination": "/fleet.html" },
