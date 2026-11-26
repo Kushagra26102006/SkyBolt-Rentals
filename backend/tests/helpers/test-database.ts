@@ -2,6 +2,7 @@ import { spawn, ChildProcess, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import mongoose from 'mongoose';
 
 function isBinaryOnPath(binary: string): boolean {
   try {
@@ -83,6 +84,13 @@ export class EphemeralMongoServer {
 
   public async stop(): Promise<void> {
     if (this.isExternal) {
+      if (this.dbName && mongoose.connection.readyState === 1 && mongoose.connection.name === this.dbName) {
+        try {
+          await mongoose.connection.db?.dropDatabase();
+        } catch {
+          // Ignore cleanup error on external database
+        }
+      }
       return;
     }
 

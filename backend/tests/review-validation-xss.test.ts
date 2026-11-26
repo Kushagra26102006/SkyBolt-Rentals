@@ -32,6 +32,10 @@ describe('TASK 14: Review Rating Validation, Content Sanitization & XSS Protecti
     await BookingModel.syncIndexes();
     await ReviewModel.syncIndexes();
 
+    await HubModel.deleteOne({ code: 'HUB-DEL-01' });
+    await VehicleModel.deleteOne({ vehicleCode: 'SKY-VHC-VAL' });
+    await UserModel.deleteMany({ email: { $in: ['validator@skybolt.test', 'other.validator@skybolt.test'] } });
+
     // Register Customer
     const custRes = await request(app)
       .post('/api/v1/auth/register')

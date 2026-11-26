@@ -308,12 +308,31 @@ export async function connectDatabase(
   const uri = uriOverride || config.database.uri;
   const sanitizedUri = sanitizeMongoUri(uri);
 
-  // Return existing connection if already connected
-  if (mongoose.connection.readyState === 1) {
-    if (!config.isTest) {
-      console.log(`[SkyBolt DB] Already connected to MongoDB at ${sanitizedUri}`);
+  let targetDbName = config.database.dbName;
+  if (optionsOverride?.dbName) {
+    targetDbName = optionsOverride.dbName;
+  } else if (uriOverride) {
+    try {
+      const parsed = new URL(uriOverride);
+      const nameFromUri = parsed.pathname.replace(/^\//, '');
+      if (nameFromUri) {
+        targetDbName = nameFromUri;
+      }
+    } catch {
+      // Keep default dbName if URL parsing fails
     }
-    return mongoose;
+  }
+
+  // Return existing connection if already connected to target database
+  if (mongoose.connection.readyState === 1) {
+    if (mongoose.connection.name === targetDbName) {
+      if (!config.isTest) {
+        console.log(`[SkyBolt DB] Already connected to MongoDB at ${sanitizedUri}`);
+      }
+      return mongoose;
+    }
+    // Reconnect if target database changed between test suites
+    await mongoose.disconnect();
   }
 
   // Prevent multiple overlapping connection attempts
@@ -334,7 +353,7 @@ export async function connectDatabase(
     }
 
     const conn = await mongoose.connect(uri, {
-      dbName: config.database.dbName,
+      dbName: targetDbName,
       maxPoolSize: config.database.maxPoolSize,
       minPoolSize: config.database.minPoolSize,
       serverSelectionTimeoutMS: config.database.timeoutMs,

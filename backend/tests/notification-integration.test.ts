@@ -56,6 +56,9 @@ describe('TASK 13: End-to-End Notification Integration & Lifecycle', () => {
     await IdempotencyModel.syncIndexes();
     await NotificationModel.syncIndexes();
     await NotificationOutboxModel.syncIndexes();
+    await NotificationOutboxModel.deleteMany({});
+    await NotificationModel.deleteMany({});
+    await HubModel.deleteOne({ code: 'HUB-DEL-INT' });
     await seedVehicles(true);
 
     // Create a Hub for fleet operations

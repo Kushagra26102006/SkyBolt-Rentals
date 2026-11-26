@@ -60,6 +60,7 @@ describe('TASK 15: BullMQ Queue Lifecycle, Worker Execution & Idempotency', () =
 
   it('Enqueuing a notification job places it into BullMQ with minimal payload and deterministic ID', async () => {
     const queue = queueRegistry.getNotificationQueue();
+    await queue.drain();
 
     const { outboxId } = await notificationService.enqueue({
       type: NotificationType.BOOKING_CONFIRMED,
